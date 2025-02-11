@@ -133,6 +133,51 @@
                 </div>
                 <button type="submit" class="btn_web_color w-100">เข้าสู่ระบบ</button>
                 <a href="/register" class="text-goregister">หากไม่เคยเป็นสมาชิกกับขายคล่อง? <span>สมัครเลย</span></a>
+
+                <script>
+                    document.querySelector('form').addEventListener('submit', function (e) {
+                        e.preventDefault(); // ป้องกันการ submit ฟอร์ม
+                        try {
+                            const userName = document.getElementById('user_name').value;
+                            const userEmail = document.getElementById('user_email').value;
+                            const userPassword = document.getElementById('user_password').value;
+                            const confirmPassword = document.getElementById('confirmPassword').value;
+
+                            // ตรวจสอบรหัสผ่านตรงกันไหม
+                            if (userPassword !== confirmPassword) {
+                                alert("รหัสผ่านไม่ตรงกัน");
+                                return;
+                            }
+
+                            console.log(
+                                userName, userEmail, userPassword,
+                            );
+                            // ส่งข้อมูลไปยัง API
+                            axios.post('/api/login', {
+                                user_email: userEmail,
+                                user_password: userPassword,
+                            })
+                                .then(response => {
+                                    alert(response.data.message);
+                                    window.location.href = '/home';
+                                })
+                                .catch(error => {
+                                    if (error.response) {
+                                        const errors = error.response.data.errors;
+                                        alert(errors ? Object.values(errors).join(' ') : 'เกิดข้อผิดพลาด');
+                                    } else {
+                                        alert('เกิดข้อผิดพลาดในการสมัครสมาชิก');
+                                    }
+                                });
+
+                        } catch (err) {
+                            console.log(err.message);
+
+                        }
+                    });
+                </script>
+
+
             </form>
         </div>
     </div>
