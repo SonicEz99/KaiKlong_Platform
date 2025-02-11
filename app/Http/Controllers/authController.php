@@ -37,7 +37,7 @@ class authController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'user_email' => 'required', // Can be email or username
+            'user_email' => 'required|email', // Ensure it's a valid email
             'user_password' => 'required',
         ]);
 
@@ -45,9 +45,9 @@ class authController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        if (Auth::attempt(['user_email' => $request->user_email, 'password' => $request->password])) {
+        if (Auth::attempt(['email' => $request->user_email, 'password' => $request->user_password])) {
             $user = Auth::user();
-            $token = session()->put('message', $user->name);
+            $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json(['message' => 'Login successful', 'user' => $user, 'token' => $token], 200);
         }
