@@ -119,12 +119,12 @@
                 <p class=" text text-center mb-3">เข้าสู่ระบบ</p>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="lable form-label">ชื่อผู้ใช้งาน / อีเมล</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                        placeholder="กรอกชื่อผู้ใช้งาน / อีเมล">
+                    <input type="email" id="user_email" class="form-control" id="exampleInputEmail1"
+                        aria-describedby="emailHelp" placeholder="กรอกชื่อผู้ใช้งาน / อีเมล">
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="lable form-label">รหัสผ่าน</label>
-                    <input type="password" class="text form-control" id="exampleInputPassword1"
+                    <input type="password" id="user_password" class="text form-control" id="exampleInputPassword1"
                         placeholder="กรอกรหัสผ่าน">
                 </div>
                 <div class="mb-3 form-check">
@@ -138,20 +138,8 @@
                     document.querySelector('form').addEventListener('submit', function (e) {
                         e.preventDefault(); // ป้องกันการ submit ฟอร์ม
                         try {
-                            const userName = document.getElementById('user_name').value;
                             const userEmail = document.getElementById('user_email').value;
                             const userPassword = document.getElementById('user_password').value;
-                            const confirmPassword = document.getElementById('confirmPassword').value;
-
-                            // ตรวจสอบรหัสผ่านตรงกันไหม
-                            if (userPassword !== confirmPassword) {
-                                alert("รหัสผ่านไม่ตรงกัน");
-                                return;
-                            }
-
-                            console.log(
-                                userName, userEmail, userPassword,
-                            );
                             // ส่งข้อมูลไปยัง API
                             axios.post('/api/login', {
                                 user_email: userEmail,
