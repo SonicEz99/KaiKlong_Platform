@@ -139,10 +139,60 @@
                 <input type="hidden" id="rols" value="1">
                 <button type="submit" class="btn_web_color w-100">สมัครสมาชิก</button>
                 <a href="/" class="text-goregister">หากคุณเป็นสมาชิกขายคล่องอยู่เเล้ว <span>เข้าสู่ระบบ</span></a>
+
+
+                <script>
+                    document.querySelector('form').addEventListener('submit', function (e) {
+                        e.preventDefault(); // ป้องกันการ submit ฟอร์ม
+                        try {
+                            const userName = document.getElementById('user_name').value;
+                            const userEmail = document.getElementById('user_email').value;
+                            const userPassword = document.getElementById('user_password').value;
+                            const confirmPassword = document.getElementById('confirmPassword').value;
+                            const role = document.getElementById('rols').value;
+
+                            // ตรวจสอบรหัสผ่านตรงกันไหม
+                            if (userPassword !== confirmPassword) {
+                                alert("รหัสผ่านไม่ตรงกัน");
+                                return;
+                            }
+
+                            console.log(
+                                userName, userEmail, userPassword, role,
+                            );
+                            // ส่งข้อมูลไปยัง API
+                            //     axios.post('/api/register', {
+                            //         user_name: userName,
+                            //         user_email: userEmail,
+                            //         user_password: userPassword,
+                            //         role: role
+                            //     })
+                            //         .then(response => {
+                            //             alert(response.data.message);
+                            //             window.location.href = '/login'; // ไปที่หน้าล็อกอิน
+                            //         })
+                            //         .catch(error => {
+                            //             if (error.response) {
+                            //                 const errors = error.response.data.errors;
+                            //                 alert(errors ? Object.values(errors).join(' ') : 'เกิดข้อผิดพลาด');
+                            //             } else {
+                            //                 alert('เกิดข้อผิดพลาดในการสมัครสมาชิก');
+                            //             }
+                            //         });
+
+                        } catch (err) {
+                            console.log(err.message);
+
+                        }
+                    });
+                </script>
+
+                
             </form>
         </div>
     </div>
 </body>
 @endsection
+
 
 </html>
