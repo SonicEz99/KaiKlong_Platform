@@ -114,23 +114,30 @@
         <div class="bg-from">
             <form>
                 <h3 class="color_web text-center mb-3">Kaiklong</h3>
-                <p class=" text text-center mb-3">เข้าสู่ระบบ</p>
+                <p class=" text text-center mb-3">สมัครสมาชิก</p>
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="lable form-label">ชื่อผู้ใช้งาน / อีเมล</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                        placeholder="กรอกชื่อผู้ใช้งาน / อีเมล">
+                    <label for="exampleInputEmail1" class="lable form-label">ชื่อผู้ใช้งาน</label>
+                    <input type="text" id="user_name" class="form-control" aria-describedby="emailHelp"
+                        placeholder="กรอกชื่อผู้ใช้งานที่ต้องการสร้าง">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="lable form-label">อีเมล</label>
+                    <input type="email" id="user_email" class="form-control" aria-describedby="emailHelp"
+                        placeholder="example@kaiklong.com">
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="lable form-label">รหัสผ่าน</label>
-                    <input type="password" class="text form-control" id="exampleInputPassword1"
-                        placeholder="กรอกรหัสผ่าน">
+                    <input type="password" id="user_password" class="text form-control"
+                        placeholder="ทำการสร้างรหัสผ่าน">
                 </div>
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="checkbox" id="exampleCheck1">
-                    <label class="text" for="exampleCheck1">จดจำการเข้าสู่ระบบของฉัน</label>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="lable form-label">ยืนยันรหัสผ่าน</label>
+                    <input type="password" id="confirmPassword" class="text form-control"
+                        placeholder="กรอรหัสผ่านเพื่อยืนยัน">
                 </div>
-                <button type="submit" class="btn_web_color w-100">เข้าสู่ระบบ</button>
-                <a href="/resigter" class="text-goregister">หากไม่เคยเป็นสมาชิกกับขายคล่อง? <span>สมัครเลย</span></a>
+                <input type="hidden" id="rols" value="1">
+                <button type="submit" class="btn_web_color w-100">สมัครสมาชิก</button>
+                <a href="/" class="text-goregister">หากคุณเป็นสมาชิกขายคล่องอยู่เเล้ว <span>เข้าสู่ระบบ</span></a>
             </form>
         </div>
     </div>
