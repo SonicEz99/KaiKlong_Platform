@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\authController;
 
 // Login Page Route
 Route::get('/', function () {
@@ -15,8 +15,8 @@ Route::get('/register', function () {
 })->name('register.page');
 
 // Authentication Routes
-Route::post('/register', [AuthController::class, 'register'])->name('register.backend');
-Route::post('/login', [AuthController::class, 'login'])->name('login.backend');
+Route::post('/register', [authController::class, 'register'])->name('register.backend');
+Route::post('/login', [authController::class, 'login'])->name('login.backend');
 
 // Protected Routes (Require Authentication)
 Route::middleware('auth:sanctum')->group(function () {

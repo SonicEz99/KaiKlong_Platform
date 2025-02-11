@@ -2,60 +2,65 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
+use App\Http\Controllers\Controller;
 
 class authController extends Controller
 {
-    public function Register(Request $request){
+    public function register(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'user_name' => 'required|string|max:255',
-            'user_email' => 'required|string|max:255',
-            'user_password' => 'required|string|min:8|confirmed',
+            'user_email' => 'required|string|email|max:255|unique:users,email',
+            'user_password' => 'required|min:8|confirmed',
         ]);
 
-        if($validator->fails()){
-            return redirect()->back()->withErrors($validator)->withInput();
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        User::create([
+        $user = User::create([
             'name' => $request->input('user_name'),
             'email' => $request->input('user_email'),
-            'password' => $request->input('user_password'),
+            'password' => Hash::make($request->input('user_password')),
             'role' => 'user',
         ]);
 
-        return redirect()->route('login.page')->with('success', 'Registration successful');
+        return response()->json(['message' => 'Registration successful', 'user' => $user], 201);
     }
 
-    public function Login(Request $request){
+    public function login(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'login' => 'required', // Can be email or username
             'password' => 'required',
         ]);
-    
+
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
-    
-        // Determine if login input is email or username
+
         $field = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
-    
-        // Attempt authentication
+
         if (Auth::attempt([$field => $request->login, 'password' => $request->password])) {
             $user = Auth::user();
+            $token = session()->put('message', $user->name);
 
-            session()->put('message',$user->name);
-
-            if($user->role === 'admin') {
-                return redirect()->route('dashboard');
-            }else{
-                return redirect()->route('user.home');
-            }
+            return response()->json(['message' => 'Login successful', 'user' => $user, 'token' => $token], 200);
         }
 
-        return redirect()->back()->withErrors(['email' => 'Invalid email or password.'])->withInput();
+        return response()->json(['error' => 'Invalid email or password'], 401);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+
+        return response()->json(['message' => 'Logged out successfully'], 200);
     }
 }
