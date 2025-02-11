@@ -19,6 +19,9 @@ Route::get('/', function () {
 Route::get('/resigter', function () {
     return view('auth.register_auth');
 });
+Route::get('/loadding', function () {
+    return view('loadding.loadding');
+});
 
 Route::get('/about', function () {
     return view('about');
