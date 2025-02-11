@@ -132,7 +132,7 @@
                     <label class="text" for="exampleCheck1">จดจำการเข้าสู่ระบบของฉัน</label>
                 </div>
                 <button type="submit" class="btn_web_color w-100">เข้าสู่ระบบ</button>
-                <a href="/resigter" class="text-goregister">หากไม่เคยเป็นสมาชิกกับขายคล่อง? <span>สมัครเลย</span></a>
+                <a href="/register" class="text-goregister">หากไม่เคยเป็นสมาชิกกับขายคล่อง? <span>สมัครเลย</span></a>
             </form>
         </div>
     </div>
