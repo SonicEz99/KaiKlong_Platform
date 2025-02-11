@@ -11,6 +11,7 @@ Route::get('/', function () {
 // Register Page Route
 Route::get('/register', function () {
     return view('auth.register_auth');
+
 })->name('register.page');
 
 // Authentication Routes
