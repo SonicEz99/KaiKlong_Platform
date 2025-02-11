@@ -37,17 +37,15 @@ class authController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'login' => 'required', // Can be email or username
-            'password' => 'required',
+            'user_email' => 'required', // Can be email or username
+            'user_password' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $field = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
-
-        if (Auth::attempt([$field => $request->login, 'password' => $request->password])) {
+        if (Auth::attempt(['user_email' => $request->user_email, 'password' => $request->password])) {
             $user = Auth::user();
             $token = session()->put('message', $user->name);
 
