@@ -119,12 +119,12 @@
                 <p class=" text text-center mb-3">เข้าสู่ระบบ</p>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="lable form-label">ชื่อผู้ใช้งาน / อีเมล</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                        placeholder="กรอกชื่อผู้ใช้งาน / อีเมล">
+                    <input type="email" id="user_email" class="form-control" id="exampleInputEmail1"
+                        aria-describedby="emailHelp" placeholder="กรอกชื่อผู้ใช้งาน / อีเมล">
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="lable form-label">รหัสผ่าน</label>
-                    <input type="password" class="text form-control" id="exampleInputPassword1"
+                    <input type="password" id="user_password" class="text form-control" id="exampleInputPassword1"
                         placeholder="กรอกรหัสผ่าน">
                 </div>
                 <div class="mb-3 form-check">
@@ -133,6 +133,39 @@
                 </div>
                 <button type="submit" class="btn_web_color w-100">เข้าสู่ระบบ</button>
                 <a href="/register" class="text-goregister">หากไม่เคยเป็นสมาชิกกับขายคล่อง? <span>สมัครเลย</span></a>
+
+                <script>
+                    document.querySelector('form').addEventListener('submit', function (e) {
+                        e.preventDefault(); // ป้องกันการ submit ฟอร์ม
+                        try {
+                            const userEmail = document.getElementById('user_email').value;
+                            const userPassword = document.getElementById('user_password').value;
+                            // ส่งข้อมูลไปยัง API
+                            axios.post('/api/login', {
+                                user_email: userEmail,
+                                user_password: userPassword,
+                            })
+                                .then(response => {
+                                    alert(response.data.message);
+                                    window.location.href = '/home';
+                                })
+                                .catch(error => {
+                                    if (error.response) {
+                                        const errors = error.response.data.errors;
+                                        alert(errors ? Object.values(errors).join(' ') : 'เกิดข้อผิดพลาด');
+                                    } else {
+                                        alert('เกิดข้อผิดพลาดในการสมัครสมาชิก');
+                                    }
+                                });
+
+                        } catch (err) {
+                            console.log(err.message);
+
+                        }
+                    });
+                </script>
+
+
             </form>
         </div>
     </div>
