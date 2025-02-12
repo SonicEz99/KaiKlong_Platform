@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +8,13 @@
     <title>Document</title>
     @vite(['resources/js/app.js'])
 </head>
+
 <body>
     <p>You are logged in</p>
 
-    <p>Hi, {{ session('name') }}</p>
+    <p>Hi, {{ session('user_name') }}</p>
 
     <p>Hi, {{ Auth::user()->name ?? 'Guest' }}</p>
 </body>
+
 </html>

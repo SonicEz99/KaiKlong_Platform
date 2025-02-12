@@ -14,6 +14,7 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
+        font-weight: bold;
     }
 
     .text {
@@ -32,7 +33,7 @@
     .btn_web_color {
         background-color: rgb(255, 139, 61);
         border: none;
-        border-radius: 14px;
+        border-radius: 10px;
         padding: 10px;
         color: white;
     }
@@ -106,70 +107,103 @@
             text-align: center;
         }
     }
+
+    .box-google {
+        width: 100%;
+        border: 1px solid rgb(255, 139, 61);
+        margin-top: 15px;
+        padding: 8px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 14px;
+    
+    }
+
+    .text-google {
+        text-decoration: none;
+        color: rgb(255, 139, 61);
+    }
 </style>
 
 @extends('layouts.app')
 @section('content')
 
-<body style="background-color: #FFE6C9;">
-    <div class="container">
-        <div class="bg-from">
-            <form>
-                <h3 class="color_web text-center mb-3">Kaiklong</h3>
-                <p class=" text text-center mb-3">เข้าสู่ระบบ</p>
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="lable form-label">ชื่อผู้ใช้งาน / อีเมล</label>
-                    <input type="email" id="user_email" class="form-control" id="exampleInputEmail1"
-                        aria-describedby="emailHelp" placeholder="กรอกชื่อผู้ใช้งาน / อีเมล">
-                </div>
-                <div class="mb-3">
-                    <label for="exampleInputPassword1" class="lable form-label">รหัสผ่าน</label>
-                    <input type="password" id="user_password" class="text form-control" id="exampleInputPassword1"
-                        placeholder="กรอกรหัสผ่าน">
-                </div>
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="checkbox" id="exampleCheck1">
-                    <label class="text" for="exampleCheck1">จดจำการเข้าสู่ระบบของฉัน</label>
-                </div>
-                <button type="submit" class="btn_web_color w-100">เข้าสู่ระบบ</button>
-                <a href="/register" class="text-goregister">หากไม่เคยเป็นสมาชิกกับขายคล่อง? <span>สมัครเลย</span></a>
+    <body style="background-color: #FFE6C9;">
+        <div class="container">
+            <div class="bg-from">
+                <form id="loginForm">
+                    <h3 class="color_web text-center mb-3">Kaiklong</h3>
+                    <p class=" text text-center mb-3">เข้าสู่ระบบ</p>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="lable form-label">ชื่อผู้ใช้งาน / อีเมล</label>
+                        <input type="email" id="user_email" class="form-control" id="exampleInputEmail1"
+                            aria-describedby="emailHelp" placeholder="กรอกชื่อผู้ใช้งาน / อีเมล">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="lable form-label">รหัสผ่าน</label>
+                        <input type="password" id="user_password" class="text form-control" id="exampleInputPassword1"
+                            placeholder="กรอกรหัสผ่าน">
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="checkbox" id="exampleCheck1">
+                        <label class="text" for="exampleCheck1">จดจำการเข้าสู่ระบบของฉัน</label>
+                    </div>
+                    <button type="submit" class="btn_web_color w-100">เข้าสู่ระบบ</button>
 
-                <script>
-                    document.querySelector('form').addEventListener('submit', function (e) {
-                        e.preventDefault(); // ป้องกันการ submit ฟอร์ม
-                        try {
+
+                    <div class="box-google">
+                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30"
+                            viewBox="0 0 50 50">
+                            <path fill="#fbc02d"
+                                d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12	s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20	s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z">
+                            </path>
+                            <path fill="#e53935"
+                                d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039	l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z">
+                            </path>
+                            <path fill="#4caf50"
+                                d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36	c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z">
+                            </path>
+                            <path fill="#1565c0"
+                                d="M43.611,20.083L43.595,20L42,20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z">
+                            </path>
+                        </svg>
+                        <a class="text-google" href="{{ route('auth.google') }}">
+                            เชื่อมต่อด้วย GOOGLE
+                        </a>
+                    </div>
+
+
+
+                    <a href="/register" class="text-goregister">หากไม่เคยเป็นสมาชิกกับขายคล่อง? <span>สมัครเลย</span></a>
+
+                    <script>
+                        document.querySelector('form').addEventListener('submit', function (e) {
+                            e.preventDefault();
                             const userEmail = document.getElementById('user_email').value;
                             const userPassword = document.getElementById('user_password').value;
-                            // ส่งข้อมูลไปยัง API
                             axios.post('/api/login', {
                                 user_email: userEmail,
                                 user_password: userPassword,
                             })
                                 .then(response => {
-                                    alert(response.data.message);
+                                    console.log(response.data);
+                                    localStorage.setItem('token', response.data.token);
                                     window.location.href = '/home';
                                 })
                                 .catch(error => {
-                                    if (error.response) {
-                                        const errors = error.response.data.errors;
-                                        alert(errors ? Object.values(errors).join(' ') : 'เกิดข้อผิดพลาด');
-                                    } else {
-                                        alert('เกิดข้อผิดพลาดในการสมัครสมาชิก');
-                                    }
+                                    console.error(error);
                                 });
 
-                        } catch (err) {
-                            console.log(err.message);
-
-                        }
-                    });
-                </script>
+                        });
+                    </script>
 
 
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
-</body>
+    </body>
 @endsection
 
 </html>

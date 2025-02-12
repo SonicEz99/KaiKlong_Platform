@@ -84,7 +84,7 @@
             setTimeout(() => {
                 document.querySelector(".bg-loadding").style.display = "none";
                 document.getElementById("page_content").style.display = "block";
-            }, 1000);
+            }, 300);
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
