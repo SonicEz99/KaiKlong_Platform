@@ -37,8 +37,6 @@ class authController extends Controller
         }
     }
 
-
-
     public function login(Request $request)
     {
         try {
@@ -74,13 +72,15 @@ class authController extends Controller
 
 
     public function logout(Request $request)
-    {
-        $request->user()->tokens->each(function ($token) {
-            $token->delete();
-        });
+{
+    $request->user()->tokens->each(function ($token) {
+        $token->delete();
+    });
 
-        return response()->json(['message' => 'Logged out successfully'], 200);
-    }
-
+    return response()->json([
+        'message' => 'Logged out successfully',
+        'redirect' => '/'
+    ], 200);
+}
 
 }
