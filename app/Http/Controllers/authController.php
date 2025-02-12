@@ -55,6 +55,7 @@ class authController extends Controller
                 $token = $user->createToken('auth_token')->plainTextToken;
 
                 session()->put('user_name', $user->user_name);
+                Auth::login($user);
 
                 return response()->json([
                     'message' => 'Login successful',
@@ -72,15 +73,21 @@ class authController extends Controller
 
 
     public function logout(Request $request)
-{
-    $request->user()->tokens->each(function ($token) {
-        $token->delete();
-    });
+    {
+        // Revoke Laravel Sanctum tokens
+        $request->user()->tokens()->delete();
 
-    return response()->json([
-        'message' => 'Logged out successfully',
-        'redirect' => '/'
-    ], 200);
-}
+        // Destroy Laravel session
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Google Logout URL (Forcing Google Sign-Out)
+        $googleLogoutUrl = "https://accounts.google.com/logout";
+
+        // Redirect to Google Logout then back to homepage
+        return redirect($googleLogoutUrl)->withHeaders(['Location' => '/'])
+            ->withCookie(cookie()->forget('laravel_session'))
+            ->withCookie(cookie()->forget('XSRF-TOKEN'));
+    }
 
 }

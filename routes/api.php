@@ -6,8 +6,7 @@ use App\Http\Controllers\AuthController; // Correct the capitalization here
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-
+Route::middleware('web')->post('/login', [authController::class, 'login']);
 
 // Protected routes (Require authentication)
 Route::middleware('auth:sanctum')->group(function () {
