@@ -8,4 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class Brand extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'brand_id';
+
+    protected $fillable = [
+        'brand_name',
+        'brand_pic_path',
+        'category_id',
+    ];
+
+    public $timestamps = false;
+
+    public function category()
+    {
+        return $this->belongsTo(Categorie::class, 'category_id');
+    }
 }
