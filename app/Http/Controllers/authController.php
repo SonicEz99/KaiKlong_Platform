@@ -70,8 +70,6 @@ class authController extends Controller
         }
     }
 
-
-
     public function logout(Request $request)
     {
         // Revoke Laravel Sanctum tokens
@@ -81,11 +79,8 @@ class authController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // Google Logout URL (Forcing Google Sign-Out)
-        $googleLogoutUrl = "https://accounts.google.com/logout";
-
         // Redirect to Google Logout then back to homepage
-        return redirect($googleLogoutUrl)->withHeaders(['Location' => '/'])
+        return redirect('/')->withHeaders(['Location' => '/'])
             ->withCookie(cookie()->forget('laravel_session'))
             ->withCookie(cookie()->forget('XSRF-TOKEN'));
     }
