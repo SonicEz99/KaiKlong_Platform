@@ -2,9 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController; // Correct the capitalization here
 use App\Http\Controllers\brandController;
+use App\Http\Controllers\productController;
 use App\Http\Controllers\categoryController;
+use App\Http\Controllers\AuthController; // Correct the capitalization here
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register'])->name('register');
@@ -18,6 +19,9 @@ Route::get('/categoriesBrandAndType/{id}', [CategoryController::class, 'getCateg
 
 Route::post('/addBrand1', [brandController::class, 'addBrand1']);
 Route::post('/addBrand2', [brandController::class, 'addBrand2']);
+
+Route::post('/addProduct', [productController::class, 'addProduct']);
+Route::get('/product', [productController::class, 'getProduct']);
 
 // Protected routes (Require authentication)
 Route::middleware('auth:sanctum')->group(function () {
