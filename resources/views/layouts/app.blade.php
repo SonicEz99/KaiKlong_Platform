@@ -80,12 +80,15 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            setTimeout(() => {
+            const startTime = performance.now();
+
+            window.onload = function () {
                 document.querySelector(".bg-loadding").style.display = "none";
                 document.getElementById("page_content").style.display = "block";
-            }, 300);
+            };
         });
-        
+
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>

@@ -150,6 +150,7 @@
     }
 
     @media (max-width: 576px) {
+
         .menu-nav,
         .menu-nav-small,
         .profile {
@@ -174,8 +175,9 @@
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container">
-            <button class="menu-ham navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="menu-ham navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="row-nav collapse navbar-collapse" id="navbarNavDropdown">
@@ -218,11 +220,13 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            setTimeout(() => {
+        document.addEventListener("DOMContentLoaded", function () {
+            const startTime = performance.now();
+
+            window.onload = function () {
                 document.querySelector(".bg-loadding").style.display = "none";
                 document.getElementById("page_content").style.display = "block";
-            }, 1000);
+            };
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
