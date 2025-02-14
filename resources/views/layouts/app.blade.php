@@ -74,7 +74,6 @@
         </div>
     </div>
 
-
     <div id="page_content">
         @yield('content')
     </div>
@@ -86,6 +85,7 @@
                 document.getElementById("page_content").style.display = "block";
             }, 300);
         });
+        
     </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>
