@@ -41,15 +41,10 @@
     }
 
     .ad-container {
-        background-color: #DCDCDC;
-        padding: 50px;
-        width: 100%;
-        height: 250px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        margin-bottom: 24px;
+        background-image: url('kaiklong.png');
+        margin-bottom: 14px;
+        height: 350px;
+        background-position: center;
     }
 
     .title {
@@ -66,13 +61,13 @@
 
     .product {
         text-align: center;
-        width: 150px;
+        width: 120px;
         color: #666;
     }
 
     .product img {
-        width: 150px;
-        height: 100px;
+        width: 100px;
+        height: 80px;
         display: block;
         margin: 0 auto 10px;
     }
@@ -163,7 +158,7 @@
 
         .card-product {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(1, 1fr);
         }
 
         .product-container {
@@ -171,169 +166,167 @@
             grid-template-columns: repeat(2, 1fr);
         }
     }
+
+    @media (min-width: 486px) {
+        .flex-search {
+            width: 100%;
+        }
+
+        .card-product {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2px;
+        }
+
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .flex-search {
+            width: 100%;
+        }
+
+        .card-product {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .flex-search {
+            width: 100%;
+        }
+
+        .card-product {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+        }
+    }
 </style>
 
 
 @extends('layouts.page')
 @section('content')
-<body>
-    <div style="background-color: #FFE5CC">
-        <div class="search-container">
-            <div class="flex-search">
-                <input type="text" class="search-box" placeholder="คุณกำลังมองหาอะไรอยู่?">
-                <button class="search-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" width="32" height="32" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
 
-    <div class="container">
-
-        <div class="ad-container">
-            <h2>พื้นที่โฆษณา</h2>
-            <p>โฆษณาสินค้าของคุณที่นี่! ติดต่อเราสำหรับรายละเอียดเพิ่มเติม</p>
-        </div>
-
-        <div class="title">
-            <p>รวมสินค้าที่ดี มีคุณภาพ ครบครันและหลากหลายที่สุดของประเทศ</p>
-        </div>
-
-        <div class="product-container">
-            <div class="product">
-                <img src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg" alt="รถมือสอง">
-                <p>รถมือสอง</p>
-            </div>
-            <div class="product">
-                <img src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg" alt="รถมือสอง">
-                <p>รถมือสอง</p>
-            </div>
-            <div class="product">
-                <img src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg" alt="รถมือสอง">
-                <p>รถมือสอง</p>
-            </div>
-            <div class="product">
-                <img src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg" alt="รถมือสอง">
-                <p>รถมือสอง</p>
-            </div>
-            <div class="product">
-                <img src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg" alt="รถมือสอง">
-                <p>รถมือสอง</p>
-            </div>
-            <div class="product">
-                <img src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg" alt="รถมือสอง">
-                <p>รถมือสอง</p>
-            </div>
-            <div class="product">
-                <img src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg" alt="รถมือสอง">
-                <p>รถมือสอง</p>
-            </div>
-            <div class="product">
-                <img src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg" alt="รถมือสอง">
-                <p>รถมือสอง</p>
-            </div>
-        </div>
-
-        <div class="highlight">
-            <p>หาง่ายขึ้น! เลือกเลย!!!</p>
-            <div class="product-type">
-                <p>นาฬิกา <span class="count">(20)</span></p>
-            </div>
-        </div>
-
-        <div class="title2">
-            <p>การประกาศขายล่าสุด</p>
-        </div>
-
-        <div class="card-product">
-            <div class="card">
-                <img class="image-item" src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg"
-                    alt="รถมือสอง">
-                <div class="text-detail">
-                    <b style="color:rgb(81, 81, 81)">รถมือสอง <br> บุรีรัมย์ <br> 980,980</b>
-                </div>
-                <div class="card-btn">
-                    <button class="btn_detail">ดูสินค้า</button>
-                </div>
-            </div>
-            <div class="card">
-                <img class="image-item" src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg"
-                    alt="รถมือสอง">
-                <div class="text-detail">
-                    <b style="color:rgb(81, 81, 81)">รถมือสอง <br> บุรีรัมย์ <br> 980,980</b>
-                </div>
-                <div class="card-btn">
-                    <button class="btn_detail">ดูสินค้า</button>
-                </div>
-            </div>
-            <div class="card">
-                <img class="image-item" src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg"
-                    alt="รถมือสอง">
-                <div class="text-detail">
-                    <b style="color:rgb(81, 81, 81)">รถมือสอง <br> บุรีรัมย์ <br> 980,980</b>
-                </div>
-                <div class="card-btn">
-                    <button class="btn_detail">ดูสินค้า</button>
-                </div>
-            </div>
-            <div class="card">
-                <img class="image-item" src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg"
-                    alt="รถมือสอง">
-                <div class="text-detail">
-                    <b style="color:rgb(81, 81, 81)">รถมือสอง <br> บุรีรัมย์ <br> 980,980</b>
-                </div>
-                <div class="card-btn">
-                    <button class="btn_detail">ดูสินค้า</button>
-                </div>
-            </div>
-            <div class="card">
-                <img class="image-item" src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg"
-                    alt="รถมือสอง">
-                <div class="text-detail">
-                    <b style="color:rgb(81, 81, 81)">รถมือสอง <br> บุรีรัมย์ <br> 980,980</b>
-                </div>
-                <div class="card-btn">
-                    <button class="btn_detail">ดูสินค้า</button>
-                </div>
-            </div>
-            <div class="card">
-                <img class="image-item" src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg"
-                    alt="รถมือสอง">
-                <div class="text-detail">
-                    <b style="color:rgb(81, 81, 81)">รถมือสอง <br> บุรีรัมย์ <br> 980,980</b>
-                </div>
-                <div class="card-btn">
-                    <button class="btn_detail">ดูสินค้า</button>
+    <body>
+        <div style="background-color: #FFE5CC">
+            <div class="search-container container">
+                <div class="flex-search">
+                    <input type="text" class="search-box" placeholder="คุณกำลังมองหาอะไรอยู่?">
+                    <button class="search-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" width="32" height="32" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
 
+        <div class="container">
 
-    </div>
-</body>
+            <div class="ad-container"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+            <div class="title">
+                <p>รวมสินค้าที่ดี มีคุณภาพ ครบครันและหลากหลายที่สุดของประเทศ</p>
+            </div>
 
-<script>
-    document.getElementById('logout-button')?.addEventListener('click', function () {
-        axios.post("{{ route('logout') }}", {}, {
-            headers: {
-                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-            }
-        })
-            .then(response => {
-                alert(response.data.message);
-                window.location.href = response.data.redirect;
+            <div class="product-container">
+
+
+
+            </div>
+
+            <div class="highlight">
+                <p>หาง่ายขึ้น! เลือกเลย!!!</p>
+                <div class="product-type">
+                    <p>นาฬิกา <span class="count">(20)</span></p>
+                </div>
+            </div>
+
+            <div class="title2">
+                <p>การประกาศขายล่าสุด</p>
+            </div>
+
+            <div class="card-product">
+                <div class="card">
+                    <img class="image-item" src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg"
+                        alt="รถมือสอง">
+                    <div class="text-detail">
+                        <b style="color:rgb(81, 81, 81)">รถมือสอง <br> บุรีรัมย์ <br> 980,980</b>
+                    </div>
+                    <div class="card-btn">
+                        <button class="btn_detail">ดูสินค้า</button>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </body>
+
+    <script>
+        document.getElementById('logout-button')?.addEventListener('click', function () {
+            axios.post("{{ route('logout') }}", {}, {
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                }
             })
-            .catch(error => {
-                console.error('Logout failed:', error);
-            });
-    });
-</script>
+                .then(response => {
+                    alert(response.data.message);
+                    window.location.href = response.data.redirect;
+                })
+                .catch(error => {
+                    console.error('Logout failed:', error);
+                });
+        });
+
+
+        // fetch api categories 
+        fetch('/api/categories')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.querySelector('.product-container');
+                console.log(data.categories);
+                data = data.categories;
+                data.forEach(category => {
+                    const productDiv = document.createElement('div');
+                    productDiv.classList.add('product');
+
+                    const img = document.createElement('img');
+                    img.src = category.category_pic_path
+                    img.alt = category.category_name;
+
+                    const p = document.createElement('p');
+                    p.textContent = category.category_name;
+
+                    productDiv.appendChild(img);
+                    productDiv.appendChild(p);
+                    container.appendChild(productDiv);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+
+
+        // new sale fetch
+
+
+    </script>
 @endsection
 
 </html>

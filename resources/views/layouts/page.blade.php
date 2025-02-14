@@ -170,7 +170,10 @@
         </div>
     </div>
 
+    <?php
+$user = Auth::user();
 
+    ?>
 
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -201,7 +204,7 @@
                     <div class="profile">
                         <div class="profile-pic">
                             <img class="profile-pic"
-                                src="https://e7.pngegg.com/pngimages/533/648/png-clipart-person-thought-people-thinking-desktop-wallpaper-glasses-thumbnail.png"
+                                src="<?php echo $user->user_pic ? $user->user_pic : 'https://www.shutterstock.com/image-vector/avatar-gender-neutral-silhouette-vector-600nw-2470054311.jpg' ?>"
                                 alt="">
                         </div>
                         <div class="btn-sale">
