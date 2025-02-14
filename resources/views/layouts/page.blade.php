@@ -26,7 +26,7 @@
     }
 
     #loading {
-        background-color: rgba(255, 255, 255, 0.81);
+        background-color: rgb(255, 255, 255);
         box-shadow: black;
         padding: 70px 200px;
         border-radius: 24px;
@@ -56,6 +56,107 @@
             text-align: center;
         }
     }
+
+    .row-nav {
+        display: flex;
+
+        align-items: center;
+    }
+
+    .menu-nav-small {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .menu-nav {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .navbar {
+        padding: 25px;
+    }
+
+    .menu {
+        color: rgb(255, 139, 61);
+        font-weight: bold;
+
+    }
+
+    .menu-bar {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+    }
+
+    .logo h1 {
+        font-weight: bold;
+        color: rgb(255, 139, 61);
+    }
+
+    .menu-part {
+        font-weight: bold;
+        display: flex;
+        gap: 14px;
+    }
+
+    .profile-pic {
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+        /* background-color: red; */
+    }
+
+    .menu-ham:focus {
+        border: none;
+    }
+
+    .menu-ham {
+        border-radius: 4px;
+        padding: 4px;
+        color: rgb(255, 139, 61);
+        border: none;
+    }
+
+    .profile {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .btn-sale button {
+        padding: 10px;
+        background-color: coral;
+        color: white;
+        border-radius: 4px;
+        border: none;
+        width: 120px;
+    }
+
+
+    @media (max-width: 768px) {
+
+        .menu-nav,
+        .menu-nav-small,
+        .profile {
+            display: flex;
+            flex-direction: column;
+        }
+
+    }
+
+    @media (max-width: 576px) {
+        .menu-nav,
+        .menu-nav-small,
+        .profile {
+            display: flex;
+            flex-direction: column;
+        }
+    }
 </style>
 
 <body>
@@ -68,19 +169,61 @@
         </div>
     </div>
 
-    <div class="navbar">navbar</div>
+
+
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container">
+            <button class="menu-ham navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="row-nav collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="menu-nav navbar-nav">
+                    <div class="menu-nav-small">
+                        <li class="nav-item">
+                            <a class="logo nav-link active" aria-current="page" href="#">
+                                <h1>Kaiklong</h1>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="menu nav-link" href="#">หน้าหลัก</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="menu nav-link" href="#">เกี่ยวกับเรา</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="menu nav-link" href="#">เริ่มต้นยังไง?</a>
+                        </li>
+                    </div>
+                    <div class="profile">
+                        <div class="profile-pic">
+                            <img class="profile-pic"
+                                src="https://e7.pngegg.com/pngimages/533/648/png-clipart-person-thought-people-thinking-desktop-wallpaper-glasses-thumbnail.png"
+                                alt="">
+                        </div>
+                        <div class="btn-sale">
+                            <button>ลงขาย</button>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+
     <div id="page_content">
         @yield('content')
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             setTimeout(() => {
                 document.querySelector(".bg-loadding").style.display = "none";
                 document.getElementById("page_content").style.display = "block";
-            }, 2000);
+            }, 1000);
         });
-
     </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>
