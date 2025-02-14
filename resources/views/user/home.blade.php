@@ -174,7 +174,8 @@
 </style>
 
 
-
+@extends('layouts.page')
+@section('content')
 <body>
     <div style="background-color: #FFE5CC">
         <div class="search-container">
@@ -333,5 +334,6 @@
             });
     });
 </script>
+@endsection
 
 </html>
