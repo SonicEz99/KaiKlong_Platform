@@ -48,14 +48,15 @@ class authController extends Controller
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
-            
+
             $user = User::where('user_email', $request->user_email)->first();
 
             if ($user && Hash::check($request->user_password, $user->user_password)) {
                 $token = $user->createToken('auth_token')->plainTextToken;
 
                 session()->put('user_name', $user->user_name);
-                Auth::login($user);
+                Auth::login($user, true); // true = remember user
+                session()->regenerate();  // Prevent session fixation attacks
 
                 return response()->json([
                     'message' => 'Login successful',
@@ -84,5 +85,4 @@ class authController extends Controller
             ->withCookie(cookie()->forget('laravel_session'))
             ->withCookie(cookie()->forget('XSRF-TOKEN'));
     }
-
 }

@@ -22,10 +22,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/about', function () {
         return view('about');
     });
-    Route::get('/home', function () {
-        return view('user.home');
-    })->name('home');
 });
+
+Route::middleware('web')->get('/home', function () {
+    return view('user.home');
+})->name('home');
+
 
 
 Route::controller(GoogleController::class)->group(function () {
