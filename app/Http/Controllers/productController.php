@@ -30,7 +30,7 @@ class productController extends Controller
                 return response()->json(['errors' => $validator->errors()], 500);
             }
 
-            $user_id = Auth::id(); 
+            $user_id = 6; 
 
             // Step 1: Create the product
             $productData = [
@@ -64,7 +64,7 @@ class productController extends Controller
                         $imagePath = 'product_pic/' . $imageName;
             
                         ProductImage::create([
-                            'product_id' => $product->id,
+                            'product_id' => $product->product_id,
                             'image_path' => $imagePath,
                         ]);
                     }
