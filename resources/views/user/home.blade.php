@@ -22,6 +22,7 @@
         width: 100%;
         display: flex;
         justify-content: center;
+        
     }
 
     .search-box {
@@ -73,6 +74,7 @@
     }
 
     .highlight {
+        font-size: 24px;
         color: #FF8C00;
         font-weight: bold;
         text-align: left;
@@ -80,12 +82,24 @@
     }
 
     .product-type {
+        font-size: 16px;
         color: #000000;
         font-weight: bold;
         text-align: left;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .product-type p {
+        width: calc(20% - 10px);
+        text-align: center;
     }
 
     .title2 {
+        font-size: 24px;
         color: #FF8C00;
         font-weight: bold;
         text-align: left;
@@ -96,8 +110,9 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 20px;
-        padding: 20px;
+        padding-left: 20px;
         justify-content: center;
+        margin-top: -20px;
     }
 
     .btn_detail {
@@ -163,8 +178,28 @@
 
         .product-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            /* ทำให้ขนาดสมมาตร */
+            gap: 20px;
+            /* ระยะห่าง */
+            justify-items: center;
+            /* จัดให้อยู่ตรงกลาง */
+            align-items: center;
         }
+
+        .product img {
+            width: 100px;
+            /* ขนาดมาตรฐาน */
+            height: 100px;
+            /* ใช้ความสูงเท่ากับความกว้าง */
+            object-fit: cover;
+            /* ทำให้รูปภาพไม่บิดเบี้ยว */
+            border-radius: 10px;
+            /* เพิ่มมุมโค้งเล็กน้อย */
+            display: block;
+            margin: 0 auto;
+        }
+
     }
 
     @media (min-width: 486px) {
@@ -248,14 +283,12 @@
 
             <div class="product-container">
 
-
-
             </div>
 
             <div class="highlight">
                 <p>หาง่ายขึ้น! เลือกเลย!!!</p>
                 <div class="product-type">
-                    <p>นาฬิกา <span class="count">(20)</span></p>
+                    <p id="product-name">กำลังโหลด...</p>
                 </div>
             </div>
 
@@ -281,12 +314,12 @@
     </body>
 
     <script>
-        document.getElementById('logout-button')?.addEventListener('click', function () {
+        document.getElementById('logout-button')?.addEventListener('click', function() {
             axios.post("{{ route('logout') }}", {}, {
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                }
-            })
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    }
+                })
                 .then(response => {
                     alert(response.data.message);
                     window.location.href = response.data.redirect;
@@ -304,16 +337,24 @@
                 const container = document.querySelector('.product-container');
                 console.log(data.categories);
                 data = data.categories;
+
                 data.forEach(category => {
                     const productDiv = document.createElement('div');
                     productDiv.classList.add('product');
 
                     const img = document.createElement('img');
-                    img.src = category.category_pic_path
+                    img.src = category.category_pic_path;
                     img.alt = category.category_name;
+
+                    
+                    img.style.width = "100px";
+                    img.style.height = "100px";
+                    img.style.objectFit = "contain"; 
+                    img.style.borderRadius = "10px"; 
 
                     const p = document.createElement('p');
                     p.textContent = category.category_name;
+                    p.style.textAlign = "center"; 
 
                     productDiv.appendChild(img);
                     productDiv.appendChild(p);
@@ -321,11 +362,30 @@
                 });
             })
             .catch(error => console.error('Error fetching data:', error));
-
-
         // new sale fetch
+    </script>
 
 
+    {{-- fecth quicksearch --}}
+    <script>
+        async function fetchFirstTenTypes() {
+            try {
+                const response = await fetch("http://127.0.0.1:8000/api/types/first-ten");
+                const data = await response.json();
+
+                const container = document.querySelector('.product-type');
+                if (!container) return; // ป้องกัน error ถ้า container ไม่เจอ
+
+                let typeNames = data.map(type => `<p>${type.type_name}</p>`).join(''); // รวม type_name เป็น HTML
+                container.innerHTML = typeNames; // อัปเดตเนื้อหาโดยไม่ลบ `<div>`
+
+            } catch (error) {
+                console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+                document.getElementById("product-name").innerText = "โหลดข้อมูลล้มเหลว";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", fetchFirstTenTypes);
     </script>
 @endsection
 

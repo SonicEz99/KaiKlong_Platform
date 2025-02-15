@@ -6,6 +6,7 @@ use App\Http\Controllers\brandController;
 use App\Http\Controllers\productController;
 use App\Http\Controllers\categoryController;
 use App\Http\Controllers\AuthController; // Correct the capitalization here
+use App\Http\Controllers\TypeController; // Correct the capitalization here
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register'])->name('register');
@@ -16,6 +17,11 @@ Route::get('/categories', [CategoryController::class, 'getCategory']);
 Route::get('/categories/{id}', [CategoryController::class, 'getCategoryById']);
 Route::get('/categoriesBrandAndType', [CategoryController::class, 'getCategoryAndBrandAndType']);
 Route::get('/categoriesBrandAndType/{id}', [CategoryController::class, 'getCategoryAndBrandAndTypeById']);
+
+Route::get('/types',[TypeController::class, 'index']);
+Route::get('/types/category/{category_id}', [TypeController::class, 'getByCategory']);
+Route::get('/types/first-ten', [TypeController::class, 'getFirstTenTypes']);
+
 
 Route::post('/addBrand1', [brandController::class, 'addBrand1']);
 Route::post('/addBrand2', [brandController::class, 'addBrand2']);
