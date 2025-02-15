@@ -9,6 +9,8 @@ class Type extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'type_id';
+
     public function category()
     {
         return $this->belongsTo(Categorie::class, 'category_id');

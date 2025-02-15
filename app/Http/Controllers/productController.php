@@ -30,7 +30,7 @@ class productController extends Controller
                 return response()->json(['errors' => $validator->errors()], 500);
             }
 
-            $user_id = 6; 
+            $user_id = Auth::id(); 
 
             // Step 1: Create the product
             $productData = [
