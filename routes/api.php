@@ -22,6 +22,8 @@ Route::post('/addBrand2', [brandController::class, 'addBrand2']);
 
 Route::post('/addProduct', [productController::class, 'addProduct']);
 Route::get('/product', [productController::class, 'getProduct']);
+Route::delete('/deleteProduct/{id}', [productController::class, 'deleteProduct']);
+Route::post('/updateProduct/{id}', [productController::class, 'updateProduct']);
 
 // Protected routes (Require authentication)
 Route::middleware('auth:sanctum')->group(function () {
