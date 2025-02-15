@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Categorie;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -79,7 +80,7 @@ class productController extends Controller
 
     public function getProduct()
     {
-        $products = Product::with('productImages')->get();
+        $products = Product::with(['productImages','category','category.brands', 'category.types','user'])->get();
 
         return response()->json([
             'message' => 'Products retrieved successfully',
