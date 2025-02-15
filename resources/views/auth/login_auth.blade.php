@@ -142,9 +142,9 @@
                     <h3 class="color_web text-center mb-3">Kaiklong</h3>
                     <p class=" text text-center mb-3">เข้าสู่ระบบ</p>
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="lable form-label">ชื่อผู้ใช้งาน / อีเมล</label>
+                        <label for="exampleInputEmail1" class="lable form-label">อีเมล</label>
                         <input type="email" id="user_email" class="form-control" id="exampleInputEmail1"
-                            aria-describedby="emailHelp" placeholder="กรอกชื่อผู้ใช้งาน / อีเมล">
+                            aria-describedby="emailHelp" placeholder="กรอกอีเมล">
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="lable form-label">รหัสผ่าน</label>
