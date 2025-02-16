@@ -106,7 +106,7 @@
         padding: 20px;
     }
 
-    .card-product {
+    #card-product {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 20px;
@@ -171,7 +171,7 @@
             width: 100%;
         }
 
-        .card-product {
+        #card-product {
             display: grid;
             grid-template-columns: repeat(1, 1fr);
         }
@@ -207,7 +207,7 @@
             width: 100%;
         }
 
-        .card-product {
+        #card-product {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 2px;
@@ -225,7 +225,7 @@
             width: 100%;
         }
 
-        .card-product {
+        #card-product {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
         }
@@ -241,7 +241,7 @@
             width: 100%;
         }
 
-        .card-product {
+        #card-product {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
         }
@@ -292,7 +292,7 @@
                 <p>การประกาศขายล่าสุด</p>
             </div>
 
-            <div id="products-container" style="display:flex">
+            <div id="card-product">
 
             </div>
 
@@ -301,21 +301,19 @@
                     .then(response => response.json())
                     .then(data => {
                         console.log(data);
-                        const productsContainer = document.getElementById("products-container");
+                        const productsContainer = document.getElementById("card-product");
                         data.products.forEach(product => {
                             const productCard = `
-                                                                                <div class="card-product">                                                  
-                                                                                    <div class="card border rounded-lg shadow-md p-4">
-                                                                                        <img class="image-item w-full h-40 object-cover" src="/${product.product_images.image_path}" alt="${product.product_name}" />
-                                                                                        <div class="text-detail mt-2">
-                                                                                            <b class="text-gray-700">${product.product_name} <br /> ${product.product_location} <br /> ${new Intl.NumberFormat().format(product.product_price)}</b>
-                                                                                        </div>
-                                                                                        <div class="card-btn mt-2">
-                                                                                            <button class="btn_detail bg-blue-500 text-white px-4 py-2 rounded-md">ดูสินค้า</button>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            `;
+                                                                                                        <div class="card border rounded-lg shadow-md p-4">
+                                                                                                            <img class="image-item w-full h-40 object-cover" src="/${product.product_images[0].image_path}" alt="${product.product_name}" />
+                                                                                                            <div class="text-detail mt-2">
+                                                                                                                <b class="text-gray-700">${product.product_name} <br /> ${product.product_location} <br /> ${new Intl.NumberFormat().format(product.product_price)}</b>
+                                                                                                            </div>
+                                                                                                            <div class="card-btn mt-2">
+                                                                                                                <button class="btn_detail bg-blue-500 text-white px-4 py-2 rounded-md">ดูสินค้า</button>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                `;
                             productsContainer.innerHTML += productCard;
                         });
                     })
