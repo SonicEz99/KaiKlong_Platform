@@ -138,11 +138,13 @@
 
     .image-item {
         height: 150px;
+        border-radius: 5px 5px 0px 0px;
     }
 
     .text-detail {
         text-align: left;
-        padding: 14px;
+        padding: 4px;
+        color: rgb(92, 92, 92);
     }
 
     .card-btn {
