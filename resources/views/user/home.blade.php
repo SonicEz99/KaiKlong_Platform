@@ -281,10 +281,6 @@
                 <p>รวมสินค้าที่ดี มีคุณภาพ ครบครันและหลากหลายที่สุดของประเทศ</p>
             </div>
 
-            <div class="product-container">
-
-            </div>
-
             <div class="highlight">
                 <p>หาง่ายขึ้น! เลือกเลย!!!</p>
                 <div class="product-type">
@@ -296,31 +292,34 @@
                 <p>การประกาศขายล่าสุด</p>
             </div>
 
+            <div id="products-container" style="display:flex">
+
+            </div>
+
             <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    fetch("/api/products")
-                        .then(response => response.json())
-                        .then(data => {
-                            const productsContainer = document.getElementById("products-container");
-                            data.products.forEach(product => {
-                                const productCard = `
-                                    <div class="card-product">
-                                        <div class="card border rounded-lg shadow-md p-4">
-                                            <img class="image-item w-full h-40 object-cover" src="${product.image}" alt="${product.name}" />
-                                            <div class="text-detail mt-2">
-                                                <b class="text-gray-700">${product.name} <br /> ${product.location} <br /> ${new Intl.NumberFormat().format(product.price)}</b>
-                                            </div>
-                                            <div class="card-btn mt-2">
-                                                <button class="btn_detail bg-blue-500 text-white px-4 py-2 rounded-md">ดูสินค้า</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                                productsContainer.innerHTML += productCard;
-                            });
-                        })
-                        .catch(error => console.error("Error fetching products:", error));
-                });
+                fetch("/api/product")
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        const productsContainer = document.getElementById("products-container");
+                        data.products.forEach(product => {
+                            const productCard = `
+                                                                                <div class="card-product">                                                  
+                                                                                    <div class="card border rounded-lg shadow-md p-4">
+                                                                                        <img class="image-item w-full h-40 object-cover" src="/${product.product_images.image_path}" alt="${product.product_name}" />
+                                                                                        <div class="text-detail mt-2">
+                                                                                            <b class="text-gray-700">${product.product_name} <br /> ${product.product_location} <br /> ${new Intl.NumberFormat().format(product.product_price)}</b>
+                                                                                        </div>
+                                                                                        <div class="card-btn mt-2">
+                                                                                            <button class="btn_detail bg-blue-500 text-white px-4 py-2 rounded-md">ดูสินค้า</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            `;
+                            productsContainer.innerHTML += productCard;
+                        });
+                    })
+                    .catch(error => console.error("Error fetching products:", error));
             </script>
 
 
@@ -328,12 +327,12 @@
     </body>
 
     <script>
-        document.getElementById('logout-button')?.addEventListener('click', function() {
+        document.getElementById('logout-button')?.addEventListener('click', function () {
             axios.post("{{ route('logout') }}", {}, {
-                    headers: {
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    }
-                })
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                }
+            })
                 .then(response => {
                     alert(response.data.message);
                     window.location.href = response.data.redirect;
@@ -380,7 +379,6 @@
     </script>
 
 
-    {{-- fecth quicksearch --}}
     <script>
         async function fetchFirstTenTypes() {
             try {
