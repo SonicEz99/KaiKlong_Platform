@@ -116,6 +116,7 @@
         padding-left: 20px;
         justify-content: center;
         margin-bottom: 14px;
+        border-radius: 5px;
     }
 
     .btn_detail {
@@ -126,6 +127,7 @@
         margin-top: 10px;
         border-radius: 5px;
         width: 100%;
+        font-weight: bold;
     }
 
     .card {
@@ -318,7 +320,7 @@
                                                                                                                                     <b class="text-gray-700">${product.product_name} <br /> <span class="detail-product">${product.product_location} </span>  <br /> ${new Intl.NumberFormat().format(product.product_price)}</b>
                                                                                                                                 </div>
                                                                                                                                 <div class="card-btn">
-                                                                                                                                    <button class="btn_detail bg-blue-500 text-white px-4 py-2 rounded-md">ดูสินค้า</button>
+                                                                                                                                    <button class="btn_detail">ดูสินค้า</button>
                                                                                                                                 </div>
                                                                                                                             </div>
                                                                                                                     `;
