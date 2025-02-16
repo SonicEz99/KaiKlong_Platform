@@ -135,6 +135,8 @@
 
     .image-item {
         border-radius: 10px;
+        background-color: red;
+        height: 150px;
     }
 
     .text-detail {
@@ -179,7 +181,7 @@
 
         .product-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(120px, 1fr);
             /* ทำให้ขนาดสมมาตร */
             gap: 20px;
             /* ระยะห่าง */
@@ -314,11 +316,11 @@
                         data.products.forEach(product => {
                             const productCard = `
                                                                                                                         <div class="card border rounded-lg shadow-md p-4">
-                                                                                                                            <img class="image-item w-full h-40 object-cover" src="/${product.product_images[0].image_path}" alt="${product.product_name}" />
-                                                                                                                            <div class="text-detail mt-2">
+                                                                                                                            <img class="image-item w-full" src="/${product.product_images[0].image_path}" alt="${product.product_name}" />
+                                                                                                                            <div class="text-detail">
                                                                                                                                 <b class="text-gray-700">${product.product_name} <br /> ${product.product_location} <br /> ${new Intl.NumberFormat().format(product.product_price)}</b>
                                                                                                                             </div>
-                                                                                                                            <div class="card-btn mt-2">
+                                                                                                                            <div class="card-btn">
                                                                                                                                 <button class="btn_detail bg-blue-500 text-white px-4 py-2 rounded-md">ดูสินค้า</button>
                                                                                                                             </div>
                                                                                                                         </div>
