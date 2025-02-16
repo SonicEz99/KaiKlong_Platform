@@ -309,28 +309,47 @@
             </div>
 
             <script>
-                fetch("/api/product")
+                // รอให้ DOM โหลดเสร็จก่อนรันโค้ด
+                document.addEventListener("DOMContentLoaded", function() {
+                  fetch("/api/product")
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data);
-                        const productsContainer = document.getElementById("card-product");
-                        data.products.forEach(product => {
-                            const productCard = `
-                                                                                                                            <div class="card border">
-                                                                                                                                <img class="image-item w-full" src="/${product.product_images[0].image_path}" alt="${product.product_name}" />
-                                                                                                                                <div class="text-detail">
-                                                                                                                                    <b class="text-gray-700">${product.product_name} <br /> <span class="detail-product">${product.product_location} </span>  <br /> ${new Intl.NumberFormat().format(product.product_price)}</b>
-                                                                                                                                </div>
-                                                                                                                                <div class="card-btn">
-                                                                                                                                    <button class="btn_detail">ดูสินค้า</button>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                    `;
-                            productsContainer.innerHTML += productCard;
-                        });
+                      console.log(data);
+                      const productsContainer = document.getElementById("card-product");
+                      if (!productsContainer) {
+                        console.error("ไม่พบ element ที่มี id 'card-product'");
+                        return;
+                      }
+                      let productCards = "";
+                      data.products.forEach(product => {
+                        // ตรวจสอบว่ามีข้อมูลรูปภาพหรือไม่ ถ้าไม่มีให้ใช้ placeholder
+                        const imagePath = (product.product_images && product.product_images.length > 0)
+                          ? `/${product.product_images[0].image_path}`
+                          : '/path/to/placeholder.jpg';
+                        
+                        productCards += `
+                          <div class="card border">
+                            <img class="image-item w-full" src="${imagePath}" alt="${product.product_name}" />
+                            <div class="text-detail">
+                              <b class="text-gray-700">
+                                ${product.product_name} <br />
+                                <span class="detail-product">${product.product_location}</span> <br />
+                                ${new Intl.NumberFormat().format(product.product_price)}
+                              </b>
+                            </div>
+                            <div class="card-btn">
+                              <button class="btn_detail">ดูสินค้า</button>
+                            </div>
+                          </div>
+                        `;
+                      });
+                      // แสดงข้อมูลทั้งหมดทีเดียว
+                      productsContainer.innerHTML = productCards;
                     })
                     .catch(error => console.error("Error fetching products:", error));
-            </script>
+                });
+              </script>
+              
 
 
         </div>
