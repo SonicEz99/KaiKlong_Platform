@@ -112,7 +112,7 @@
         gap: 20px;
         padding-left: 20px;
         justify-content: center;
-        margin-top: -20px;
+        margin-bottom: 14px;
     }
 
     .btn_detail {
@@ -315,7 +315,7 @@
                         const productsContainer = document.getElementById("card-product");
                         data.products.forEach(product => {
                             const productCard = `
-                                                                                                                        <div class="card border rounded-lg shadow-md p-4">
+                                                                                                                        <div class="card border rounded-xl p-4">
                                                                                                                             <img class="image-item w-full" src="/${product.product_images[0].image_path}" alt="${product.product_name}" />
                                                                                                                             <div class="text-detail">
                                                                                                                                 <b class="text-gray-700">${product.product_name} <br /> ${product.product_location} <br /> ${new Intl.NumberFormat().format(product.product_price)}</b>
