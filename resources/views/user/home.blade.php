@@ -174,6 +174,7 @@
         #card-product {
             display: grid;
             grid-template-columns: repeat(1, 1fr);
+            gap: 15px;
         }
 
         .product-container {
@@ -210,13 +211,13 @@
         #card-product {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 2px;
+            gap: 15px;
         }
 
         .product-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
+            gap: 15px;
         }
     }
 
@@ -228,11 +229,13 @@
         #card-product {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
         }
 
         .product-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
         }
     }
 
@@ -244,11 +247,13 @@
         #card-product {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
         }
 
         .product-container {
             display: grid;
             grid-template-columns: repeat(8, 1fr);
+            gap: 15px;
         }
     }
 </style>
@@ -281,6 +286,8 @@
                 <p>รวมสินค้าที่ดี มีคุณภาพ ครบครันและหลากหลายที่สุดของประเทศ</p>
             </div>
 
+            <div class="product-container"></div>
+
             <div class="highlight">
                 <p>หาง่ายขึ้น! เลือกเลย!!!</p>
                 <div class="product-type">
@@ -291,6 +298,8 @@
             <div class="title2">
                 <p>การประกาศขายล่าสุด</p>
             </div>
+
+
 
             <div id="card-product">
 
@@ -304,16 +313,16 @@
                         const productsContainer = document.getElementById("card-product");
                         data.products.forEach(product => {
                             const productCard = `
-                                                                                                        <div class="card border rounded-lg shadow-md p-4">
-                                                                                                            <img class="image-item w-full h-40 object-cover" src="/${product.product_images[0].image_path}" alt="${product.product_name}" />
-                                                                                                            <div class="text-detail mt-2">
-                                                                                                                <b class="text-gray-700">${product.product_name} <br /> ${product.product_location} <br /> ${new Intl.NumberFormat().format(product.product_price)}</b>
-                                                                                                            </div>
-                                                                                                            <div class="card-btn mt-2">
-                                                                                                                <button class="btn_detail bg-blue-500 text-white px-4 py-2 rounded-md">ดูสินค้า</button>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                `;
+                                                                                                                        <div class="card border rounded-lg shadow-md p-4">
+                                                                                                                            <img class="image-item w-full h-40 object-cover" src="/${product.product_images[0].image_path}" alt="${product.product_name}" />
+                                                                                                                            <div class="text-detail mt-2">
+                                                                                                                                <b class="text-gray-700">${product.product_name} <br /> ${product.product_location} <br /> ${new Intl.NumberFormat().format(product.product_price)}</b>
+                                                                                                                            </div>
+                                                                                                                            <div class="card-btn mt-2">
+                                                                                                                                <button class="btn_detail bg-blue-500 text-white px-4 py-2 rounded-md">ดูสินค้า</button>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                `;
                             productsContainer.innerHTML += productCard;
                         });
                     })
