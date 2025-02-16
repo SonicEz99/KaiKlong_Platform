@@ -22,7 +22,7 @@
         width: 100%;
         display: flex;
         justify-content: center;
-        
+
     }
 
     .search-box {
@@ -296,18 +296,32 @@
                 <p>การประกาศขายล่าสุด</p>
             </div>
 
-            <div class="card-product">
-                <div class="card">
-                    <img class="image-item" src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg"
-                        alt="รถมือสอง">
-                    <div class="text-detail">
-                        <b style="color:rgb(81, 81, 81)">รถมือสอง <br> บุรีรัมย์ <br> 980,980</b>
-                    </div>
-                    <div class="card-btn">
-                        <button class="btn_detail">ดูสินค้า</button>
-                    </div>
-                </div>
-            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    fetch("/api/products")
+                        .then(response => response.json())
+                        .then(data => {
+                            const productsContainer = document.getElementById("products-container");
+                            data.products.forEach(product => {
+                                const productCard = `
+                                    <div class="card-product">
+                                        <div class="card border rounded-lg shadow-md p-4">
+                                            <img class="image-item w-full h-40 object-cover" src="${product.image}" alt="${product.name}" />
+                                            <div class="text-detail mt-2">
+                                                <b class="text-gray-700">${product.name} <br /> ${product.location} <br /> ${new Intl.NumberFormat().format(product.price)}</b>
+                                            </div>
+                                            <div class="card-btn mt-2">
+                                                <button class="btn_detail bg-blue-500 text-white px-4 py-2 rounded-md">ดูสินค้า</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                                productsContainer.innerHTML += productCard;
+                            });
+                        })
+                        .catch(error => console.error("Error fetching products:", error));
+                });
+            </script>
 
 
         </div>
@@ -346,15 +360,15 @@
                     img.src = category.category_pic_path;
                     img.alt = category.category_name;
 
-                    
+
                     img.style.width = "100px";
                     img.style.height = "100px";
-                    img.style.objectFit = "contain"; 
-                    img.style.borderRadius = "10px"; 
+                    img.style.objectFit = "contain";
+                    img.style.borderRadius = "10px";
 
                     const p = document.createElement('p');
                     p.textContent = category.category_name;
-                    p.style.textAlign = "center"; 
+                    p.style.textAlign = "center";
 
                     productDiv.appendChild(img);
                     productDiv.appendChild(p);
