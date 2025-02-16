@@ -30,7 +30,6 @@
         padding: 10px;
         font-size: 16px;
         border: none;
-
     }
 
     .banner {
@@ -54,7 +53,11 @@
         font-weight: bold;
         color: #FF8C00;
     }
-
+    
+    .detail-product{
+        color: gray;
+        font-size: 12px;
+    }
     .product-container {
         display: grid;
         grid-template-columns: repeat(8, 1fr);
@@ -127,15 +130,11 @@
 
     .card {
         background-color: #fff;
-        border-radius: 14px;
-        padding: 5px;
         text-align: center;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .image-item {
-        border-radius: 10px;
-        background-color: red;
         height: 150px;
     }
 
@@ -149,8 +148,6 @@
         padding: 4px;
 
     }
-
-
 
     .flex-search {
         background-color: white;
@@ -315,16 +312,16 @@
                         const productsContainer = document.getElementById("card-product");
                         data.products.forEach(product => {
                             const productCard = `
-                                                                                                                        <div class="card border rounded-xl p-4">
-                                                                                                                            <img class="image-item w-full" src="/${product.product_images[0].image_path}" alt="${product.product_name}" />
-                                                                                                                            <div class="text-detail">
-                                                                                                                                <b class="text-gray-700">${product.product_name} <br /> ${product.product_location} <br /> ${new Intl.NumberFormat().format(product.product_price)}</b>
+                                                                                                                            <div class="card border">
+                                                                                                                                <img class="image-item w-full" src="/${product.product_images[0].image_path}" alt="${product.product_name}" />
+                                                                                                                                <div class="text-detail">
+                                                                                                                                    <b class="text-gray-700">${product.product_name} <br /> <span class="detail-product">${product.product_location} </span>  <br /> ${new Intl.NumberFormat().format(product.product_price)}</b>
+                                                                                                                                </div>
+                                                                                                                                <div class="card-btn">
+                                                                                                                                    <button class="btn_detail bg-blue-500 text-white px-4 py-2 rounded-md">ดูสินค้า</button>
+                                                                                                                                </div>
                                                                                                                             </div>
-                                                                                                                            <div class="card-btn">
-                                                                                                                                <button class="btn_detail bg-blue-500 text-white px-4 py-2 rounded-md">ดูสินค้า</button>
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                `;
+                                                                                                                    `;
                             productsContainer.innerHTML += productCard;
                         });
                     })
