@@ -158,6 +158,84 @@
             flex-direction: column;
         }
     }
+
+    .footer {
+        background-color: #f8f9fa;
+        padding: 20px 0;
+        margin-top: 50px;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: end;
+        align-items: flex-start;
+    }
+
+    .footer-section {
+        flex: 1;
+        padding: 0 15px;
+    }
+
+    .footer-title {
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .footer-contact {
+        font-size: 12px;
+        color: #666;
+        line-height: 1.6;
+    }
+
+    .footer-social {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .social-icon {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+    }
+
+    .social-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .footer-copyright {
+        text-align: right;
+        font-size: 12px;
+        color: #666;
+    }
+
+    @media (max-width: 768px) {
+        .footer-content {
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .footer-social {
+            justify-content: center;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            margin-top: 20px;
+        }
+    }
 </style>
 
 <body>
@@ -187,7 +265,7 @@ $user = Auth::user();
                 <ul class="menu-nav navbar-nav">
                     <div class="menu-nav-small">
                         <li class="nav-item">
-                            <a class="logo nav-link active" aria-current="page" href="#">
+                            <a class="logo nav-link active" aria-current="page" href="home">
                                 <h1>Kaiklong</h1>
                             </a>
                         </li>
@@ -220,6 +298,44 @@ $user = Auth::user();
 
     <div id="page_content">
         @yield('content')
+    </div>
+
+    <div class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-title">ติดต่อเรา</div>
+                <div class="footer-contact">
+                    เลขที่ 1 ถนนเทศบาลรังสฤษดิ์เหนือ เเขวงลาดยาว เขตจตุจักร<br>
+                    กรุงเทพมหานคร 10900<br>
+                    Tel : 02-123-4567<br>
+                </div>
+            </div>
+            <div class="footer-section">
+                <div class="footer-title">ศูนย์ช่วยเหลือ</div>
+                <div class="footer-contact">
+                    โทร
+                </div>
+            </div>
+            <div class="footer-section">
+                <div class="footer-title">ติดตามเรา</div>
+                <div class="footer-social">
+                    <a href="#" class="social-icon">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/600px-Facebook_Logo_%282019%29.png" alt="Facebook">
+                    </a>
+                    <a href="#" class="social-icon">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/800px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube">
+                    </a>
+                    <a href="#" class="social-icon">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/LINE_logo.svg/2048px-LINE_logo.svg.png" alt="Line">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-content" style="margin-top: 20px;">
+            <div class="footer-copyright">
+                &copy;บริษัท ขายคล่อง บริษัทในกลุ่มดี จำกัด
+            </div>
+        </div>
     </div>
 
     <script>

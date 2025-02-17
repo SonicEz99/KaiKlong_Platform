@@ -32,6 +32,11 @@
         border: none;
     }
 
+    .search-box:focus {
+        outline: none;
+        border-color: orange;
+    }
+
     .banner {
         text-align: center;
         padding: 50px;
