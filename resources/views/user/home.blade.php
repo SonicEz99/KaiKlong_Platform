@@ -7,22 +7,28 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     @vite(['resources/js/app.js'])
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
 </head>
 <style>
     body {
         background-color: #f5f5f5;
         margin: 0;
         padding: 0;
+        font-family: 'Noto Sans Thai', 'Prompt', sans-serif; 
     }
 
     .search-container {
+        font-family: 'Noto Sans Thai', 'Prompt', sans-serif; 
         padding: 20px;
         text-align: center;
         margin-bottom: 14px;
         width: 100%;
         display: flex;
         justify-content: center;
-
     }
 
     .search-box {
@@ -88,6 +94,7 @@
         font-weight: bold;
         text-align: left;
         padding: 20px;
+        margin-top: -50px;
     }
 
     .product-type {
@@ -117,9 +124,11 @@
         justify-content: space-between;
         width: 100%;
         align-items: center;
+        margin-bottom: -35px;
+        margin-top: -20px;
 
 
-        & a{
+        & a {
             text-decoration: none;
             color: grey;
             font-size: 14px;
@@ -161,6 +170,9 @@
         font-weight: 600;
         margin-bottom: 8px;
         color: #333;
+        white-space: nowrap; 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
     }
 
     .product-price {
@@ -193,6 +205,12 @@
         border-radius: 5px;
         width: 100%;
         font-weight: bold;
+        transition: background-color 0.3s ease, color 0.3s ease; 
+    }
+
+    .btn_detail:hover {
+        background-color: #FF8C00; 
+        color: white; 
     }
 
     .card-product-top {
@@ -205,7 +223,7 @@
     .image-item {
         height: 150px;
         border-radius: 5px 5px 0px 0px;
-    
+
     }
 
     .text-detail {
@@ -217,8 +235,9 @@
     .card-btn {
         color: white;
         padding: 4px;
-
+        transition: background-color 0.3s ease; /* Add transition for smooth color change */
     }
+
 
     .flex-search {
         background-color: white;
@@ -348,7 +367,7 @@
 @extends('layouts.page')
 @section('content')
 
-    <body>
+    <body style="font-family: 'Noto Sans Thai', 'Prompt', sans-serif;">
         <div style="background-color: #FFE5CC">
             <div class="search-container container">
                 <div class="flex-search">
@@ -386,15 +405,15 @@
                 <a href="product-all">ดูทั้งหมด ></a>
             </div>
 
-
-
             <div id="card-product">
 
             </div>
 
+
+
             <script>
                 // รอให้ DOM โหลดเสร็จก่อนรันโค้ด
-                document.addEventListener("DOMContentLoaded", function () {
+                document.addEventListener("DOMContentLoaded", function() {
                     fetch("/api/product")
                         .then(response => response.json())
                         .then(data => {
@@ -404,28 +423,34 @@
                                 console.error("ไม่พบ element ที่มี id 'card-product'");
                                 return;
                             }
+
+                            // จัดเรียงข้อมูลตามลำดับใหม่ล่าสุดและเลือกเฉพาะ 4 อันดับแรก
+                            const latestProducts = data.products.sort((a, b) => new Date(b.created_at) - new Date(a
+                                .created_at)).slice(0, 4);
+
                             let productCards = "";
-                            data.products.forEach(product => {
+                            latestProducts.forEach(product => {
                                 // ตรวจสอบว่ามีข้อมูลรูปภาพหรือไม่ ถ้าไม่มีให้ใช้ placeholder
-                                const imagePath = (product.product_images && product.product_images.length > 0)
-                                    ? `/${product.product_images[0].image_path}`
-                                    : '/path/to/placeholder.jpg';
+                                const imagePath = (product.product_images && product.product_images.length >
+                                    0) ?
+                                    `/${product.product_images[0].image_path}` :
+                                    '/path/to/placeholder.jpg';
 
                                 productCards += `
-                                  <div class="product-card">
-                                    <img class="product-image" src="${imagePath}" alt="${product.product_name}" />
-                                    <div class="product-details">
-                                      <b class="product-title">
-                                        ${product.product_name} <br />
-                                      </b>
-                                      <span class="product-price">${new Intl.NumberFormat().format(product.product_price)}</span> <br />
-                                      <span class="product-description">${product.product_location}</span>
-                                    </div>
-                                    <div class="card-btn">
-                                      <button class="btn_detail">ดูสินค้า</button>
-                                    </div>
-                                  </div>
-                                `;
+                      <div class="product-card">
+                        <img class="product-image" src="${imagePath}" alt="${product.product_name}" />
+                        <div class="product-details">
+                          <b class="product-title">
+                            ${product.product_name} <br />
+                          </b>
+                          <span class="product-price">${new Intl.NumberFormat().format(product.product_price)}</span> <br />
+                          <span class="product-description">${product.product_location}</span>
+                        </div>
+                        <div class="card-btn">
+                          <button class="btn_detail">ดูสินค้า</button>
+                        </div>
+                      </div>
+                    `;
                             });
                             // แสดงข้อมูลทั้งหมดทีเดียว
                             productsContainer.innerHTML = productCards;
@@ -440,12 +465,12 @@
     </body>
 
     <script>
-        document.getElementById('logout-button')?.addEventListener('click', function () {
+        document.getElementById('logout-button')?.addEventListener('click', function() {
             axios.post("{{ route('logout') }}", {}, {
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                }
-            })
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    }
+                })
                 .then(response => {
                     alert(response.data.message);
                     window.location.href = response.data.redirect;
