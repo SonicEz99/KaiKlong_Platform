@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,6 +46,21 @@
         .search-box:focus {
             outline: none;
             border-color: orange;
+        }
+
+        .category {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            display: flex;
+        }
+
+        .category-product {
+
+            background: red;
         }
 
         #card-product {
@@ -202,91 +218,102 @@
 
 @extends('layouts.page')
 @section('content')
-<body>
-    <div class="page-container">
-        <div class="header-section">
-            <div class="search-filter-container">
-                     <p class="page-title">ค้นหากับขายคล่อง</p>
-                     <input type="text" class="search-box" placeholder="ค้นหา">
+
+    <body>
+        <div class="page-container">
+            <div class="header-section">
+                <div class="search-filter-container">
+                    <p class="page-title">ค้นหากับขายคล่อง</p>
+                    <input type="text" class="search-box" placeholder="ค้นหา">
+                </div>
+            </div>
+
+            <div class="category">
+                <div class="category-product">iphone</div>
+                <div class="category-product">iphone</div>
+                <div class="category-product">iphone</div>
+                <div class="category-product">iphone</div>
+            </div>
+
+            <div id="card-product">
+                <div class="loading-text" style="text-align: center; padding: 20px; color: #666;">กำลังโหลด...</div>
             </div>
         </div>
 
-        <div id="card-product">
-            <div class="loading-text" style="text-align: center; padding: 20px; color: #666;">กำลังโหลด...</div>
-        </div>
-    </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const productsContainer = document.getElementById("card-product");
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const productsContainer = document.getElementById("card-product");
-            
-            // Show loading state immediately
-            productsContainer.innerHTML = '<div class="loading-text" style="text-align: center; padding: 20px; color: #666;">กำลังโหลด...</div>';
+                // Show loading state immediately
+                productsContainer.innerHTML =
+                    '<div class="loading-text" style="text-align: center; padding: 20px; color: #666;">กำลังโหลด...</div>';
 
-            // Add cache control headers to prevent caching
-            const fetchOptions = {
-                headers: {
-                    'Cache-Control': 'no-cache',
-                    'Pragma': 'no-cache'
-                }
-            };
+                // Fetch options to prevent caching
+                const fetchOptions = {
+                    headers: {
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache'
+                    }
+                };
 
-            // Use Promise.race to implement timeout
-            const timeout = new Promise((_, reject) => 
-                setTimeout(() => reject(new Error('Request timeout')), 5000)
-            );
+                // Timeout mechanism
+                const timeout = new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Request timeout')), 5000)
+                );
 
-            Promise.race([
-                fetch("/api/product", fetchOptions),
-                timeout
-            ])
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (!data.products || data.products.length === 0) {
-                    productsContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">ไม่พบสินค้า</div>';
-                    return;
-                }
+                Promise.race([
+                        fetch("/api/product", fetchOptions),
+                        timeout
+                    ])
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (!data.products || data.products.length === 0) {
+                            productsContainer.innerHTML =
+                                '<div style="text-align: center; padding: 20px; color: #666;">ไม่พบสินค้า</div>';
+                            return;
+                        }
 
-                let productCards = "";
-                data.products.forEach(product => {
-                    const imagePath = (product.product_images && product.product_images.length > 0)
-                        ? `/${product.product_images[0].image_path}`
-                        : '/path/to/placeholder.jpg';
+                        let productCards = "";
+                        data.products.forEach(product => {
+                            const imagePath = (product.product_images && product.product_images.length >
+                                    0 && product.product_images[0].image_path) ?
+                                `/${product.product_images[0].image_path}` :
+                                '/path/to/placeholder.jpg';
 
-                    productCards += `
+                            productCards += `
                       <div class="product-card">
                         <img class="product-image" src="${imagePath}" alt="${product.product_name}" 
                              loading="lazy" onerror="this.src='/path/to/placeholder.jpg'" />
                         <div class="product-details">
-                          <b class="product-title">
-                            ${product.product_name}
-                          </b>
+                          <b class="product-title">${product.product_name}</b>
                           <span class="product-price">${new Intl.NumberFormat().format(product.product_price)} บาท</span>
-                          <span class="product-description">${product.product_location}</span>
+                          <span class="product-description">${product.product_location || 'ไม่มีข้อมูลที่ตั้ง'}</span>
                         </div>
                         <div class="card-btn">
                           <button class="btn_detail">ดูสินค้า</button>
                         </div>
                       </div>
                     `;
-                });
-                
-                productsContainer.innerHTML = productCards;
-            })
-            .catch(error => {
-                console.error("Error fetching products:", error);
-                productsContainer.innerHTML = `
+                        });
+
+                        productsContainer.innerHTML = productCards;
+                    })
+                    .catch(error => {
+                        console.error("Error fetching products:", error);
+                        productsContainer.innerHTML = `
                     <div style="text-align: center; padding: 20px; color: #666;">
                         เกิดข้อผิดพลาดในการโหลดข้อมูล กรุณาลองใหม่อีกครั้ง
                     </div>`;
+                    });
             });
-        });
-    </script>
-</body>
+        </script>
+
+    </body>
 @endsection
+
 </html>
