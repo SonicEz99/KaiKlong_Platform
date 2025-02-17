@@ -22,7 +22,7 @@
         width: 100%;
         display: flex;
         justify-content: center;
-        
+
     }
 
     .search-box {
@@ -30,7 +30,11 @@
         padding: 10px;
         font-size: 16px;
         border: none;
+    }
 
+    .search-box:focus {
+        outline: none;
+        border-color: orange;
     }
 
     .banner {
@@ -53,6 +57,11 @@
         font-size: 16px;
         font-weight: bold;
         color: #FF8C00;
+    }
+
+    .detail-product {
+        color: gray;
+        font-size: 12px;
     }
 
     .product-container {
@@ -104,15 +113,75 @@
         font-weight: bold;
         text-align: left;
         padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        align-items: center;
+
+
+        & a{
+            text-decoration: none;
+            color: grey;
+            font-size: 14px;
+        }
     }
 
-    .card-product {
+    #card-product {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 20px;
-        padding-left: 20px;
-        justify-content: center;
-        margin-top: -20px;
+        padding: 20px 0;
+    }
+
+    .product-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+        overflow: hidden;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .product-details {
+        padding: 15px;
+    }
+
+    .product-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    .product-price {
+        font-size: 1.2rem;
+        color: #e65100;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .product-description {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 15px;
+        line-height: 1.4;
+    }
+
+    .product-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 20px 0;
     }
 
     .btn_detail {
@@ -123,23 +192,26 @@
         margin-top: 10px;
         border-radius: 5px;
         width: 100%;
+        font-weight: bold;
     }
 
-    .card {
-        background-color: #fff;
-        border-radius: 14px;
-        padding: 5px;
+    .card-product-top {
         text-align: center;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        height: 350px;
     }
 
     .image-item {
-        border-radius: 10px;
+        height: 150px;
+        border-radius: 5px 5px 0px 0px;
+    
     }
 
     .text-detail {
         text-align: left;
-        padding: 14px;
+        padding: 4px;
+        color: rgb(92, 92, 92);
     }
 
     .card-btn {
@@ -147,8 +219,6 @@
         padding: 4px;
 
     }
-
-
 
     .flex-search {
         background-color: white;
@@ -171,14 +241,31 @@
             width: 100%;
         }
 
-        .card-product {
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
+        #card-product {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 15px 0;
+        }
+
+        .product-image {
+            height: 180px;
+        }
+
+        .product-title {
+            font-size: 1rem;
+        }
+
+        .product-price {
+            font-size: 1.1rem;
+        }
+
+        .product-description {
+            font-size: 0.85rem;
         }
 
         .product-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(120px, 1fr);
             /* ทำให้ขนาดสมมาตร */
             gap: 20px;
             /* ระยะห่าง */
@@ -207,16 +294,16 @@
             width: 100%;
         }
 
-        .card-product {
+        #card-product {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 2px;
+            gap: 15px;
         }
 
         .product-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
+            gap: 15px;
         }
     }
 
@@ -225,14 +312,16 @@
             width: 100%;
         }
 
-        .card-product {
+        #card-product {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
         }
 
         .product-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
         }
     }
 
@@ -241,14 +330,16 @@
             width: 100%;
         }
 
-        .card-product {
+        #card-product {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
         }
 
         .product-container {
             display: grid;
             grid-template-columns: repeat(8, 1fr);
+            gap: 15px;
         }
     }
 </style>
@@ -281,9 +372,7 @@
                 <p>รวมสินค้าที่ดี มีคุณภาพ ครบครันและหลากหลายที่สุดของประเทศ</p>
             </div>
 
-            <div class="product-container">
-
-            </div>
+            <div class="product-container"></div>
 
             <div class="highlight">
                 <p>หาง่ายขึ้น! เลือกเลย!!!</p>
@@ -294,32 +383,69 @@
 
             <div class="title2">
                 <p>การประกาศขายล่าสุด</p>
+                <a href="product-all">ดูทั้งหมด ></a>
             </div>
 
-            <div class="card-product">
-                <div class="card">
-                    <img class="image-item" src="https://media.cdn-jaguarlandrover.com/api/v2/images/55880/w/680.jpg"
-                        alt="รถมือสอง">
-                    <div class="text-detail">
-                        <b style="color:rgb(81, 81, 81)">รถมือสอง <br> บุรีรัมย์ <br> 980,980</b>
-                    </div>
-                    <div class="card-btn">
-                        <button class="btn_detail">ดูสินค้า</button>
-                    </div>
-                </div>
+
+
+            <div id="card-product">
+
             </div>
+
+            <script>
+                // รอให้ DOM โหลดเสร็จก่อนรันโค้ด
+                document.addEventListener("DOMContentLoaded", function () {
+                    fetch("/api/product")
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            const productsContainer = document.getElementById("card-product");
+                            if (!productsContainer) {
+                                console.error("ไม่พบ element ที่มี id 'card-product'");
+                                return;
+                            }
+                            let productCards = "";
+                            data.products.forEach(product => {
+                                // ตรวจสอบว่ามีข้อมูลรูปภาพหรือไม่ ถ้าไม่มีให้ใช้ placeholder
+                                const imagePath = (product.product_images && product.product_images.length > 0)
+                                    ? `/${product.product_images[0].image_path}`
+                                    : '/path/to/placeholder.jpg';
+
+                                productCards += `
+                                  <div class="product-card">
+                                    <img class="product-image" src="${imagePath}" alt="${product.product_name}" />
+                                    <div class="product-details">
+                                      <b class="product-title">
+                                        ${product.product_name} <br />
+                                      </b>
+                                      <span class="product-price">${new Intl.NumberFormat().format(product.product_price)}</span> <br />
+                                      <span class="product-description">${product.product_location}</span>
+                                    </div>
+                                    <div class="card-btn">
+                                      <button class="btn_detail">ดูสินค้า</button>
+                                    </div>
+                                  </div>
+                                `;
+                            });
+                            // แสดงข้อมูลทั้งหมดทีเดียว
+                            productsContainer.innerHTML = productCards;
+                        })
+                        .catch(error => console.error("Error fetching products:", error));
+                });
+            </script>
+
 
 
         </div>
     </body>
 
     <script>
-        document.getElementById('logout-button')?.addEventListener('click', function() {
+        document.getElementById('logout-button')?.addEventListener('click', function () {
             axios.post("{{ route('logout') }}", {}, {
-                    headers: {
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    }
-                })
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                }
+            })
                 .then(response => {
                     alert(response.data.message);
                     window.location.href = response.data.redirect;
@@ -346,15 +472,15 @@
                     img.src = category.category_pic_path;
                     img.alt = category.category_name;
 
-                    
+
                     img.style.width = "100px";
                     img.style.height = "100px";
-                    img.style.objectFit = "contain"; 
-                    img.style.borderRadius = "10px"; 
+                    img.style.objectFit = "contain";
+                    img.style.borderRadius = "10px";
 
                     const p = document.createElement('p');
                     p.textContent = category.category_name;
-                    p.style.textAlign = "center"; 
+                    p.style.textAlign = "center";
 
                     productDiv.appendChild(img);
                     productDiv.appendChild(p);
@@ -366,7 +492,6 @@
     </script>
 
 
-    {{-- fecth quicksearch --}}
     <script>
         async function fetchFirstTenTypes() {
             try {
