@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -197,96 +198,165 @@
                 font-size: 0.9rem;
             }
         }
+
+        .category {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            justify-content: center;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .category-item {
+            flex: 0 0 200px;
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .category-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-image {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        .category-name {
+            font-size: 16px;
+            color: #333;
+            margin: 0;
+        }
     </style>
 </head>
 
 @extends('layouts.page')
 @section('content')
-<body>
-    <div class="page-container">
-        <div class="header-section">
-            <div class="search-filter-container">
-                     <p class="page-title">ค้นหากับขายคล่อง</p>
-                     <input type="text" class="search-box" placeholder="ค้นหา">
+
+    <body>
+        <div class="page-container">
+            <div class="header-section">
+                <div class="search-filter-container">
+                    <p class="page-title">ค้นหากับขายคล่อง</p>
+                    <input type="text" class="search-box" placeholder="ค้นหา">
+                </div>
+            </div>
+
+            <div class="category" id="categories-container">
+              
+            </div>
+
+            <div id="card-product">
+                <div class="loading-text" style="text-align: center; padding: 20px; color: #666;">กำลังโหลด...</div>
             </div>
         </div>
 
-        <div id="card-product">
-            <div class="loading-text" style="text-align: center; padding: 20px; color: #666;">กำลังโหลด...</div>
-        </div>
-    </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const productsContainer = document.getElementById("card-product");
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const productsContainer = document.getElementById("card-product");
-            
-            // Show loading state immediately
-            productsContainer.innerHTML = '<div class="loading-text" style="text-align: center; padding: 20px; color: #666;">กำลังโหลด...</div>';
+                productsContainer.innerHTML =
+                    '<div class="loading-text" style="text-align: center; padding: 20px; color: #666;">กำลังโหลด...</div>';
 
-            // Add cache control headers to prevent caching
-            const fetchOptions = {
-                headers: {
-                    'Cache-Control': 'no-cache',
-                    'Pragma': 'no-cache'
-                }
-            };
+                const fetchOptions = {
+                    headers: {
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache'
+                    }
+                };
 
-            // Use Promise.race to implement timeout
-            const timeout = new Promise((_, reject) => 
-                setTimeout(() => reject(new Error('Request timeout')), 5000)
-            );
+                fetch("/api/product", fetchOptions)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (!data.products || data.products.length === 0) {
+                            productsContainer.innerHTML =
+                                '<div style="text-align: center; padding: 20px; color: #666;">ไม่พบสินค้า</div>';
+                            return;
+                        }
 
-            Promise.race([
-                fetch("/api/product", fetchOptions),
-                timeout
-            ])
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (!data.products || data.products.length === 0) {
-                    productsContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">ไม่พบสินค้า</div>';
-                    return;
-                }
+                        let productCards = "";
+                        data.products.forEach(product => {
+                            const imagePath = (product.product_images && product.product_images.length >
+                                    0 && product.product_images[0].image_path) ?
+                                `/${product.product_images[0].image_path}` :
+                                '/path/to/placeholder.jpg';
 
-                let productCards = "";
-                data.products.forEach(product => {
-                    const imagePath = (product.product_images && product.product_images.length > 0)
-                        ? `/${product.product_images[0].image_path}`
-                        : '/path/to/placeholder.jpg';
+                            productCards += `
+                                            <div class="product-card">
+                                                <img class="product-image" src="${imagePath}" alt="${product.product_name}" 
+                                                    loading="lazy" onerror="this.src='/path/to/placeholder.jpg'" />
+                                                <div class="product-details">
+                                                <b class="product-title">${product.product_name}</b>
+                                                <span class="product-price">${new Intl.NumberFormat().format(product.product_price)} บาท</span>
+                                                <span class="product-description">${product.product_location || 'ไม่มีข้อมูลที่ตั้ง'}</span>
+                                                </div>
+                                                <div class="card-btn">
+                                                <button class="btn_detail">ดูสินค้า</button>
+                                                </div>
+                                            </div>
+                                            `;
+                        });
 
-                    productCards += `
-                      <div class="product-card">
-                        <img class="product-image" src="${imagePath}" alt="${product.product_name}" 
-                             loading="lazy" onerror="this.src='/path/to/placeholder.jpg'" />
-                        <div class="product-details">
-                          <b class="product-title">
-                            ${product.product_name}
-                          </b>
-                          <span class="product-price">${new Intl.NumberFormat().format(product.product_price)} บาท</span>
-                          <span class="product-description">${product.product_location}</span>
-                        </div>
-                        <div class="card-btn">
-                          <button class="btn_detail">ดูสินค้า</button>
-                        </div>
-                      </div>
-                    `;
-                });
-                
-                productsContainer.innerHTML = productCards;
-            })
-            .catch(error => {
-                console.error("Error fetching products:", error);
-                productsContainer.innerHTML = `
+                        productsContainer.innerHTML = productCards;
+                    })
+                    .catch(error => {
+                        console.error("Error fetching products:", error);
+                        productsContainer.innerHTML = `
                     <div style="text-align: center; padding: 20px; color: #666;">
                         เกิดข้อผิดพลาดในการโหลดข้อมูล กรุณาลองใหม่อีกครั้ง
                     </div>`;
+                    });
             });
-        });
-    </script>
-</body>
+
+            document.addEventListener('DOMContentLoaded', function() {
+                fetchCategories();
+            });
+
+            function fetchCategories() {
+                fetch('/api/getFourBrand')
+                    .then(response => response.json())
+                    .then(data => {
+                        const container = document.getElementById('categories-container');
+                        if (data.brands && Array.isArray(data.brands)) {
+                            data.brands.forEach(brand => {
+                                const categoryElement = createCategoryElement(brand);
+                                container.appendChild(categoryElement);
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Error fetching categories:', error));
+            }
+
+            function createCategoryElement(brand) {
+                const div = document.createElement('div');
+                div.className = 'category-item';
+                div.innerHTML = `
+                    <img src="${brand.brand_pic_path}" alt="${brand.brand_name}" class="category-image">
+                    <p class="category-name">${brand.brand_name}</p>
+                `;
+                div.addEventListener('click', () => {
+                    console.log('Category clicked:', brand.brand_name);
+                });
+                return div;
+            }
+        </script>
+
+    </body>
 @endsection
+
 </html>

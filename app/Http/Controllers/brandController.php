@@ -70,12 +70,14 @@ class brandController extends Controller
         }
     }
 
-    public function getBrand()
+    public function getFourBrand()
     {
         try {
-            $categories = Brand::all(); // Fetch all categories
+            $brands = Brand::whereIn('brand_id', [1, 2, 11, 12])->limit(4)->get();
 
-            return response()->json(['categories' => $categories], 200);
+            return response()->json([
+                'brands' => $brands
+            ], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
