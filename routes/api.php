@@ -25,6 +25,7 @@ Route::get('/types/first-ten', [TypeController::class, 'getFirstTenTypes']);
 
 Route::post('/addBrand1', [brandController::class, 'addBrand1']);
 Route::post('/addBrand2', [brandController::class, 'addBrand2']);
+Route::get('/getFourBrand', [brandController::class, 'getFourBrand']);
 
 Route::post('/addProduct', [productController::class, 'addProduct']);
 Route::get('/product', [productController::class, 'getProduct']);
