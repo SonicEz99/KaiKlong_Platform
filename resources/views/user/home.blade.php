@@ -53,11 +53,12 @@
         font-weight: bold;
         color: #FF8C00;
     }
-    
-    .detail-product{
+
+    .detail-product {
         color: gray;
         font-size: 12px;
     }
+
     .product-container {
         display: grid;
         grid-template-columns: repeat(8, 1fr);
@@ -107,16 +108,75 @@
         font-weight: bold;
         text-align: left;
         padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        align-items: center;
+
+
+        & a{
+            text-decoration: none;
+            color: grey;
+            font-size: 14px;
+        }
     }
 
     #card-product {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 20px;
-        padding-left: 20px;
-        justify-content: center;
-        margin-bottom: 14px;
-        border-radius: 5px;
+        padding: 20px 0;
+    }
+
+    .product-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+        overflow: hidden;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .product-details {
+        padding: 15px;
+    }
+
+    .product-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    .product-price {
+        font-size: 1.2rem;
+        color: #e65100;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .product-description {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 15px;
+        line-height: 1.4;
+    }
+
+    .product-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 20px 0;
     }
 
     .btn_detail {
@@ -130,15 +190,17 @@
         font-weight: bold;
     }
 
-    .card {
-        background-color: #fff;
+    .card-product-top {
         text-align: center;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        height: 350px;
     }
 
     .image-item {
         height: 150px;
         border-radius: 5px 5px 0px 0px;
+    
     }
 
     .text-detail {
@@ -175,9 +237,25 @@
         }
 
         #card-product {
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
+            padding: 15px 0;
+        }
+
+        .product-image {
+            height: 180px;
+        }
+
+        .product-title {
+            font-size: 1rem;
+        }
+
+        .product-price {
+            font-size: 1.1rem;
+        }
+
+        .product-description {
+            font-size: 0.85rem;
         }
 
         .product-container {
@@ -300,6 +378,7 @@
 
             <div class="title2">
                 <p>การประกาศขายล่าสุด</p>
+                <a href="product-all">ดูทั้งหมด ></a>
             </div>
 
 
@@ -310,46 +389,46 @@
 
             <script>
                 // รอให้ DOM โหลดเสร็จก่อนรันโค้ด
-                document.addEventListener("DOMContentLoaded", function() {
-                  fetch("/api/product")
-                    .then(response => response.json())
-                    .then(data => {
-                      console.log(data);
-                      const productsContainer = document.getElementById("card-product");
-                      if (!productsContainer) {
-                        console.error("ไม่พบ element ที่มี id 'card-product'");
-                        return;
-                      }
-                      let productCards = "";
-                      data.products.forEach(product => {
-                        // ตรวจสอบว่ามีข้อมูลรูปภาพหรือไม่ ถ้าไม่มีให้ใช้ placeholder
-                        const imagePath = (product.product_images && product.product_images.length > 0)
-                          ? `/${product.product_images[0].image_path}`
-                          : '/path/to/placeholder.jpg';
-                        
-                        productCards += `
-                          <div class="card border">
-                            <img class="image-item w-full" src="${imagePath}" alt="${product.product_name}" />
-                            <div class="text-detail">
-                              <b class="text-gray-700">
-                                ${product.product_name} <br />
-                                <span class="detail-product">${product.product_location}</span> <br />
-                                ${new Intl.NumberFormat().format(product.product_price)}
-                              </b>
-                            </div>
-                            <div class="card-btn">
-                              <button class="btn_detail">ดูสินค้า</button>
-                            </div>
-                          </div>
-                        `;
-                      });
-                      // แสดงข้อมูลทั้งหมดทีเดียว
-                      productsContainer.innerHTML = productCards;
-                    })
-                    .catch(error => console.error("Error fetching products:", error));
+                document.addEventListener("DOMContentLoaded", function () {
+                    fetch("/api/product")
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            const productsContainer = document.getElementById("card-product");
+                            if (!productsContainer) {
+                                console.error("ไม่พบ element ที่มี id 'card-product'");
+                                return;
+                            }
+                            let productCards = "";
+                            data.products.forEach(product => {
+                                // ตรวจสอบว่ามีข้อมูลรูปภาพหรือไม่ ถ้าไม่มีให้ใช้ placeholder
+                                const imagePath = (product.product_images && product.product_images.length > 0)
+                                    ? `/${product.product_images[0].image_path}`
+                                    : '/path/to/placeholder.jpg';
+
+                                productCards += `
+                                  <div class="product-card">
+                                    <img class="product-image" src="${imagePath}" alt="${product.product_name}" />
+                                    <div class="product-details">
+                                      <b class="product-title">
+                                        ${product.product_name} <br />
+                                      </b>
+                                      <span class="product-price">${new Intl.NumberFormat().format(product.product_price)}</span> <br />
+                                      <span class="product-description">${product.product_location}</span>
+                                    </div>
+                                    <div class="card-btn">
+                                      <button class="btn_detail">ดูสินค้า</button>
+                                    </div>
+                                  </div>
+                                `;
+                            });
+                            // แสดงข้อมูลทั้งหมดทีเดียว
+                            productsContainer.innerHTML = productCards;
+                        })
+                        .catch(error => console.error("Error fetching products:", error));
                 });
-              </script>
-              
+            </script>
+
 
 
         </div>

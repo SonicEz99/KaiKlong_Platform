@@ -13,6 +13,8 @@ Route::get('/register', function () {
     return view('auth.register_auth');
 })->name('register.page');
 
+
+
 // // Authentication Routes
 // Route::post('/register', [authController::class, 'register'])->name('register.backend');
 // Route::post('/login', [authController::class, 'login'])->name('login.backend');
@@ -22,6 +24,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/about', function () {
         return view('about');
     });
+    Route::get('/product-all', function () {
+        return view('product.product');
+    });
+
+
 });
 
 Route::middleware('web')->get('/home', function () {
