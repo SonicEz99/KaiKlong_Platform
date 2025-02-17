@@ -48,21 +48,6 @@
             border-color: orange;
         }
 
-        .category {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
-            display: flex;
-        }
-
-        .category-product {
-
-            background: red;
-        }
-
         #card-product {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -213,6 +198,45 @@
                 font-size: 0.9rem;
             }
         }
+
+        .category {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            justify-content: center;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .category-item {
+            flex: 0 0 200px;
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .category-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-image {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        .category-name {
+            font-size: 16px;
+            color: #333;
+            margin: 0;
+        }
     </style>
 </head>
 
@@ -228,11 +252,8 @@
                 </div>
             </div>
 
-            <div class="category">
-                <div class="category-product">iphone</div>
-                <div class="category-product">iphone</div>
-                <div class="category-product">iphone</div>
-                <div class="category-product">iphone</div>
+            <div class="category" id="categories-container">
+              
             </div>
 
             <div id="card-product">
@@ -244,11 +265,9 @@
             document.addEventListener("DOMContentLoaded", function() {
                 const productsContainer = document.getElementById("card-product");
 
-                // Show loading state immediately
                 productsContainer.innerHTML =
                     '<div class="loading-text" style="text-align: center; padding: 20px; color: #666;">กำลังโหลด...</div>';
 
-                // Fetch options to prevent caching
                 const fetchOptions = {
                     headers: {
                         'Cache-Control': 'no-cache',
@@ -256,15 +275,7 @@
                     }
                 };
 
-                // Timeout mechanism
-                const timeout = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('Request timeout')), 5000)
-                );
-
-                Promise.race([
-                        fetch("/api/product", fetchOptions),
-                        timeout
-                    ])
+                fetch("/api/product", fetchOptions)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
@@ -286,19 +297,19 @@
                                 '/path/to/placeholder.jpg';
 
                             productCards += `
-                      <div class="product-card">
-                        <img class="product-image" src="${imagePath}" alt="${product.product_name}" 
-                             loading="lazy" onerror="this.src='/path/to/placeholder.jpg'" />
-                        <div class="product-details">
-                          <b class="product-title">${product.product_name}</b>
-                          <span class="product-price">${new Intl.NumberFormat().format(product.product_price)} บาท</span>
-                          <span class="product-description">${product.product_location || 'ไม่มีข้อมูลที่ตั้ง'}</span>
-                        </div>
-                        <div class="card-btn">
-                          <button class="btn_detail">ดูสินค้า</button>
-                        </div>
-                      </div>
-                    `;
+                                            <div class="product-card">
+                                                <img class="product-image" src="${imagePath}" alt="${product.product_name}" 
+                                                    loading="lazy" onerror="this.src='/path/to/placeholder.jpg'" />
+                                                <div class="product-details">
+                                                <b class="product-title">${product.product_name}</b>
+                                                <span class="product-price">${new Intl.NumberFormat().format(product.product_price)} บาท</span>
+                                                <span class="product-description">${product.product_location || 'ไม่มีข้อมูลที่ตั้ง'}</span>
+                                                </div>
+                                                <div class="card-btn">
+                                                <button class="btn_detail">ดูสินค้า</button>
+                                                </div>
+                                            </div>
+                                            `;
                         });
 
                         productsContainer.innerHTML = productCards;
@@ -311,6 +322,38 @@
                     </div>`;
                     });
             });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                fetchCategories();
+            });
+
+            function fetchCategories() {
+                fetch('/api/getFourBrand')
+                    .then(response => response.json())
+                    .then(data => {
+                        const container = document.getElementById('categories-container');
+                        if (data.brands && Array.isArray(data.brands)) {
+                            data.brands.forEach(brand => {
+                                const categoryElement = createCategoryElement(brand);
+                                container.appendChild(categoryElement);
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Error fetching categories:', error));
+            }
+
+            function createCategoryElement(brand) {
+                const div = document.createElement('div');
+                div.className = 'category-item';
+                div.innerHTML = `
+                    <img src="${brand.brand_pic_path}" alt="${brand.brand_name}" class="category-image">
+                    <p class="category-name">${brand.brand_name}</p>
+                `;
+                div.addEventListener('click', () => {
+                    console.log('Category clicked:', brand.brand_name);
+                });
+                return div;
+            }
         </script>
 
     </body>
