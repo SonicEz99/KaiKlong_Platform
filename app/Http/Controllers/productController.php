@@ -88,6 +88,29 @@ class productController extends Controller
         ], 200);
     }
 
+    public function getProductById($id)
+    {
+        try {
+            $product = Product::with(['productImages', 'category'])->findOrFail($id);
+
+            return response()->json($product, 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Product not found'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    public function show($id)
+    {
+        $product = Product::with(['productImages', 'category'])->find($id);
+
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        return view('product.product-detail', ['product' => $product]);
+    }
+
     public function updateProduct(Request $request, $productId)
     {
         try {

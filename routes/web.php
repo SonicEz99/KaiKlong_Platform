@@ -2,11 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     return view('auth.login_auth');
-})->name('login.page');
-;
+})->name('login.page');;
 
 // // Register Page Route
 Route::get('/register', function () {
@@ -30,6 +30,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/addproduct', function () {
         return view('product.addproduct');
     });
+
+    Route::get('/product-detail/{id}', [ProductController::class, 'show'])->name('productdetail');
+
 });
 
 Route::middleware('web')->get('/home', function () {
