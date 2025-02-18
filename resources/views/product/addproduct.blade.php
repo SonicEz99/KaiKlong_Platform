@@ -327,7 +327,7 @@
             })
             .then(response => response.json())
             .then(data => {
-              window.location.href= '/addproduct'
+              window.location.href= 'addproduct'
             })
             .catch(error => {
                 console.error('Error:', error);
