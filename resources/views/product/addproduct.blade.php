@@ -78,6 +78,26 @@
         .dropdown-item:not(:last-child) {
             border-bottom: 1px solid #eee;
         }
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        option {
+            padding: 10px;
+        }
     </style>
 </head>
 
@@ -88,107 +108,88 @@
         <div class="col-12">
             <div class="">              
                 <div class="card-body">
-                    <form action="" method="POST" class="needs-validation" novalidate>
+                    <form action="{{route('product.store')}}" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
                         @csrf
                         <!-- ชื่อสินค้า -->
                         <div class="mb-3">
-                            <label for="productName" class="form-label">ชื่อสินค้าที่คุณต้องการลงขาย <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="productName" name="productName" required>
+                            <label for="product_name" class="form-label">ชื่อสินค้า <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="product_name" name="product_name" required>
                             <div class="invalid-feedback">
                                 กรุณากรอกชื่อสินค้า
                             </div>
                         </div>
-
-                        <!-- ประเภทสินค้า -->
-                        <div class="mb-3">
-                            <label class="form-label">ประเภทของสินค้า <span class="text-danger">*</span></label>
-                            <input type="hidden" id="productType" name="productType" required>
-                            <div class="custom-dropdown">
-                                <div class="dropdown-toggle" id="categoryDropdown">เลือกหมวดหมู่</div>
-                                <ul class="dropdown-menu">
-                                    <li class="dropdown-item" data-value="electronics">อิเล็กทรอนิกส์</li>
-                                    <li class="dropdown-item" data-value="clothing">เสื้อผ้า</li>
-                                    <li class="dropdown-item" data-value="food">อาหาร</li>
-                                    <li class="dropdown-item" data-value="other">อื่นๆ</li>
-                                </ul>
-                            </div>  
-                            <div class="invalid-feedback">
-                                กรุณาเลือกประเภทสินค้า
-                            </div>
-                        </div>
-                        <!-- แบรนด์สินค้า -->
-                        <div class="mb-3">
-                            <label class="form-label">แบรนด์ของสินค้า <span class="text-danger">*</span></label>
-                            <input type="hidden" id="productType" name="productType" required>
-                            <div class="custom-dropdown">
-                                <div class="dropdown-toggle" id="categoryDropdown">เลือกแบรนด์</div>
-                                <ul class="dropdown-menu">
-                                    <li class="dropdown-item" data-value="electronics">i phone</li>
-                                </ul>
-                            </div>  
-                            <div class="invalid-feedback">
-                                กรุณาเลือกประเภทสินค้า
-                            </div>
-                        </div>
-
                         <!-- รายละเอียดสินค้า -->
                         <div class="mb-3">
-                            <label for="productDescription" class="form-label">รายละเอียดของสินค้า <span class="text-danger">*</span></label>
-                            <textarea class="form-control" id="productDescription" name="productDescription" rows="4" required></textarea>
+                            <label for="product_description" class="form-label">รายละเอียดสินค้า <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="product_description" name="product_description" required></textarea>
                             <div class="invalid-feedback">
                                 กรุณากรอกรายละเอียดสินค้า
                             </div>
                         </div>
-
-                        <!-- ราคาสินค้า -->
+                        <!-- ราคา -->
                         <div class="mb-3">
-                            <label for="productPrice" class="form-label">ราคาสินค้า <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" id="productPrice" name="productPrice" required min="0" step="0.01">
-                                <span class="input-group-text">บาท</span>
-                                <div class="invalid-feedback">
-                                    กรุณากรอกราคาสินค้า
-                                </div>
+                            <label for="product_price" class="form-label">ราคา <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="product_price" name="product_price" required>
+                            <div class="invalid-feedback">
+                                กรุณากรอกราคา
                             </div>
                         </div>
-
-                        <!-- สภาพ -->
+                        <!-- สภาพสินค้า -->
                         <div class="mb-3">
-                            <label for="productCondition" class="form-label">สภาพ <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="productCondition" name="productCondition" required>
+                            <label for="product_condition" class="form-label">สภาพสินค้า <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="product_condition" name="product_condition" required placeholder="มือหนึ่ง / มือสอง">
                             <div class="invalid-feedback">
                                 กรุณากรอกสภาพสินค้า
                             </div>
                         </div>
-
                         <!-- ที่อยู่สินค้า -->
                         <div class="mb-3">
-                            <label for="productLocation" class="form-label">ที่อยู่สินค้า <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="productLocation" name="productLocation" required>
+                            <label for="product_location" class="form-label">ที่อยู่สินค้า <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="product_location" name="product_location" required>
                             <div class="invalid-feedback">
                                 กรุณากรอกที่อยู่สินค้า
                             </div>
                         </div>
-
-                        <!-- เบอร์โทร -->
+                        <!-- เบอร์โทรศัพท์ -->
                         <div class="mb-3">
-                            <label for="phoneNumber" class="form-label">เบอร์โทรศัพท์ (ที่สามารถติดต่อได้) <span class="text-danger">*</span></label>
-                            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" pattern="[0-9]{10}" required>
+                            <label for="product_phone" class="form-label">เบอร์โทรศัพท์ <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="product_phone" name="product_phone" required>
                             <div class="invalid-feedback">
-                                กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง
+                                กรุณากรอกเบอร์โทรศัพท์
                             </div>
                         </div>
-
-                        <!-- รูปสินค้า -->
+                        <!-- รูปภาพ -->
                         <div class="mb-3">
-                            <label for="productImages" class="form-label">รูปสินค้า <span class="text-danger">*</span></label>
-                            <input type="file" class="form-control" id="productImages" name="productImages[]" multiple accept="image/*" required>
-                            <div class="form-text">สามารถเพิ่มรูปได้หลายรูป (สูงสุด 5 รูป)</div>
+                            <label for="image_path" class="form-label">รูปภาพ</label>
+                            <input type="file" class="form-control" id="image_path" name="image_path[]" accept="image/product_pic/*" multiple>
                             <div class="invalid-feedback">
-                                กรุณาเพิ่มรูปสินค้า
+                                กรุณาอัพโหลดรูปภาพที่ถูกต้อง
                             </div>
                         </div>
-
+                        <!-- หมวดหมู่ -->
+                        <div class="mb-3">
+                            <label for="category_id" class="form-label">หมวดหมู่ <span class="text-danger">*</span></label>
+                            <select id="categoryDropdown" name="category_id" onchange="handleCategoryChange()" required>
+                                <option value="">เลือกประเภทของสินค้า</option>
+                                <!-- Categories will be populated here -->
+                            </select>
+                            <div class="invalid-feedback">
+                                กรุณาเลือกหมวดหมู่
+                            </div>
+                        </div>
+                        <!-- ประเภท -->
+                        <div class="mb-3">
+                            <label for="type_id" class="form-label">ประเภท</label>
+                            <input type="number" class="form-control" id="type_id" name="type_id">
+                        </div>
+                        <!-- แบรนด์ -->
+                        <div class="mb-3">
+                            <label for="brand_id" class="form-label">แบรนด์</label>
+                            <select id="brandDropdown" name="brand_id" disabled>
+                                <option value="">เลือกแบรนด์ของสินค้า</option>
+                                <!-- Brands will be populated here -->
+                            </select>
+                        </div>
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn-orange btn-lg">ลงขายสินค้า</button>
                         </div>
@@ -200,72 +201,140 @@
 </div>
 
 <script>
-// Form validation
-(function () {
-    'use strict'
-    var forms = document.querySelectorAll('.needs-validation')
-    Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
-                form.classList.add('was-validated')
-            }, false)
-        })
-})()
+    document.addEventListener('DOMContentLoaded', function() {
+        const categoryDropdown = document.getElementById('categoryDropdown');
+        const brandDropdown = document.getElementById('brandDropdown');
 
-// Preview images before upload
-document.getElementById('productImages').addEventListener('change', function(e) {
-    if (this.files.length > 5) {
-        alert('คุณสามารถอัพโหลดรูปได้สูงสุด 5 รูปเท่านั้น');
-        this.value = '';
-    }
-});
+        if (categoryDropdown && brandDropdown) {
+            fetch('/api/categoriesBrandAndType')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.categories);
+                    data.categories.forEach(category => {
+                        const option = document.createElement('option');
+                        option.value = category.category_id;
+                        option.textContent = category.category_name;
+                        categoryDropdown.appendChild(option);
+                    });
+                });
 
-// Dropdown functionality
-const dropdown = document.querySelector('.dropdown-toggle');
-const dropdownMenu = document.querySelector('.dropdown-menu');
-const dropdownItems = document.querySelectorAll('.dropdown-item');
-
-// Toggle dropdown
-dropdown.addEventListener('click', function() {
-    dropdownMenu.classList.toggle('show');
-});
-
-// Close dropdown when clicking outside
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.custom-dropdown')) {
-        dropdownMenu.classList.remove('show');
-    }
-});
-
-// Handle item selection
-dropdownItems.forEach(item => {
-    item.addEventListener('click', function() {
-        const value = this.dataset.value;
-        const text = this.textContent;
-        
-        // Update hidden input and dropdown text
-        document.getElementById('productType').value = value;
-        dropdown.textContent = text;
-        
-        // Close dropdown
-        dropdownMenu.classList.remove('show');
-        
-        // Remove invalid feedback if present
-        document.getElementById('productType').classList.remove('is-invalid');
+            categoryDropdown.addEventListener('change', handleCategoryChange);
+        }
     });
-});
 
-// Add validation for category selection
-document.querySelector('form').addEventListener('submit', function(event) {
-    if (!document.getElementById('productType').value) {
-        event.preventDefault();
-        document.getElementById('productType').classList.add('is-invalid');
+    function handleCategoryChange() {
+        const categoryDropdown = document.getElementById('categoryDropdown');
+        const brandDropdown = document.getElementById('brandDropdown');
+        const selectedCategoryId = categoryDropdown.value;
+
+        if (selectedCategoryId) {
+            brandDropdown.disabled = false;
+            fetch(`/api/categoriesBrandAndType?category_id=${selectedCategoryId}`)
+                .then(response => response.json())
+                .then(data => {
+                    brandDropdown.innerHTML = '<option value="">กำลังเลือกดเเบรนด์สินค้า</option>';
+                    data.categories.find(cat => cat.category_id == selectedCategoryId).brands.forEach(brand => {
+                        const option = document.createElement('option');
+                        option.value = brand.brand_id;
+                        option.textContent = brand.brand_name;
+                        brandDropdown.appendChild(option);
+                    });
+                });
+        } else {
+            brandDropdown.disabled = true;
+            brandDropdown.innerHTML = '<option value="">ไม่มีเเบรนด์สินค้า</option>';
+        }
     }
-});
+
+    // Form validation
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+
+    // Preview images before upload
+    document.getElementById('image_path').addEventListener('change', function(e) {
+        if (this.files.length > 5) {
+            alert('คุณสามารถอัพโหลดรูปได้สูงสุด 5 รูปเท่านั้น');
+            this.value = '';
+        }
+    });
+
+    // Dropdown functionality
+    const dropdown = document.querySelector('.dropdown-toggle');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+    // Toggle dropdown
+    dropdown.addEventListener('click', function() {
+        dropdownMenu.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.custom-dropdown')) {
+            dropdownMenu.classList.remove('show');
+        }
+    });
+
+    // Handle item selection
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const value = this.dataset.value;
+            const text = this.textContent;
+            
+            // Update hidden input and dropdown text
+            document.getElementById('productType').value = value;
+            dropdown.textContent = text;
+            
+            // Close dropdown
+            dropdownMenu.classList.remove('show');
+            
+            // Remove invalid feedback if present
+            document.getElementById('productType').classList.remove('is-invalid');
+        });
+    });
+
+    // Add validation for category selection
+    document.querySelector('form').addEventListener('submit', function(event) {
+        if (!document.getElementById('productType').value) {
+            event.preventDefault();
+            document.getElementById('productType').classList.add('is-invalid');
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const formData = new FormData(form);
+
+            fetch('/api/addProduct', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+              window.location.href= '/addproduct'
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while adding the product.');
+            });
+        });
+    });
 </script>
 @endsection
 </html>
