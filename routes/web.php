@@ -27,8 +27,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/product-all', function () {
         return view('product.product');
     });
-
-
+    Route::get('/addproduct', function () {
+        return view('product.addproduct');
+    });
 });
 
 Route::middleware('web')->get('/home', function () {

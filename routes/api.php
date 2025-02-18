@@ -27,7 +27,7 @@ Route::post('/addBrand1', [brandController::class, 'addBrand1']);
 Route::post('/addBrand2', [brandController::class, 'addBrand2']);
 Route::get('/getFourBrand', [brandController::class, 'getFourBrand']);
 
-Route::post('/addProduct', [productController::class, 'addProduct']);
+Route::post('/addProduct', [productController::class, 'addProduct'])->name("product.store");
 Route::get('/product', [productController::class, 'getProduct']);
 Route::delete('/deleteProduct/{id}', [productController::class, 'deleteProduct']);
 Route::post('/updateProduct/{id}', [productController::class, 'updateProduct']);

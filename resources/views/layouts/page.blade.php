@@ -270,13 +270,13 @@ $user = Auth::user();
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="menu nav-link" href="#">หน้าหลัก</a>
+                            <a class="menu nav-link" href="home">หน้าหลัก</a>
                         </li>
                         <li class="nav-item">
-                            <a class="menu nav-link" href="#">เกี่ยวกับเรา</a>
+                            <a class="menu nav-link" href="abount">เกี่ยวกับเรา</a>
                         </li>
                         <li class="nav-item">
-                            <a class="menu nav-link" href="#">เริ่มต้นยังไง?</a>
+                            <a class="menu nav-link" href="first-start">เริ่มต้นยังไง?</a>
                         </li>
                     </div>
                     <div class="profile">
@@ -286,7 +286,7 @@ $user = Auth::user();
                                 alt="">
                         </div>
                         <div class="btn-sale">
-                            <button>ลงขาย</button>
+                            <button onclick="goadd()">ลงขาย</button>
                         </div>
                     </div>
                 </ul>
@@ -294,6 +294,12 @@ $user = Auth::user();
         </div>
     </nav>
 
+
+    <script>
+        function  goadd(){
+             window.location.href = "/addproduct"
+        }
+    </script>
 
 
     <div id="page_content">
