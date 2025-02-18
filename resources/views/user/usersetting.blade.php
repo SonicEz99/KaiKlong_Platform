@@ -129,24 +129,24 @@ $user = auth()->user();
             <div class="text-flind-setting">
                     <div class="input-data">
                         <label for="">ชื่อผู้ใช้</label>
-                        <input type="text">
+                        <input type="text" value="<?php echo $user->user_name ?>">
                     </div>
                     <div class="input-data">
                         <label for="">ชื่อ*</label>
-                        <input type="text">
+                        <input type="text" value="<?php echo ($user->first_name) ?>" placeholder="ยังไม่ได้ตั้งค่าชื่อ">
                     </div>
                     <div class="input-data">
                         <label for="">นามสกุล*</label>
-                        <input type="text">
+                        <input type="text" value="<?php echo ($user->last_name); ?>" placeholder="ยังไม่ได้ตั้งค่านามสกุล">
                     </div>
-
+                    
                     <hr>
                     <div class="container">
                     <h5>ข้อมูลการติดต่อ</h4>
                     </div>
                     <div class="input-data">
                         <label for="">เบอร์</label>
-                        <input type="text" placeholder="+ เบอร์โทรศัพท์">
+                        <input type="text" value="<?php echo ($user->tel); ?>" placeholder="+ เบอร์โทรศัพท์">
                     </div>
 
                     
