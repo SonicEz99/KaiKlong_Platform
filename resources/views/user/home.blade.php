@@ -506,7 +506,7 @@
                     productDiv.classList.add('product');
 
                     const link = document.createElement('a');
-                    link.href = `http://127.0.0.1:8000/product-type/${category.id}`;
+                    link.href = `http://127.0.0.1:8000/product-category/${category.id}`;
                     link.target = "_blank";
 
                     const img = document.createElement('img');

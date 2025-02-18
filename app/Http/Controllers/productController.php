@@ -72,7 +72,14 @@ class productController extends Controller
                 }
             }
 
-            return response()->json(['message' => 'Product added successfully', 'product' => $product], 201);
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'message' => 'Product added successfully',
+                    'product' => $product
+                ], 201);
+            }
+
+            return redirect()->route('home');
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         };
