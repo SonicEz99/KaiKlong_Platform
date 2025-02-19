@@ -85,7 +85,7 @@ class productController extends Controller
         };
     }
 
-    public function getProduct(Request $request)
+    public function getProduct24(Request $request)
     {
         $limit = $request->input('limit', 24); // ค่า default = 24 รายการต่อหน้า
         $products = Product::with(['productImages', 'category', 'category.brands', 'category.types', 'user'])
@@ -94,6 +94,15 @@ class productController extends Controller
         return response()->json($products);
     }
 
+    public function getProduct()
+    {
+        $products = Product::with(['productImages', 'category', 'category.brands', 'category.types', 'user'])->get();
+
+        return response()->json([
+            'message' => 'Products retrieved successfully',
+            'products' => $products
+        ], 200);
+    }
 
     public function updateProduct(Request $request, $productId)
     {

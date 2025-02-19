@@ -303,7 +303,7 @@
                 productsContainer.innerHTML =
                     '<div class="loading-text" style="text-align: center; padding: 20px; color: #666;">กำลังโหลด...</div>';
 
-                fetch(`/api/product?page=${page}&limit=${itemsPerPage}`)
+                fetch(`/api/get24product?page=${page}&limit=${itemsPerPage}`)
                     .then(response => response.json())
                     .then(data => {
                         if (!data.data || data.data.length === 0) {
