@@ -162,8 +162,13 @@
                             <div class="mb-3">
                                 <label for="product_condition" class="form-label">สภาพสินค้า <span
                                         class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="product_condition" name="product_condition"
-                                    required placeholder="มือหนึ่ง / มือสอง">
+
+                                <select name="product_condition" id="product_condition" class="form-control" required
+                                    placeholder="มือหนึ่ง / มือสอง">
+                                    <option selected="selected" disabled>มือหนึ่ง / มือสอง</option>
+                                    <option value="มือหนึ่ง">มือหนึ่ง</option>
+                                    <option value="มือสอง">มือสอง</option>
+                                </select>
                                 <div class="invalid-feedback">
                                     กรุณากรอกสภาพสินค้า
                                 </div>
@@ -212,7 +217,10 @@
                             <!-- ประเภท -->
                             <div class="mb-3">
                                 <label for="type_id" class="form-label">ประเภท</label>
-                                <input type="number" class="form-control" id="type_id" name="type_id">
+                                <select id="typeDropdown" name="type_id" disabled>
+                                    <option value="">เลือกประเภทของสินค้า</option>
+                                    <!-- Brands will be populated here -->
+                                </select>
                             </div>
                             <!-- แบรนด์ -->
                             <div class="mb-3">
@@ -233,50 +241,57 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             const categoryDropdown = document.getElementById('categoryDropdown');
             const brandDropdown = document.getElementById('brandDropdown');
+            const typeDropdown = document.getElementById('typeDropdown');
+
+            let categoryData = {}; // Cache category data
 
             if (categoryDropdown && brandDropdown) {
-                fetch('/api/categoriesBrandAndType')
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data.categories);
-                        data.categories.forEach(category => {
-                            const option = document.createElement('option');
-                            option.value = category.category_id;
-                            option.textContent = category.category_name;
-                            categoryDropdown.appendChild(option);
-                        });
-                    });
+                try {
+                    const response = await fetch('/api/categoriesBrandAndType');
+                    categoryData = await response.json();
+
+                    if (categoryData.categories) {
+                        categoryDropdown.innerHTML = '<option value="">เลือกหมวดหมู่</option>' +
+                            categoryData.categories.map(category =>
+                                `<option value="${category.category_id}">${category.category_name}</option>`
+                            ).join('');
+                    }
+                } catch (error) {
+                    console.error('Error fetching categories:', error);
+                }
 
                 categoryDropdown.addEventListener('change', handleCategoryChange);
             }
-        });
 
-        function handleCategoryChange() {
-            const categoryDropdown = document.getElementById('categoryDropdown');
-            const brandDropdown = document.getElementById('brandDropdown');
-            const selectedCategoryId = categoryDropdown.value;
+            function handleCategoryChange() {
+                const selectedCategoryId = categoryDropdown.value;
+                const category = categoryData.categories.find(cat => cat.category_id == selectedCategoryId);
 
-            if (selectedCategoryId) {
-                brandDropdown.disabled = false;
-                fetch(`/api/categoriesBrandAndType?category_id=${selectedCategoryId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        brandDropdown.innerHTML = '<option value="">กำลังเลือกเเบรนด์สินค้า</option>';
-                        data.categories.find(cat => cat.category_id == selectedCategoryId).brands.forEach(brand => {
-                            const option = document.createElement('option');
-                            option.value = brand.brand_id;
-                            option.textContent = brand.brand_name;
-                            brandDropdown.appendChild(option);
-                        });
-                    });
-            } else {
-                brandDropdown.disabled = true;
-                brandDropdown.innerHTML = '<option value="">ไม่มีเเบรนด์สินค้า</option>';
+                if (!category) return;
+
+                brandDropdown.innerHTML = '';
+                typeDropdown.innerHTML = '';
+
+                if (selectedCategoryId === '1' || selectedCategoryId === '2') {
+                    brandDropdown.disabled = false;
+                    typeDropdown.disabled = true;
+                    brandDropdown.innerHTML = '<option value="">กำลังเลือกเเบรนด์สินค้า</option>' +
+                        (category.brands?.map(brand =>
+                            `<option value="${brand.brand_id}">${brand.brand_name}</option>`
+                        ).join('') || '');
+                } else {
+                    typeDropdown.disabled = false;
+                    brandDropdown.disabled = true;
+                    typeDropdown.innerHTML = '<option value="">กำลังเลือกประเภทสินค้า</option>' +
+                        (category.types?.map(type =>
+                            `<option value="${type.type_id}">${type.type_name}</option>`
+                        ).join('') || '');
+                }
             }
-        }
+        });
 
         // Form validation
         (function() {
@@ -375,7 +390,6 @@
                     });
             });
         });
-
 
         // ตรวจสอบความถูกต้องของเบอร์โทรศัพท์เมื่อกด Submit
         document.addEventListener("DOMContentLoaded", function() {
