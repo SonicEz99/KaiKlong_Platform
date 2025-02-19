@@ -91,14 +91,13 @@ class productController extends Controller
     public function getProductById($id)
     {
         try {
-            $product = Product::with(['productImages', 'category', 'user'])
-                ->with(['category.brands' => function ($query) {
-                    $query->whereHas('products');
-                }])
-                ->with(['category.types' => function ($query) {
-                    $query->whereHas('products');
-                }])
-                ->findOrFail($id);
+            $product = Product::with([
+                'productImages',
+                'category',
+                'user',
+                'brand', // Add this
+                'type',  // Add this
+            ])->findOrFail($id);
 
             return response()->json($product, 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
@@ -107,6 +106,7 @@ class productController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
 
     public function show($id)
     {

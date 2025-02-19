@@ -10,7 +10,7 @@ class Product extends Model
     use HasFactory;
 
     protected $primaryKey = 'product_id';
-    
+
     protected $fillable = [
         'user_id',
         'product_name',
@@ -35,5 +35,15 @@ class Product extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(Type::class, 'type_id');
     }
 }
