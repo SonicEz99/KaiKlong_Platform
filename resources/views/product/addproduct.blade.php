@@ -12,6 +12,10 @@
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
     <style>
+        option:disabled {
+            color: gray !important;
+        }
+
         .btn-orange {
             background-color: #FF8C00;
             border: 2px solid #FF8C00;
@@ -164,8 +168,8 @@
                                         class="text-danger">*</span></label>
 
                                 <select name="product_condition" id="product_condition" class="form-control" required
-                                    placeholder="มือหนึ่ง / มือสอง">
-                                    <option selected="selected" disabled>มือหนึ่ง / มือสอง</option>
+                                    >
+                                    <option selected hidden>เลือกสภาพสินค้าที่คุณจะขาย</option>
                                     <option value="มือหนึ่ง">มือหนึ่ง</option>
                                     <option value="มือสอง">มือสอง</option>
                                 </select>
@@ -207,7 +211,7 @@
                                 <label for="category_id" class="form-label">หมวดหมู่ <span
                                         class="text-danger">*</span></label>
                                 <select id="categoryDropdown" name="category_id" onchange="handleCategoryChange()" required>
-                                    <option value="">เลือกประเภทของสินค้า</option>
+                                    <option value="">เลือกหมวดหมู่</option>
                                     <!-- Categories will be populated here -->
                                 </select>
                                 <div class="invalid-feedback">
