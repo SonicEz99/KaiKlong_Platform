@@ -30,6 +30,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/addproduct', function () {
         return view('product.addproduct');
     });
+    Route::get('/user_setting', function () {
+        return view('user.usersetting');
+    });
 });
 
 Route::middleware('web')->get('/home', function () {
