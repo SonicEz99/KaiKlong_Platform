@@ -5,24 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Kaiklong | แพลตฟอร์มซื้อ-ขายสินค้ามือสอง</title>
     @vite(['resources/js/app.js'])
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <style>
     body {
         background-color: #f5f5f5;
         margin: 0;
         padding: 0;
-        font-family: 'Noto Sans Thai', 'Prompt', sans-serif; 
+        font-family: 'Noto Sans Thai', 'Prompt', sans-serif;
     }
 
     .search-container {
-        font-family: 'Noto Sans Thai', 'Prompt', sans-serif; 
+        font-family: 'Noto Sans Thai', 'Prompt', sans-serif;
         padding: 20px;
         text-align: center;
         margin-bottom: 14px;
@@ -75,6 +76,15 @@
         grid-template-columns: repeat(8, 1fr);
     }
 
+    .product-container a {
+        text-decoration: none;
+        color: #666;
+    }
+
+    .product-container a:hover {
+        color: #FF8C00;
+    }
+
     .product {
         text-align: center;
         width: 120px;
@@ -112,6 +122,15 @@
     .product-type p {
         width: calc(20% - 10px);
         text-align: center;
+    }
+
+    .product-type a {
+        text-decoration: none;
+        color: rgb(39, 39, 39);
+    }
+
+    .product-type a:hover {
+        color: #FF8C00;
     }
 
     .title2 {
@@ -170,9 +189,9 @@
         font-weight: 600;
         margin-bottom: 8px;
         color: #333;
-        white-space: nowrap; 
-        overflow: hidden; 
-        text-overflow: ellipsis; 
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .product-price {
@@ -205,12 +224,12 @@
         border-radius: 5px;
         width: 100%;
         font-weight: bold;
-        transition: background-color 0.3s ease, color 0.3s ease; 
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .btn_detail:hover {
-        background-color: #FF8C00; 
-        color: white; 
+        background-color: #FF8C00;
+        color: white;
     }
 
     .card-product-top {
@@ -235,7 +254,7 @@
     .card-btn {
         color: white;
         padding: 4px;
-        transition: background-color 0.3s ease; /* Add transition for smooth color change */
+        transition: background-color 0.3s ease;
     }
 
 
@@ -295,13 +314,9 @@
 
         .product img {
             width: 100px;
-            /* ขนาดมาตรฐาน */
             height: 100px;
-            /* ใช้ความสูงเท่ากับความกว้าง */
             object-fit: cover;
-            /* ทำให้รูปภาพไม่บิดเบี้ยว */
             border-radius: 10px;
-            /* เพิ่มมุมโค้งเล็กน้อย */
             display: block;
             margin: 0 auto;
         }
@@ -395,9 +410,7 @@
 
             <div class="highlight">
                 <p>หาง่ายขึ้น! เลือกเลย!!!</p>
-                <div class="product-type">
-                    <p id="product-name">กำลังโหลด...</p>
-                </div>
+                <div class="product-type"></div>
             </div>
 
             <div class="title2">
@@ -409,6 +422,19 @@
 
             </div>
 
+
+            @if (session('success'))
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        Swal.fire({
+                            title: "🎉 สำเร็จ!",
+                            text: "{{ session('success') }}",
+                            icon: "success",
+                            confirmButtonText: "ตกลง"
+                        });
+                    });
+                </script>
+            @endif
 
 
             <script>
@@ -432,7 +458,7 @@
                             latestProducts.forEach(product => {
                                 // ตรวจสอบว่ามีข้อมูลรูปภาพหรือไม่ ถ้าไม่มีให้ใช้ placeholder
                                 const imagePath = (product.product_images && product.product_images.length >
-                                    0) ?
+                                        0) ?
                                     `/${product.product_images[0].image_path}` :
                                     '/path/to/placeholder.jpg';
 
@@ -458,9 +484,6 @@
                         .catch(error => console.error("Error fetching products:", error));
                 });
             </script>
-
-
-
         </div>
     </body>
 
@@ -493,10 +516,13 @@
                     const productDiv = document.createElement('div');
                     productDiv.classList.add('product');
 
+                    const link = document.createElement('a');
+                    link.href = `http://127.0.0.1:8000/product-category/${category.id}`;
+                    link.target = "_blank";
+
                     const img = document.createElement('img');
                     img.src = category.category_pic_path;
                     img.alt = category.category_name;
-
 
                     img.style.width = "100px";
                     img.style.height = "100px";
@@ -507,8 +533,9 @@
                     p.textContent = category.category_name;
                     p.style.textAlign = "center";
 
-                    productDiv.appendChild(img);
-                    productDiv.appendChild(p);
+                    link.appendChild(img);
+                    link.appendChild(p);
+                    productDiv.appendChild(link);
                     container.appendChild(productDiv);
                 });
             })
@@ -524,10 +551,18 @@
                 const data = await response.json();
 
                 const container = document.querySelector('.product-type');
-                if (!container) return; // ป้องกัน error ถ้า container ไม่เจอ
+                if (!container) return;
 
-                let typeNames = data.map(type => `<p>${type.type_name}</p>`).join(''); // รวม type_name เป็น HTML
-                container.innerHTML = typeNames; // อัปเดตเนื้อหาโดยไม่ลบ `<div>`
+                // แก้โค้ดให้แสดงชื่อและเป็นลิงก์ไปยังหน้าที่ต้องการ
+                let typeLinks = data.map(type =>
+                    `<p>
+                    <a href="http://127.0.0.1:8000/product-type/${type.id}" target="_blank">
+                        ${type.type_name}
+                    </a>
+                </p>`
+                ).join('');
+
+                container.innerHTML = typeLinks;
 
             } catch (error) {
                 console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
