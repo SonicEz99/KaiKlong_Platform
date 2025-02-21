@@ -14,7 +14,7 @@ class userController extends Controller
             'user_name' => 'required|string',
             'first_name' => 'nullable|string',
             'last_name' => 'nullable|string',
-            'tel' => 'nullable|string',
+            'tel' => 'nullable|string|max:10',
         ]);
 
         if ($validator->fails()) {
