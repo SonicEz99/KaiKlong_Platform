@@ -12,23 +12,21 @@
             display: flex;
             gap: 20px;
             align-items: flex-start;
-            border: 1px solid #ddd;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
             flex-wrap: wrap;
         }
 
         .product-image {
             width: 300px;
+            height: 300px;
             max-width: 100%;
             object-fit: cover;
-            border-radius: 8px;
         }
 
         .product-details {
-            flex: 1;
+
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -41,20 +39,25 @@
 
         .product-price {
             font-size: 20px;
-            color: #e74c3c;
+            color: black;
             margin-bottom: 5px;
+            font-weight: bold;
         }
 
         .product-seller {
             font-size: 16px;
-            color: #555;
             margin-bottom: 10px;
+        }
+
+        .seller-name {
+            color: #FF8C00;
+            font-size: 20px;
         }
 
         .btn-chat {
             display: inline-block;
             padding: 8px 16px;
-            background-color: #3498db;
+            background-color: #FF8C00;
             color: #fff;
             text-decoration: none;
             border-radius: 4px;
@@ -68,7 +71,6 @@
         .feature-title {
             font-size: 20px;
             margin: 20px 0 10px 0;
-            border-bottom: 1px solid #ddd;
             padding-bottom: 5px;
         }
 
@@ -85,14 +87,16 @@
 
         .seller-card {
             display: flex;
-            gap: 15px;
             align-items: center;
+            text-align: center;
             border: 1px solid #ddd;
             padding: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
             max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .seller-image {
@@ -100,12 +104,13 @@
             height: 80px;
             object-fit: cover;
             border-radius: 50%;
+            display: flex;
+            justify-content: center;
         }
 
         .seller-info {
             flex: 1;
             display: flex;
-            flex-direction: column;
         }
 
         .seller-name {
@@ -116,13 +121,9 @@
 
         .btn-call,
         .btn-view-products {
-            display: inline-block;
             padding: 8px 12px;
             background-color: #2ecc71;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 4px;
-            margin-top: 5px;
+
         }
 
         .btn-view-products {
@@ -151,39 +152,53 @@
                     .then(product => {
                         console.log("Product data received:", product);
                         const productDetailContainer = document.getElementById('product-detail');
+
                         const imagePath = (product.product_images && product.product_images.length > 0) ?
                             `/${product.product_images[0].image_path}` :
                             '/path/to/placeholder.jpg';
 
                         productDetailContainer.innerHTML = `
-                        <div class="product-card">
-                            <img class="product-image" src="${imagePath}" alt="${product.product_name}" 
-                                loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
-                            <div class="product-details">
-                                <div class="product-title">${product.product_name}</div>
-                                <div class="product-price">${new Intl.NumberFormat().format(product.product_price)} บาท</div>
-                                <div class="product-seller">
-                                    <strong>ผู้ขาย:</strong> ${product.user?.user_name || 'ไม่ระบุ'}
-                                </div>
-                                <a class="btn-chat" href="https://m.me/${product.user?.google_id || ''}" target="_blank">คุยกับผู้ขาย</a>
-                                <div class="feature-section">
-                                    <div class="feature-title">คุณสมบัติเด่น</div>
-                                    <ul class="feature-list" id="feature-list">
-                                        <li>กำลังโหลด...</li>
-                                    </ul>
-                                </div>
-                            </div>
-                         <div class="seller-card">
-                            <img class="seller-image" src="${product.user?.profile_image || '/path/to/default-profile.jpg'}" alt="${product.user?.user_name}" loading="lazy">
-                            <div class="seller-info">
-                                <div class="seller-name">${product.user?.user_name || 'ไม่ระบุ'}</div>
-                                <a class="btn-call" href="tel:${product.user?.phone || '#'}">โทร: ${product.user?.phone || 'ไม่มีเบอร์'}</a>
-                                <a class="btn-view-products" href="/seller/${product.user?.id || ''}">ดูสินค้าทั้งหมด</a>
-                            </div>
-                        </div>
-                        </div>
-                    `;
+                                                        <div class="product-card">
+                                                            <img class="product-image" src="${imagePath}" alt="${product.product_name}" 
+                                                                loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
 
+                                                            <div class="product-details">
+                                                                <div class="product-title">${product.product_name}</div>
+                                                                <div class="product-price">${new Intl.NumberFormat().format(product.product_price)} บาท</div>
+                                                                <div class="product-seller">
+                                                                     <strong>ลงขายโดย</strong> <span class="seller-name">${product.user?.user_name || 'ไม่ระบุ'}</span>
+                                                                </div>
+                                                                <a class="btn-chat" href="https://m.me/${product.user?.google_id || ''}" target="_blank">คุยกับผู้ขาย</a>
+
+                                                                <!-- คุณสมบัติเด่น -->
+                                                                <div class="feature-section">
+                                                                    <div class="feature-title">คุณสมบัติเด่น</div>
+                                                                    <ul class="feature-list" id="feature-list">
+                                                                        <li>กำลังโหลด...</li>
+                                                                    </ul>
+                                                                </div>
+
+                                                                <!-- รายละเอียดสินค้า -->
+                                                                <div class="product-description">
+                                                                    <div class="feature-title">รายละเอียดสินค้า</div>
+                                                                    <p id="product-details">${product.product_description || "ไม่มีรายละเอียดสินค้า"}</p>
+                                                                </div>
+
+                                                                <!--  ข้อมูลผู้ขาย -->
+                                                                <div class="seller-card">
+                                                                    <img class="seller-image" src="${product.user?.profile_image || '/path/to/default-profile.jpg'}" 
+                                                                        alt="${product.user?.user_name}" loading="lazy">
+                                                                    <div class="seller-info">
+                                                                        <div class="seller-name">${product.user?.user_name || 'ไม่ระบุ'}</div>
+                                                                        <a class="btn-call" href="tel:${product.user?.phone || '#'}">โทร: ${product.user?.phone || 'ไม่มีเบอร์'}</a>
+                                                                        <a class="btn-view-products" href="/seller/${product.user?.id || ''}">ดูสินค้าทั้งหมด</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    `;
+
+                        //  Fetch ข้อมูลคุณสมบัติ
                         fetchFeatureData(product.brand_id, product.type_id);
                     })
                     .catch(error => {
@@ -192,14 +207,14 @@
                             '<p style="text-align:center;padding:20px;color:#666;">เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า</p>';
                     });
 
+                //  ฟังก์ชันดึงข้อมูลคุณสมบัติเด่น
                 function fetchFeatureData(brandId, typeId) {
                     console.log("Fetching feature data for Brand ID:", brandId, "Type ID:", typeId);
+
                     if (brandId) {
                         fetch(`/api/brands/${brandId}`)
                             .then(response => response.json())
-                            .then(brand => {
-                                updateFeatureList([brand], 'brand_name');
-                            })
+                            .then(brand => updateFeatureList([brand], 'brand_name'))
                             .catch(() => fetchType(typeId));
                     } else {
                         fetchType(typeId);
@@ -210,9 +225,7 @@
                     if (typeId) {
                         fetch(`/api/types/${typeId}`)
                             .then(response => response.json())
-                            .then(type => {
-                                updateFeatureList([type], 'type_name');
-                            })
+                            .then(type => updateFeatureList([type], 'type_name'))
                             .catch(() => showNoData());
                     } else {
                         showNoData();
@@ -234,8 +247,6 @@
                     featureListEl.innerHTML = items.map(item => `<li>${item[keyName]}</li>`).join('');
                 }
             });
-        </script>
-
         </script>
     </body>
 @endsection
