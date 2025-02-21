@@ -11,25 +11,44 @@
         .product-card {
             display: flex;
             gap: 20px;
-            align-items: flex-start;
             padding: 20px;
             border-radius: 8px;
-            margin-top: 20px;
             flex-wrap: wrap;
         }
 
         .product-image {
-            width: 300px;
-            height: 300px;
+            width: 400px;
+            height: 400px;
             max-width: 100%;
             object-fit: cover;
         }
 
-        .product-details {
+        .image-add {
+            flex-direction: column;
+        }
 
+        /* รูปภาพเพิ่มเติม */
+        .additional-images {
+            margin-top: 20px;
+            padding: 14px;
+        }
+
+        .image-gallery {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .additional-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .product-details {
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
         }
 
         .product-title {
@@ -55,13 +74,15 @@
         }
 
         .btn-chat {
-            display: inline-block;
-            padding: 8px 16px;
-            background-color: #FF8C00;
-            color: #fff;
-            text-decoration: none;
+            width: 50%;
+            padding: 4px;
+            background-color: #FB8C00;
+            color: #ffffff;
+            border: 2px solid #FB8C00;
             border-radius: 4px;
-            margin-bottom: 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
         .feature-section {
@@ -70,6 +91,7 @@
 
         .feature-title {
             font-size: 20px;
+            font-weight: bold;
             margin: 20px 0 10px 0;
             padding-bottom: 5px;
         }
@@ -86,17 +108,16 @@
         }
 
         .seller-card {
+            width: 150%;
             display: flex;
             align-items: center;
             text-align: center;
-            border: 1px solid #ddd;
             padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
             max-width: 400px;
             margin-left: auto;
             margin-right: auto;
+            background: #ececec;
         }
 
         .seller-image {
@@ -114,23 +135,26 @@
         }
 
         .seller-name {
-            font-size: 18px;
             font-weight: bold;
-            margin-bottom: 5px;
+
         }
 
         .btn-call,
         .btn-view-products {
-            padding: 8px 12px;
-            background-color: #2ecc71;
-
+            width: 50%;
+            padding: 4px;
+            background-color: #ececec;
+            color: #000000;
+            border: 2px solid #FB8C00;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .btn-view-products {
-            background-color: #f39c12;
-        }
     </style>
 </head>
+
 @extends('layouts.page')
 @section('content')
 
@@ -158,94 +182,61 @@
                             '/path/to/placeholder.jpg';
 
                         productDetailContainer.innerHTML = `
-                                                        <div class="product-card">
-                                                            <img class="product-image" src="${imagePath}" alt="${product.product_name}" 
-                                                                loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
+                                                            <div class="product-card">
+                                                                 <div class="image-add">
+                                                                    <img class="product-image" src="${imagePath}" alt="${product.product_name}" 
+                                                                        loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
 
-                                                            <div class="product-details">
-                                                                <div class="product-title">${product.product_name}</div>
-                                                                <div class="product-price">${new Intl.NumberFormat().format(product.product_price)} บาท</div>
-                                                                <div class="product-seller">
-                                                                     <strong>ลงขายโดย</strong> <span class="seller-name">${product.user?.user_name || 'ไม่ระบุ'}</span>
-                                                                </div>
-                                                                <a class="btn-chat" href="https://m.me/${product.user?.google_id || ''}" target="_blank">คุยกับผู้ขาย</a>
+                                                                        <div class="additional-images">
+                                                                            <div class="image-gallery">
+                                                                                ${product.product_images.slice(1).map(img => `
+                                                                                            <img class="additional-image" src="/${img.image_path}" alt="${product.product_name}" 
+                                                                                                loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
+                                                                                        `).join('')}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
 
-                                                                <!-- คุณสมบัติเด่น -->
-                                                                <div class="feature-section">
-                                                                    <div class="feature-title">คุณสมบัติเด่น</div>
-                                                                    <ul class="feature-list" id="feature-list">
-                                                                        <li>กำลังโหลด...</li>
-                                                                    </ul>
-                                                                </div>
+                                                                <div class="product-details">
+                                                                    <div class="product-title">${product.product_name}</div>
+                                                                    <div class="product-price">${new Intl.NumberFormat().format(product.product_price)} บาท</div>
+                                                                    <div class="product-seller">
+                                                                        <strong>ลงขายโดย</strong> <span class="seller-name">${product.user?.user_name || 'ไม่ระบุ'}</span>
+                                                                    </div>
 
-                                                                <!-- รายละเอียดสินค้า -->
-                                                                <div class="product-description">
-                                                                    <div class="feature-title">รายละเอียดสินค้า</div>
-                                                                    <p id="product-details">${product.product_description || "ไม่มีรายละเอียดสินค้า"}</p>
-                                                                </div>
+                                                                    <button class="btn-chat">คุยกับผู้ขาย</button>
 
-                                                                <!--  ข้อมูลผู้ขาย -->
-                                                                <div class="seller-card">
-                                                                    <img class="seller-image" src="${product.user?.profile_image || '/path/to/default-profile.jpg'}" 
-                                                                        alt="${product.user?.user_name}" loading="lazy">
-                                                                    <div class="seller-info">
-                                                                        <div class="seller-name">${product.user?.user_name || 'ไม่ระบุ'}</div>
-                                                                        <a class="btn-call" href="tel:${product.user?.phone || '#'}">โทร: ${product.user?.phone || 'ไม่มีเบอร์'}</a>
-                                                                        <a class="btn-view-products" href="/seller/${product.user?.id || ''}">ดูสินค้าทั้งหมด</a>
+                                                                    <div class="feature-section">
+                                                                        <div class="feature-title">คุณสมบัติ</div>
+                                                                        <p>ขาว ดำ แดง</p>
+                                                                    </div>
+
+                                                                    <!-- รายละเอียดสินค้า -->
+                                                                    <div class="product-description">
+                                                                        <div class="feature-title">รายละเอียดสินค้า</div>
+                                                                        <p id="product-details">${product.product_description || "ไม่มีรายละเอียดสินค้า"}</p>
+                                                                    </div>
+
+                                                                    <!-- ข้อมูลผู้ขาย -->
+                                                                    <div class="seller-card">
+                                                                        <img class="seller-image" src="${product.user?.profile_image || '/path/to/default-profile.jpg'}" 
+                                                                            alt="${product.user?.user_name}" loading="lazy">
+                                                                        <div class="seller-info">
+                                                                            <div class="seller-name">${product.user?.user_name || 'ไม่ระบุ'}</div>
+                                                                            <a class="btn-call" href="tel:${product.user?.phone || '#'}">โทร: ${product.user?.phone || ''}</a>
+                                                                            <a class="btn-view-products" href="/seller/${product.user?.id || ''}">ดูสินค้าทั้งหมด</a>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    `;
 
-                        //  Fetch ข้อมูลคุณสมบัติ
-                        fetchFeatureData(product.brand_id, product.type_id);
+                    `;
                     })
                     .catch(error => {
                         console.error("Error fetching product detail:", error);
                         document.getElementById('product-detail').innerHTML =
                             '<p style="text-align:center;padding:20px;color:#666;">เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า</p>';
                     });
-
-                //  ฟังก์ชันดึงข้อมูลคุณสมบัติเด่น
-                function fetchFeatureData(brandId, typeId) {
-                    console.log("Fetching feature data for Brand ID:", brandId, "Type ID:", typeId);
-
-                    if (brandId) {
-                        fetch(`/api/brands/${brandId}`)
-                            .then(response => response.json())
-                            .then(brand => updateFeatureList([brand], 'brand_name'))
-                            .catch(() => fetchType(typeId));
-                    } else {
-                        fetchType(typeId);
-                    }
-                }
-
-                function fetchType(typeId) {
-                    if (typeId) {
-                        fetch(`/api/types/${typeId}`)
-                            .then(response => response.json())
-                            .then(type => updateFeatureList([type], 'type_name'))
-                            .catch(() => showNoData());
-                    } else {
-                        showNoData();
-                    }
-                }
-
-                function showNoData() {
-                    console.log("No feature data found.");
-                    document.getElementById('feature-list').innerHTML = '<li>ไม่พบข้อมูล</li>';
-                }
-
-                function updateFeatureList(items, keyName) {
-                    console.log("Updating feature list with:", items);
-                    const featureListEl = document.getElementById('feature-list');
-                    if (!items || items.length === 0) {
-                        showNoData();
-                        return;
-                    }
-                    featureListEl.innerHTML = items.map(item => `<li>${item[keyName]}</li>`).join('');
-                }
             });
         </script>
     </body>
