@@ -37,6 +37,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/product-listing/{id}', function () {
         return view('user.productlisting');
     });
+    Route::get('/my-product', function () {
+        return view('user.myproduct');
+    });
 });
 
 Route::middleware('web')->get('/home', function () {

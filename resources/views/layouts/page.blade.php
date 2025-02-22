@@ -373,7 +373,7 @@
                     })
                     .catch(error => console.error('Logout failed:', error));
             } else if (num === 6) {
-                window.location.href = "/product-listing/<?php echo $user->id; ?>";
+                window.location.href = "/my-product";
             }
         }
     </script>
