@@ -482,7 +482,7 @@
                               <span class="product-description">${product.product_location}</span>
                             </div>
                             <div class="card-btn">
-                              <button class="btn_detail"><a href="/product-detail/${product.product_id}">ดูสินค้า</a></button>
+                               <button class="btn_detail" onclick="gotoDetail(${product.product_id})">ดูสินค้า</button>
                             </div>
                           </div>
                         `;
@@ -492,6 +492,11 @@
                         })
                         .catch(error => console.error("Error fetching products:", error));
                 });
+
+                function gotoDetail(id) {
+                    window.location.href = `/product-detail/${id}`;
+                }
+
 
                 document.addEventListener("DOMContentLoaded", function() {
                     const searchBox = document.querySelector(".search-box");

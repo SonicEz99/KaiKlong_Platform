@@ -379,6 +379,7 @@
                         body: formData,
                         headers: {
                             'Accept': 'application/json' // ✅ Forces Laravel to return JSON even on errors
+
                         }
                     })
                     .then(response => response.json().then(data => ({

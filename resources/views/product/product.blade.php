@@ -423,7 +423,7 @@
                 const div = document.createElement('div');
                 div.className = 'category-item';
                 div.innerHTML = `
-                <a href="http://127.0.0.1:8000/product-all?q=${brand.brand_name}" target="_blank" style="text-decoration: none;">
+                <a href="/product-all?q=${brand.brand_name}" style="text-decoration: none;">
                         <img src="${brand.brand_pic_path}" alt="${brand.brand_name}" class="category-image">
                         <p class="category-name">${brand.brand_name}</p>
                     </a>
