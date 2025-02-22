@@ -112,16 +112,15 @@
         }
 
         .btn_detail {
+            background: #fff1df;
+            color: #FF8C00;
+            border: 1px solid #FF8C00;
+            padding: 4px 15px;
+            margin-top: 10px;
+            border-radius: 5px;
             width: 100%;
-            padding: 4px;
-            background-color: #FFF3E0;
-            color: #FB8C00;
-            border: 2px solid #FB8C00;
-            border-radius: 6px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-weight: 600;
+            font-weight: bold;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .btn_detail:hover {
@@ -358,7 +357,7 @@
                             productCards += `
 
                                             <div class="product-card">
-                                                <img class="product-image" src="${imagePath}" alt="${product.product_name}" 
+                                                <img class="product-image" src="${imagePath}" alt="${product.product_name}"
                                                     loading="lazy" onerror="this.src='/path/to/placeholder.jpg'" />
                                                 <div class="product-details">
                                                     <b class="product-title">${product.product_name}</b>
