@@ -356,19 +356,22 @@
                                 '/path/to/placeholder.jpg';
 
                             productCards += `
-                    <div class="product-card">
-                        <img class="product-image" src="${imagePath}" alt="${product.product_name}"
-                            loading="lazy" onerror="this.src='/path/to/placeholder.jpg'" />
-                        <div class="product-details">
-                            <b class="product-title">${product.product_name}</b>
-                            <span class="product-price">${new Intl.NumberFormat().format(product.product_price)} บาท</span>
-                            <span class="product-description">${product.product_location || 'ไม่มีข้อมูลที่ตั้ง'}</span>
-                        </div>
-                        <div class="card-btn">
-                            <button class="btn_detail">ดูสินค้า</button>
-                        </div>
-                    </div>
-                `;
+
+                                            <div class="product-card">
+                                                <img class="product-image" src="${imagePath}" alt="${product.product_name}" 
+                                                    loading="lazy" onerror="this.src='/path/to/placeholder.jpg'" />
+                                                <div class="product-details">
+                                                    <b class="product-title">${product.product_name}</b>
+                                                    <span class="product-price">${new Intl.NumberFormat().format(product.product_price)} บาท</span>
+                                                    <span class="product-description">${product.product_location || 'ไม่มีข้อมูลที่ตั้ง'}</span>
+                                                </div>
+                                                <div class="card-btn">
+                                                    <a class="btn_detail" href="/product-detail/${product.product_id}">ดูสินค้า</a>
+
+                                                </div>
+                                            </div>
+
+                                            `;
                         });
 
                         productsContainer.innerHTML = productCards;
