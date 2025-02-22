@@ -111,7 +111,7 @@
         .seller-card {
            display: flex;
            gap: 10px;
-           justify-content: center;
+           justify-content: start;
            align-items: center;
            width: 100%;
         }
@@ -142,13 +142,14 @@
         .btn-view-products {
             width: 50%;
             padding: 4px;
-            background-color: #ececec;
             color: #000000;
             border: 2px solid #FB8C00;
             border-radius: 4px;
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.2s ease;
+            text-decoration: none;
+            text-align: center;
         }
     </style>
 </head>
@@ -236,7 +237,7 @@
                                                                             alt="${product.user?.user_name}" loading="lazy">
                                                                         <div class="seller-info">
                                                                             <div class="seller-name">${product.user?.user_name || 'ไม่ระบุ'}</div>
-                                                                            <a class="btn-call" href="tel:${product.user?.phone || '#'}">โทร: ${product.user?.phone || ''}</a>
+                                                                            <a class="btn-call" href="tel:${product.user?.phone || '#'}">โทร</a>
                                                                             <a class="btn-view-products" href="/seller/${product.user?.id || ''}">ดูสินค้าทั้งหมด</a>
                                                                         </div>
                                                                     </div>
