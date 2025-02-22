@@ -93,7 +93,7 @@ class productController extends Controller
 
     public function getFilteredProducts(Request $request)
     {
-        $query = Product::with(['productImages', 'category', 'category.brands', 'category.types']);
+        $query = Product::with(['productImages', 'category', 'brand', 'type']);
 
         if ($request->has('q') && !empty($request->q)) {
             $searchTerm = '%' . $request->q . '%';
@@ -103,6 +103,12 @@ class productController extends Controller
                   ->orWhere('product_description', 'LIKE', $searchTerm)
                   ->orWhereHas('category', function ($categoryQuery) use ($searchTerm) {
                       $categoryQuery->where('category_name', 'LIKE', $searchTerm);
+                  })
+                  ->orWhereHas('brand', function ($brandQuery) use ($searchTerm) {
+                      $brandQuery->where('brand_name', 'LIKE', $searchTerm);
+                  })
+                  ->orWhereHas('type', function ($typeQuery) use ($searchTerm) {
+                      $typeQuery->where('type_name', 'LIKE', $searchTerm);
                   })
                   ;
             });
