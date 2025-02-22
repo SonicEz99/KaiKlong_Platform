@@ -292,18 +292,55 @@
             const itemsPerPage = 24;
 
             document.addEventListener("DOMContentLoaded", function() {
-                fetchProducts(currentPage);
+                const searchBox = document.querySelector(".search-box");
+                const urlParams = new URLSearchParams(window.location.search);
+                const searchQuery = urlParams.get("q") || ""; // Get search query from URL
+
+                if (searchQuery) {
+                    searchBox.value = searchQuery; // Keep previous search text in box
+                }
+
+                searchBox.addEventListener("keypress", function(event) {
+                    if (event.key === "Enter") {
+                        const searchValue = searchBox.value.trim();
+                        if (searchValue != "") {
+                            window.location.href = `/product-all?q=${encodeURIComponent(searchValue)}`;
+                            fetch(`/get24productsearch?q=${encodeURIComponent(searchValue)}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    // Handle the search results (display them in your page)
+                                    console.log(data);
+                                })
+                                .catch(error => {
+                                    console.error('Error searching products:', error);
+                                });
+                        } else {
+                            window.location.href = `/product-all`;
+                        }
+                    }
+                });
+
+                fetchProducts(1);
                 fetchCategories();
             });
+
+            // document.addEventListener("DOMContentLoaded", function() {
+            //     fetchProducts(currentPage);
+            //     fetchCategories();
+            // });
 
             function fetchProducts(page) {
                 const productsContainer = document.getElementById("card-product");
                 const paginationContainer = document.getElementById("pagination-container");
 
+                const urlParams = new URLSearchParams(window.location.search);
+                const searchQuery = urlParams.get("q") || ""; // Get search query
+
                 productsContainer.innerHTML =
                     '<div class="loading-text" style="text-align: center; padding: 20px; color: #666;">กำลังโหลด...</div>';
 
-                fetch(`/api/get24product?page=${page}&limit=${itemsPerPage}`)
+                // ✅ Use correct API endpoint for search
+                fetch(`/api/get24productsearch?page=${page}&limit=${itemsPerPage}&q=${encodeURIComponent(searchQuery)}`)
                     .then(response => response.json())
                     .then(data => {
                         if (!data.data || data.data.length === 0) {
@@ -319,34 +356,32 @@
                                 '/path/to/placeholder.jpg';
 
                             productCards += `
-                        <div class="product-card">
-                            <img class="product-image" src="${imagePath}" alt="${product.product_name}" 
-                                loading="lazy" onerror="this.src='/path/to/placeholder.jpg'" />
-                            <div class="product-details">
-                                <b class="product-title">${product.product_name}</b>
-                                <span class="product-price">${new Intl.NumberFormat().format(product.product_price)} บาท</span>
-                                <span class="product-description">${product.product_location || 'ไม่มีข้อมูลที่ตั้ง'}</span>
-                            </div>
-                            <div class="card-btn">
-                                <button class="btn_detail">ดูสินค้า</button>
-                            </div>
+                    <div class="product-card">
+                        <img class="product-image" src="${imagePath}" alt="${product.product_name}"
+                            loading="lazy" onerror="this.src='/path/to/placeholder.jpg'" />
+                        <div class="product-details">
+                            <b class="product-title">${product.product_name}</b>
+                            <span class="product-price">${new Intl.NumberFormat().format(product.product_price)} บาท</span>
+                            <span class="product-description">${product.product_location || 'ไม่มีข้อมูลที่ตั้ง'}</span>
                         </div>
-                    `;
+                        <div class="card-btn">
+                            <button class="btn_detail">ดูสินค้า</button>
+                        </div>
+                    </div>
+                `;
                         });
 
                         productsContainer.innerHTML = productCards;
-
-                        // ✅ อัปเดตปุ่มเปลี่ยนหน้า
-                        const totalPages = data.last_page; // API ส่งจำนวนหน้ามา
-                        paginationContainer.innerHTML = createPaginationButtons(totalPages, page);
+                        paginationContainer.innerHTML = createPaginationButtons(data.last_page, page);
                     })
                     .catch(error => {
                         console.error("Error fetching products:", error);
                         productsContainer.innerHTML = `<div style="text-align: center; padding: 20px; color: #666;">
-                    เกิดข้อผิดพลาดในการโหลดข้อมูล กรุณาลองใหม่อีกครั้ง
-                </div>`;
+                เกิดข้อผิดพลาดในการโหลดข้อมูล กรุณาลองใหม่อีกครั้ง
+            </div>`;
                     });
             }
+
 
             // ✅ ฟังก์ชันสร้างปุ่มเปลี่ยนหน้า
             function createPaginationButtons(totalPages, currentPage) {
@@ -386,8 +421,10 @@
                 const div = document.createElement('div');
                 div.className = 'category-item';
                 div.innerHTML = `
-                    <img src="${brand.brand_pic_path}" alt="${brand.brand_name}" class="category-image">
-                    <p class="category-name">${brand.brand_name}</p>
+                <a href="http://127.0.0.1:8000/product-all?q=${brand.brand_name}" target="_blank" style="text-decoration: none;">
+                        <img src="${brand.brand_pic_path}" alt="${brand.brand_name}" class="category-image">
+                        <p class="category-name">${brand.brand_name}</p>
+                    </a>
                 `;
                 div.addEventListener('click', () => {
                     console.log('Category clicked:', brand.brand_name);
@@ -398,4 +435,5 @@
 
     </body>
 @endsection
+
 </html>

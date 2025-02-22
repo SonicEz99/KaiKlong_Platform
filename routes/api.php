@@ -19,6 +19,7 @@ Route::get('/categories/{id}', [CategoryController::class, 'getCategoryById']);
 Route::get('/categoriesBrandAndType', [CategoryController::class, 'getCategoryAndBrandAndType']);
 Route::get('/categoriesBrandAndType/{id}', [CategoryController::class, 'getCategoryAndBrandAndTypeById']);
 Route::get('/get24product', [productController::class, 'getProduct24']);
+Route::get('/get24productsearch', [ProductController::class, 'getFilteredProducts']); // API endpoint
 
 Route::get('/types',[TypeController::class, 'index']);
 Route::get('/types/category/{category_id}', [TypeController::class, 'getByCategory']);
