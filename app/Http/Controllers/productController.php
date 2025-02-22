@@ -14,26 +14,25 @@ class productController extends Controller
     public function addProduct(Request $request)
     {
         try {
+            // ✅ Force JSON response in case of validation failure
             $validator = Validator::make($request->all(), [
                 'product_name' => 'required',
                 'product_description' => 'required',
                 'product_price' => 'required|integer',
-                'product_condition' => 'required|string', // มือหนึ่ง มือสอง
-                'product_location' => 'required|string', // ที่อยู่ของสินค้า
-                'product_phone' => 'required|string', // เบอร์โทรศัพท์
-                'image_path.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // รองรับหลายรูป
+                'product_condition' => 'required|string',
+                'product_location' => 'required|string',
+                'product_phone' => 'required|string',
+                'image_path.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'category_id' => 'required|integer',
                 'type_id' => 'nullable|integer',
                 'brand_id' => 'nullable|integer',
             ]);
 
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 500);
+                return response()->json(['errors' => $validator->errors()], 400); // ✅ Return JSON instead of HTML
             }
 
-            $user_id = 6;
-
-            // Step 1: Create the product
+            $user_id = Auth::id();
             $productData = [
                 'user_id' => $user_id,
                 'product_name' => $request->input('product_name'),
@@ -48,17 +47,16 @@ class productController extends Controller
                 'brand_id' => ($request->category_id == 1 || $request->category_id == 2) ? $request->input('brand_id') : null,
             ];
 
-            $product = Product::create($productData); // Save & get the ID
+            $product = Product::create($productData);
 
-            // // Step 2: Handle image uploads (if any)
             if ($request->hasFile('image_path')) {
                 foreach ($request->file('image_path') as $image) {
-                    if ($image->isValid()) { // Ensure the file is valid before processing
+                    if ($image->isValid()) {
                         $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                         $destinationPath = public_path('product_pic');
 
                         if (!file_exists($destinationPath)) {
-                            mkdir($destinationPath, 0777, true); // Create folder if not exists
+                            mkdir($destinationPath, 0777, true);
                         }
 
                         $image->move($destinationPath, $imageName);
@@ -72,11 +70,55 @@ class productController extends Controller
                 }
             }
 
-            return response()->json(['message' => 'Product added successfully', 'product' => $product], 201);
+            return response()->json([
+                'message' => 'Product added successfully',
+                'product' => $product
+            ], 201); // ✅ Ensure success response is JSON
+
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        };
+            return response()->json(['error' => $e->getMessage()], 500); // ✅ Handle exceptions properly
+        }
     }
+
+
+    public function getProduct24(Request $request)
+    {
+        $limit = $request->input('limit', 24); // ค่า default = 24 รายการต่อหน้า
+        $products = Product::with(['productImages', 'category', 'category.brands', 'category.types', 'user'])
+            ->paginate($limit); // ใช้ paginate() แทน get()
+
+        return response()->json($products);
+    }
+
+
+    public function getFilteredProducts(Request $request)
+    {
+        $query = Product::with(['productImages', 'category', 'brand', 'type']);
+
+        if ($request->has('q') && !empty($request->q)) {
+            $searchTerm = '%' . $request->q . '%';
+
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('product_name', 'LIKE', $searchTerm)
+                  ->orWhere('product_description', 'LIKE', $searchTerm)
+                  ->orWhereHas('category', function ($categoryQuery) use ($searchTerm) {
+                      $categoryQuery->where('category_name', 'LIKE', $searchTerm);
+                  })
+                  ->orWhereHas('brand', function ($brandQuery) use ($searchTerm) {
+                      $brandQuery->where('brand_name', 'LIKE', $searchTerm);
+                  })
+                  ->orWhereHas('type', function ($typeQuery) use ($searchTerm) {
+                      $typeQuery->where('type_name', 'LIKE', $searchTerm);
+                  })
+                  ;
+            });
+        }
+
+        $products = $query->paginate($request->input('limit', 24)); // 24 products per page
+
+        return response()->json($products);
+    }
+
 
     public function getProduct()
     {

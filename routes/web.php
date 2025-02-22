@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\userController;
+
 
 Route::get('/', function () {
     return view('auth.login_auth');
@@ -30,11 +32,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/addproduct', function () {
         return view('product.addproduct');
     });
-
     Route::get('/product-detail/{id}', [ProductController::class, 'show'])->name('productdetail');
-    Route::get('/my-product',function(){
-        return view('user.myproduct');
-    }) ;    
+
 });
 
 Route::middleware('web')->get('/home', function () {
