@@ -32,7 +32,9 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/product-detail/{id}', [ProductController::class, 'show'])->name('productdetail');
-
+    Route::get('/my-product',function(){
+        return view('user.myproduct');
+    }) ;    
 });
 
 Route::middleware('web')->get('/home', function () {
