@@ -34,8 +34,8 @@ Route::middleware('auth:sanctum')->group(function () {
         return view('product.addproduct');
     });
     Route::get('/product-detail/{id}', [ProductController::class, 'show'])->name('productdetail');
-    Route::get('/my-product', function () {
-        return view('user.myproduct');
+    Route::get('/product-listing/{id}', function () {
+        return view('user.productlisting');
     });
 });
 

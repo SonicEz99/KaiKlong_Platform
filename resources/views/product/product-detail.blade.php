@@ -238,7 +238,7 @@
                                                                         <div class="seller-info">
                                                                             <div class="seller-name">${product.user?.user_name || 'ไม่ระบุ'}</div>
                                                                             <a class="btn-call" href="tel:${product.user?.phone || '#'}">โทร</a>
-                                                                            <a class="btn-view-products" href="/seller/${product.user?.id || ''}">ดูสินค้าทั้งหมด</a>
+                                                                            <a class="btn-view-products" href="/product-listing/${product.user?.id || ''}">ดูสินค้าทั้งหมด</a>
                                                                         </div>
                                                                     </div>
                                                                 </div>
