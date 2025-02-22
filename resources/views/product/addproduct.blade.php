@@ -167,8 +167,7 @@
                                 <label for="product_condition" class="form-label">สภาพสินค้า <span
                                         class="text-danger">*</span></label>
 
-                                <select name="product_condition" id="product_condition" class="form-control" required
-                                    >
+                                <select name="product_condition" id="product_condition" class="form-control" required>
                                     <option selected hidden>เลือกสภาพสินค้าที่คุณจะขาย</option>
                                     <option value="มือหนึ่ง">มือหนึ่ง</option>
                                     <option value="มือสอง">มือสอง</option>
@@ -188,11 +187,14 @@
                                 </div>
                             </div>
                             <!-- เบอร์โทรศัพท์ -->
+                            <?php
+                            $user = auth()->user();
+                            ?>
                             <div class="mb-3">
                                 <label for="product_phone" class="form-label">เบอร์โทรศัพท์ <span
                                         class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="product_phone" name="product_phone" required
-                                    maxlength="12" placeholder="099-999-9999">
+                                    maxlength="12" placeholder="099-999-9999" value="{{ $user->tel }}">
                                 <div class="invalid-feedback">
                                     กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง (10 หลัก)
                                 </div>
@@ -374,23 +376,26 @@
 
                 fetch('/api/addProduct', {
                         method: 'POST',
-                        body: formData
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json' // ✅ Forces Laravel to return JSON even on errors
+                        }
                     })
                     .then(response => response.json().then(data => ({
                         status: response.status,
                         body: data
                     })))
                     .then(result => {
-                        if (result.status === 201) { // ตรวจสอบว่า API ตอบกลับด้วย Status 201
+                        if (result.status === 201) {
                             alert('🎉 ลงขายสินค้าสำเร็จ! กำลังเปลี่ยนหน้า...');
-                            window.location.href = '/home'; // ไปที่หน้า home
+                            window.location.href = '/home';
                         } else {
-                            alert('❌ เกิดข้อผิดพลาด: ' + result.body.message);
+                            alert('❌ เกิดข้อผิดพลาด: ' + (result.body.errors || 'กรุณาลองใหม่'));
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('เกิดข้อผิดพลาดในการลงขายสินค้า');
+                        alert('❌ เกิดข้อผิดพลาดในการลงขายสินค้า');
                     });
             });
         });
