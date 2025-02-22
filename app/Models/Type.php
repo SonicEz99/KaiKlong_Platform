@@ -20,7 +20,6 @@ class Type extends Model
     {
         return $this->belongsTo(Categorie::class, 'category_id');
     }
-
     public function products()
     {
         return $this->hasMany(Product::class, 'type_id');

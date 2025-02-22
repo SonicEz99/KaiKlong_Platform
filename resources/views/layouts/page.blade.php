@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'My Laravel App')</title>
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite(['resources/js/app.js'])
 </head>
 
@@ -147,7 +147,33 @@
             flex-direction: column;
         }
 
+        .dropdown {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .btn-sale {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-top: 10px;
+            /* Add spacing between profile and button */
+        }
+
     }
+
+
 
     @media (max-width: 576px) {
 
@@ -235,6 +261,8 @@
             text-align: center;
             margin-top: 20px;
         }
+
+
     }
 </style>
 
@@ -249,7 +277,7 @@
     </div> -->
 
     <?php
-$user = Auth::user();
+    $user = Auth::user();
 
     ?>
 
@@ -273,18 +301,36 @@ $user = Auth::user();
                             <a class="menu nav-link" href="home">หน้าหลัก</a>
                         </li>
                         <li class="nav-item">
-                            <a class="menu nav-link" href="abount">เกี่ยวกับเรา</a>
+                            <a class="menu nav-link" href="about">เกี่ยวกับเรา</a>
                         </li>
                         <li class="nav-item">
                             <a class="menu nav-link" href="first-start">เริ่มต้นยังไง?</a>
                         </li>
                     </div>
-                    <div class="profile">
-                        <div class="profile-pic">
-                            <img class="profile-pic"
-                                src="<?php echo $user->user_pic ? $user->user_pic : 'https://www.shutterstock.com/image-vector/avatar-gender-neutral-silhouette-vector-600nw-2470054311.jpg' ?>"
-                                alt="">
+
+                    <!-- Profile Dropdown -->
+                    <div class="dropdown d-flex align-items-center ms-auto">
+                        <!-- Profile Dropdown -->
+                        <div class="profile dropdown me-2">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
+                                id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img class="profile-pic rounded-circle" src="<?php echo $user->user_pic ? $user->user_pic : 'https://www.shutterstock.com/image-vector/avatar-gender-neutral-silhouette-vector-600nw-2470054311.jpg'; ?>" alt="Profile Picture"
+                                    width="40" height="40">
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                                <li><a class="dropdown-item d-flex align-items-center" href="my-shop"><i
+                                            class="bi bi-shop me-2"></i> หน้าร้านของฉัน</a></li>
+                                <li><a class="dropdown-item d-flex align-items-center" href="favorites"><i
+                                            class="bi bi-heart me-2"></i> รายการโปรด</a></li>
+                                <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="userSetting()"><i
+                                            class="bi bi-person me-2"></i> ข้อมูลส่วนตัว</a></li>
+                                <li><a class="dropdown-item d-flex align-items-center text-danger" href="#"
+                                        onclick="logoutUser()"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</a>
+                                </li>
+                            </ul>
                         </div>
+
+                        <!-- Sell Button -->
                         <div class="btn-sale">
                             <button onclick="goadd()">ลงขาย</button>
                         </div>
@@ -296,8 +342,30 @@ $user = Auth::user();
 
 
     <script>
-        function  goadd(){
-             window.location.href = "/addproduct"
+        function goadd() {
+            window.location.href = "/addproduct"
+        }
+        function userSetting() {
+            window.location.href = "/user_setting"
+        }
+
+        function logoutUser() {
+            fetch('/api/logout', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include'
+                })
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url; // Redirect after logout
+                    } else {
+                        window.location.href = '/';
+                    }
+                })
+                .catch(error => console.error('Logout failed:', error));
         }
     </script>
 
@@ -326,13 +394,16 @@ $user = Auth::user();
                 <div class="footer-title">ติดตามเรา</div>
                 <div class="footer-social">
                     <a href="#" class="social-icon">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/600px-Facebook_Logo_%282019%29.png" alt="Facebook">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/600px-Facebook_Logo_%282019%29.png"
+                            alt="Facebook">
                     </a>
                     <a href="#" class="social-icon">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/800px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/800px-YouTube_full-color_icon_%282017%29.svg.png"
+                            alt="YouTube">
                     </a>
                     <a href="#" class="social-icon">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/LINE_logo.svg/2048px-LINE_logo.svg.png" alt="Line">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/LINE_logo.svg/2048px-LINE_logo.svg.png"
+                            alt="Line">
                     </a>
                 </div>
             </div>
@@ -345,14 +416,14 @@ $user = Auth::user();
     </div>
 
     <script>
-        // document.addEventListener("DOMContentLoaded", function () {
-        //     const startTime = performance.now();
+        document.addEventListener("DOMContentLoaded", function() {
+            const startTime = performance.now();
 
-        //     window.onload = function () {
-        //         document.querySelector(".bg-loadding").style.display = "none";
-        //         document.getElementById("page_content").style.display = "block";
-        //     };
-        // });
+            window.onload = function() {
+                document.querySelector(".bg-loadding").style.display = "none";
+                document.getElementById("page_content").style.display = "block";
+            };
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>

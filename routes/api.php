@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\userController;
 use App\Http\Controllers\brandController;
 use App\Http\Controllers\productController;
 use App\Http\Controllers\categoryController;
@@ -17,6 +18,8 @@ Route::get('/categories', [CategoryController::class, 'getCategory']);
 Route::get('/categories/{id}', [CategoryController::class, 'getCategoryById']);
 Route::get('/categoriesBrandAndType', [CategoryController::class, 'getCategoryAndBrandAndType']);
 Route::get('/categoriesBrandAndType/{id}', [CategoryController::class, 'getCategoryAndBrandAndTypeById']);
+Route::get('/get24product', [productController::class, 'getProduct24']);
+Route::get('/get24productsearch', [ProductController::class, 'getFilteredProducts']); // API endpoint
 
 Route::get('/types',[TypeController::class, 'index']);
 Route::get('/types/category/{category_id}', [TypeController::class, 'getByCategory']);
@@ -32,6 +35,9 @@ Route::get('/product', [productController::class, 'getProduct']);
 Route::delete('/deleteProduct/{id}', [productController::class, 'deleteProduct']);
 Route::post('/updateProduct/{id}', [productController::class, 'updateProduct']);
 Route::get('/product/{id}', [ProductController::class, 'getProductById']);
+
+
+Route::post('/updateUser/{id}', [userController::class, 'updateUser']);
 
 // Protected routes (Require authentication)
 Route::middleware('auth:sanctum')->group(function () {
