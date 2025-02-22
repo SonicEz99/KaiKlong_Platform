@@ -12,73 +12,73 @@ use Illuminate\Support\Facades\Validator;
 class productController extends Controller
 {
     public function addProduct(Request $request)
-{
-    try {
-        // ✅ Force JSON response in case of validation failure
-        $validator = Validator::make($request->all(), [
-            'product_name' => 'required',
-            'product_description' => 'required',
-            'product_price' => 'required|integer',
-            'product_condition' => 'required|string',
-            'product_location' => 'required|string',
-            'product_phone' => 'required|string',
-            'image_path.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'category_id' => 'required|integer',
-            'type_id' => 'nullable|integer',
-            'brand_id' => 'nullable|integer',
-        ]);
+    {
+        try {
+            // ✅ Force JSON response in case of validation failure
+            $validator = Validator::make($request->all(), [
+                'product_name' => 'required',
+                'product_description' => 'required',
+                'product_price' => 'required|integer',
+                'product_condition' => 'required|string',
+                'product_location' => 'required|string',
+                'product_phone' => 'required|string',
+                'image_path.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'category_id' => 'required|integer',
+                'type_id' => 'nullable|integer',
+                'brand_id' => 'nullable|integer',
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400); // ✅ Return JSON instead of HTML
-        }
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 400); // ✅ Return JSON instead of HTML
+            }
 
-        $user_id = Auth::id();
-        $productData = [
-            'user_id' => $user_id,
-            'product_name' => $request->input('product_name'),
-            'product_description' => $request->input('product_description'),
-            'product_price' => $request->input('product_price'),
-            'product_status' => 'ยังมีสินค้าอยู่',
-            'product_condition' => $request->input('product_condition'),
-            'product_location' => $request->input('product_location'),
-            'product_phone' => $request->input('product_phone'),
-            'category_id' => $request->input('category_id'),
-            'type_id' => ($request->category_id == 1 || $request->category_id == 2) ? null : $request->input('type_id'),
-            'brand_id' => ($request->category_id == 1 || $request->category_id == 2) ? $request->input('brand_id') : null,
-        ];
+            $user_id = Auth::id();
+            $productData = [
+                'user_id' => $user_id,
+                'product_name' => $request->input('product_name'),
+                'product_description' => $request->input('product_description'),
+                'product_price' => $request->input('product_price'),
+                'product_status' => 'ยังมีสินค้าอยู่',
+                'product_condition' => $request->input('product_condition'),
+                'product_location' => $request->input('product_location'),
+                'product_phone' => $request->input('product_phone'),
+                'category_id' => $request->input('category_id'),
+                'type_id' => ($request->category_id == 1 || $request->category_id == 2) ? null : $request->input('type_id'),
+                'brand_id' => ($request->category_id == 1 || $request->category_id == 2) ? $request->input('brand_id') : null,
+            ];
 
-        $product = Product::create($productData);
+            $product = Product::create($productData);
 
-        if ($request->hasFile('image_path')) {
-            foreach ($request->file('image_path') as $image) {
-                if ($image->isValid()) {
-                    $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-                    $destinationPath = public_path('product_pic');
+            if ($request->hasFile('image_path')) {
+                foreach ($request->file('image_path') as $image) {
+                    if ($image->isValid()) {
+                        $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                        $destinationPath = public_path('product_pic');
 
-                    if (!file_exists($destinationPath)) {
-                        mkdir($destinationPath, 0777, true);
+                        if (!file_exists($destinationPath)) {
+                            mkdir($destinationPath, 0777, true);
+                        }
+
+                        $image->move($destinationPath, $imageName);
+                        $imagePath = 'product_pic/' . $imageName;
+
+                        ProductImage::create([
+                            'product_id' => $product->product_id,
+                            'image_path' => $imagePath,
+                        ]);
                     }
-
-                    $image->move($destinationPath, $imageName);
-                    $imagePath = 'product_pic/' . $imageName;
-
-                    ProductImage::create([
-                        'product_id' => $product->product_id,
-                        'image_path' => $imagePath,
-                    ]);
                 }
             }
+
+            return response()->json([
+                'message' => 'Product added successfully',
+                'product' => $product
+            ], 201); // ✅ Ensure success response is JSON
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500); // ✅ Handle exceptions properly
         }
-
-        return response()->json([
-            'message' => 'Product added successfully',
-            'product' => $product
-        ], 201); // ✅ Ensure success response is JSON
-
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500); // ✅ Handle exceptions properly
     }
-}
 
 
     public function getProduct24(Request $request)
@@ -89,6 +89,36 @@ class productController extends Controller
 
         return response()->json($products);
     }
+
+
+    public function getFilteredProducts(Request $request)
+    {
+        $query = Product::with(['productImages', 'category', 'brand', 'type']);
+
+        if ($request->has('q') && !empty($request->q)) {
+            $searchTerm = '%' . $request->q . '%';
+
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('product_name', 'LIKE', $searchTerm)
+                  ->orWhere('product_description', 'LIKE', $searchTerm)
+                  ->orWhereHas('category', function ($categoryQuery) use ($searchTerm) {
+                      $categoryQuery->where('category_name', 'LIKE', $searchTerm);
+                  })
+                  ->orWhereHas('brand', function ($brandQuery) use ($searchTerm) {
+                      $brandQuery->where('brand_name', 'LIKE', $searchTerm);
+                  })
+                  ->orWhereHas('type', function ($typeQuery) use ($searchTerm) {
+                      $typeQuery->where('type_name', 'LIKE', $searchTerm);
+                  })
+                  ;
+            });
+        }
+
+        $products = $query->paginate($request->input('limit', 24)); // 24 products per page
+
+        return response()->json($products);
+    }
+
 
     public function getProduct()
     {

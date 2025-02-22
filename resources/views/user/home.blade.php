@@ -484,10 +484,42 @@
                         .catch(error => console.error("Error fetching products:", error));
                 });
             </script>
+
         </div>
     </body>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+                const searchBox = document.querySelector(".search-box");
+                const urlParams = new URLSearchParams(window.location.search);
+                const searchQuery = urlParams.get("q") || ""; // Get search query from URL
+
+                if (searchQuery) {
+                    searchBox.value = searchQuery; // Keep previous search text in box
+                }
+
+                searchBox.addEventListener("keypress", function(event) {
+                    if (event.key === "Enter") {
+                        const searchValue = searchBox.value.trim();
+                        if (searchValue != "") {
+                            window.location.href = `/product-all?q=${encodeURIComponent(searchValue)}`;
+                            fetch(`/get24productsearch?q=${encodeURIComponent(searchValue)}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    // Handle the search results (display them in your page)
+                                    console.log(data);
+                                })
+                                .catch(error => {
+                                    console.error('Error searching products:', error);
+                                });
+                        } else {
+                            window.location.href = `/product-all`;
+                        }
+                    }
+                });
+
+            });
+
         document.getElementById('logout-button')?.addEventListener('click', function() {
             axios.post("{{ route('logout') }}", {}, {
                     headers: {
@@ -517,7 +549,7 @@
                     productDiv.classList.add('product');
 
                     const link = document.createElement('a');
-                    link.href = `http://127.0.0.1:8000/product-category/${category.id}`;
+                    link.href = `http://127.0.0.1:8000/product-all?q=${category.category_name}`;
                     link.target = "_blank";
 
                     const img = document.createElement('img');
@@ -556,7 +588,7 @@
                 // แก้โค้ดให้แสดงชื่อและเป็นลิงก์ไปยังหน้าที่ต้องการ
                 let typeLinks = data.map(type =>
                     `<p>
-                    <a href="http://127.0.0.1:8000/product-type/${type.id}" target="_blank">
+                    <a href="http://127.0.0.1:8000/product-all?q=${type.type_name}" target="_blank">
                         ${type.type_name}
                     </a>
                 </p>`
