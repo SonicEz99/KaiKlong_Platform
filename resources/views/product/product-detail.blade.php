@@ -210,6 +210,40 @@
             height: 20px;
             margin-right: 5px;
         }
+
+        .switch-btn {
+            background: #fff7ee;
+            border: none;
+            color: white;
+            font-size: 18px;
+            padding: 5px 10px;
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 50;
+        }
+
+        #prev-btn {
+            left: -20px;
+            opacity: 0;
+            height: 800px;
+            width: 100px;
+        }
+
+        #next-btn {
+            right: -20px;
+            opacity: 0;
+            height: 800px;
+            width: 100px;
+        }
+
+        .product-image-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 
@@ -256,21 +290,31 @@
                             </div>
                         `;
                         }
+
+                        let images = product.product_images?.map(img => `/${img.image_path}`) || [
+                            '/path/to/placeholder.jpg'
+                        ];
+                        let currentImageIndex = 0;
+
                         productDetailContainer.innerHTML = `
                         <div class="product-card">
                             <div class="image-add">
                                 <div class="product-image-container">
+                                    <button id="prev-btn" class="switch-btn">⭠</button>
                                     <img class="product-image" src="${imagePath}" alt="${product.product_name}"
                                         loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
+                                    <button id="next-btn" class="switch-btn">⭢</button>
                                 </div>
 
                                 <div class="additional-images">
                                     <div class="image-gallery">
                                         ${product.product_images.slice(1).map(img => `
-                                                                                                                                                                            <img class="additional-image" src="/${img.image_path}" alt="${product.product_name}"
-                                                                                                                                                                                loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
-                                                                                                                                                                        `).join('')}
+                                                                                                                                                                                                            <img class="additional-image" src="/${img.image_path}" alt="${product.product_name}"
+                                                                                                                                                                                                                loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
+                                                                                                                                                                                                        `).join('')}
                                     </div>
+
+
                                 </div>
                             </div>
 
@@ -312,11 +356,41 @@
                         </div>
                     `;
 
+
                         // เพิ่มฟังก์ชันคลิกที่ภาพเพิ่มเติมเพื่อเปลี่ยนภาพหลัก
                         const productImage = document.querySelector('.product-image'); // รูปหลัก
                         const imageGallery = document.querySelector('.image-gallery'); // container ของภาพเพิ่มเติม
                         const additionalImages = document.querySelectorAll(
                             '.additional-image'); // รูปเพิ่มเติมทั้งหมด
+
+                        const prevBtn = document.getElementById('prev-btn');
+                        const nextBtn = document.getElementById('next-btn');
+
+                        // Previous image
+                        prevBtn.addEventListener('click', function() {
+                            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+                            productImage.src = images[currentImageIndex];
+                        });
+
+                        // Next image
+                        nextBtn.addEventListener('click', function() {
+                            currentImageIndex = (currentImageIndex + 1) % images.length;
+                            productImage.src = images[currentImageIndex];
+                        });
+
+                        // Click on additional images to switch main image
+                        document.querySelectorAll('.additional-image').forEach((img, index) => {
+                            img.addEventListener('click', function() {
+                                currentImageIndex = index;
+                                productImage.src = images[currentImageIndex];
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error fetching product detail:", error);
+                        document.getElementById('product-detail').innerHTML =
+                            '<p style="text-align:center;padding:20px;color:#666;">เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า</p>';
+
 
                         additionalImages.forEach(img => {
                             img.addEventListener('click', function() {
@@ -338,6 +412,8 @@
                         document.getElementById('product-detail').innerHTML =
                             '<p style="text-align:center;padding:20px;color:#666;">เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า</p>';
                     });
+
+
             });
             setTimeout(() => {
                 const productImage = document.querySelector('.product-image');
