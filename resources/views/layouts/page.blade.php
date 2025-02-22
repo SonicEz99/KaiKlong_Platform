@@ -318,8 +318,8 @@
                                     width="40" height="40">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                                <li><a class="dropdown-item d-flex align-items-center" href="my-shop"><i
-                                            class="bi bi-shop me-2"></i> หน้าร้านของฉัน</a></li>
+                                <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="go(6)"><i
+                                            class="bi bi-shop me-2" ></i> หน้าร้านของฉัน</a></li>
                                 <li><a class="dropdown-item d-flex align-items-center" href="favorites"><i
                                             class="bi bi-heart me-2"></i> รายการโปรด</a></li>
                                 <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="go(4)"><i
@@ -345,35 +345,37 @@
         function goadd() {
             window.location.href = "/addproduct"
         }
+
         function go(num) {
-            if(num === 1){
+            if (num === 1) {
                 window.location.href = "/home"
-            }else if(num === 2){
+            } else if (num === 2) {
                 window.location.href = "/about"
-            }else if(num === 3){
+            } else if (num === 3) {
                 window.location.href = "/#"
-            }else if(num === 4){
+            } else if (num === 4) {
                 window.location.href = "/user_setting"
-            }else if(num === 5){
+            } else if (num === 5) {
                 fetch('/api/logout', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        'Content-Type': 'application/json'
-                    },
-                    credentials: 'include'
-                })
-                .then(response => {
-                    if (response.redirected) {
-                        window.location.href = response.url; // Redirect after logout
-                    } else {
-                        window.location.href = '/';
-                    }
-                })
-                .catch(error => console.error('Logout failed:', error));
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: 'include'
+                    })
+                    .then(response => {
+                        if (response.redirected) {
+                            window.location.href = response.url; // Redirect after logout
+                        } else {
+                            window.location.href = '/';
+                        }
+                    })
+                    .catch(error => console.error('Logout failed:', error));
+            } else if (num === 6) {
+                window.location.href = "/product-listing/<?php echo $user->id; ?>";
             }
         }
-
     </script>
 
 
