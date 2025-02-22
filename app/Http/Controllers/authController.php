@@ -55,7 +55,10 @@ class authController extends Controller
                 $token = $user->createToken('auth_token')->plainTextToken;
 
                 session()->put('user_name', $user->user_name);
+
+                // ✅ Add "remember me" to persist session
                 Auth::login($user, true); // true = remember user
+
                 session()->regenerate();  // Prevent session fixation attacks
 
                 return response()->json([
@@ -65,24 +68,39 @@ class authController extends Controller
                     'name' => $user->user_name,
                 ], 200);
             }
+
             return response()->json(['error' => 'Invalid email or password'], 401);
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error occurred during login. ' . $e->getMessage()], 500);
         }
     }
 
+
     public function logout(Request $request)
     {
         // Revoke Laravel Sanctum tokens
-        $request->user()->tokens()->delete();
+        if ($request->user()) {
+            $request->user()->tokens()->delete();
+        }
+
+        // Logout the user
+        Auth::logout();
 
         // Destroy Laravel session
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // Redirect to Google Logout then back to homepage
-        return redirect('/')->withHeaders(['Location' => '/'])
-            ->withCookie(cookie()->forget('laravel_session'))
-            ->withCookie(cookie()->forget('XSRF-TOKEN'));
+        // Flush session data
+        session()->flush();
+
+        // Remove session cookies (forcefully forget them)
+        return redirect('/')->withHeaders([
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0'
+        ])
+            ->withCookie(cookie(config('session.cookie'), '', -1)) // Forget session cookie
+            ->withCookie(cookie('XSRF-TOKEN', '', -1)) // Forget CSRF token cookie
+            ->withCookie(cookie('laravel_session', '', -1)); // Explicitly clear Laravel session cookie
     }
 }

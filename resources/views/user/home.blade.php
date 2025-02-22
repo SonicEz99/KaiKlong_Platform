@@ -520,22 +520,6 @@
 
         });
 
-        document.getElementById('logout-button')?.addEventListener('click', function () {
-            axios.post("{{ route('logout') }}", {}, {
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                }
-            })
-                .then(response => {
-                    alert(response.data.message);
-                    window.location.href = response.data.redirect;
-                })
-                .catch(error => {
-                    console.error('Logout failed:', error);
-                });
-        });
-
-
         // fetch api categories
         fetch('/api/categories')
             .then(response => response.json())

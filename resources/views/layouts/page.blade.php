@@ -319,7 +319,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                                 <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="go(6)"><i
-                                            class="bi bi-shop me-2" ></i> หน้าร้านของฉัน</a></li>
+                                            class="bi bi-shop me-2"></i> หน้าร้านของฉัน</a></li>
                                 <li><a class="dropdown-item d-flex align-items-center" href="favorites"><i
                                             class="bi bi-heart me-2"></i> รายการโปรด</a></li>
                                 <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="go(4)"><i
@@ -356,22 +356,19 @@
             } else if (num === 4) {
                 window.location.href = "/user_setting"
             } else if (num === 5) {
-                fetch('/api/logout', {
+                fetch('/logout', {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                             'Content-Type': 'application/json'
                         },
-                        credentials: 'include'
+                        credentials: 'include' // ✅ Ensures cookies are included
                     })
                     .then(response => {
-                        if (response.redirected) {
-                            window.location.href = response.url; // Redirect after logout
-                        } else {
-                            window.location.href = '/';
-                        }
+                        window.location.href = response.url || '/';
                     })
                     .catch(error => console.error('Logout failed:', error));
+
             } else if (num === 6) {
                 window.location.href = "/my-product";
             }

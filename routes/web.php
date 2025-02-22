@@ -16,6 +16,12 @@ Route::get('/register', function () {
     return view('auth.register_auth');
 })->name('register.page');
 
+use App\Http\Controllers\authController;
+
+Route::middleware('web')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']); // ✅ Ensure it's here
+});
+
 
 
 // // Authentication Routes
@@ -40,15 +46,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/my-product', function () {
         return view('user.myproduct');
     });
+    Route::get('/user_setting', function () {
+        return view('user.usersetting');
+    });
+    Route::get('/home', function () {
+        return view('user.home');
+    })->name('home');
 });
 
-Route::middleware('web')->get('/home', function () {
-    return view('user.home');
-})->name('home');
 
 
 
 Route::controller(GoogleController::class)->group(function () {
-    Route::get('auth/google', 'redirectToGoogle')->name('auth.google');
+    Route::middleware('web')->get('auth/google', 'redirectToGoogle')->name('auth.google');
     Route::get('auth/google/callback', 'handleGoogle');
 });

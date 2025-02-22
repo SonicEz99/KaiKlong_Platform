@@ -12,6 +12,7 @@ use App\Http\Controllers\TypeController; // Correct the capitalization here
 // Public routes
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::middleware('web')->post('/login', [authController::class, 'login']);
+Route::middleware('web')->post('/Googlelogin', [authController::class, 'handleGoogle']);
 
 Route::post('/addCategory', [categoryController::class, 'addCategory']);
 Route::get('/categories', [CategoryController::class, 'getCategory']);
@@ -43,7 +44,7 @@ Route::get('/getUser/{id}',[userController::class, 'getUser']);
 
 // Protected routes (Require authentication)
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', function (Request $request) {
         return response()->json($request->user());
     });
