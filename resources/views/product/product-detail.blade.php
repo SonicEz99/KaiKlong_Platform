@@ -151,7 +151,6 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-
     </style>
 </head>
 
@@ -181,18 +180,37 @@
                             `/${product.product_images[0].image_path}` :
                             '/path/to/placeholder.jpg';
 
+                        let productFeature = '';
+
+                        if (product.brand && product.brand.brand_name && product.brand.brand_name.length !== 0) {
+                            productFeature = `
+                                            <div class="feature-section">
+                                                <div class="feature-title">คุณสมบัติ</div>
+                                                <p>ยี่ห้อ <i style="color: #FF8C00;">${product.brand.brand_name}</i></p>
+                                            </div>
+                                        `;
+                        } else if (product.type && product.type.type_name) {
+                            productFeature = `
+                                        <div class="feature-section">
+                                            <div class="feature-title">คุณสมบัติ</div>
+                                            <p>ประเภท <i style="color: #FF8C00;">${product.type.type_name}</i></p>
+                                        </div>
+                                    `;
+                        }
+
+
                         productDetailContainer.innerHTML = `
                                                             <div class="product-card">
                                                                  <div class="image-add">
-                                                                    <img class="product-image" src="${imagePath}" alt="${product.product_name}" 
+                                                                    <img class="product-image" src="${imagePath}" alt="${product.product_name}"
                                                                         loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
 
                                                                         <div class="additional-images">
                                                                             <div class="image-gallery">
                                                                                 ${product.product_images.slice(1).map(img => `
-                                                                                            <img class="additional-image" src="/${img.image_path}" alt="${product.product_name}" 
-                                                                                                loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
-                                                                                        `).join('')}
+                                                                                                    <img class="additional-image" src="/${img.image_path}" alt="${product.product_name}"
+                                                                                                        loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
+                                                                                                `).join('')}
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -206,10 +224,8 @@
 
                                                                     <button class="btn-chat">คุยกับผู้ขาย</button>
 
-                                                                    <div class="feature-section">
-                                                                        <div class="feature-title">คุณสมบัติ</div>
-                                                                        <p>ขาว ดำ แดง</p>
-                                                                    </div>
+                                                                    ${productFeature}
+
 
                                                                     <!-- รายละเอียดสินค้า -->
                                                                     <div class="product-description">
@@ -219,7 +235,7 @@
 
                                                                     <!-- ข้อมูลผู้ขาย -->
                                                                     <div class="seller-card">
-                                                                        <img class="seller-image" src="${product.user?.profile_image || '/path/to/default-profile.jpg'}" 
+                                                                        <img class="seller-image" src="${product.user?.profile_image || '/path/to/default-profile.jpg'}"
                                                                             alt="${product.user?.user_name}" loading="lazy">
                                                                         <div class="seller-info">
                                                                             <div class="seller-name">${product.user?.user_name || 'ไม่ระบุ'}</div>
