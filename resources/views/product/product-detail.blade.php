@@ -339,7 +339,7 @@
 
                                 <!-- ข้อมูลผู้ขาย -->
                                 <div class="seller-card">
-                                    <img class="seller-image" src="${product.user?.user_pic}"
+                                    <img class="seller-image" src="${product.user?.user_pic ?? "https://cdn-icons-png.flaticon.com/512/9203/9203764.png"}"
                                         alt="${product.user?.user_name}" loading="lazy">
 
                                     <div class="seller-info">
@@ -381,7 +381,7 @@
                         // Click on additional images to switch main image
                         document.querySelectorAll('.additional-image').forEach((img, index) => {
                             img.addEventListener('click', function() {
-                                currentImageIndex = index;
+                                currentImageIndex = index+1;
                                 productImage.src = images[currentImageIndex];
                             });
                         });
@@ -394,7 +394,7 @@
 
                         additionalImages.forEach(img => {
                             img.addEventListener('click', function() {
-                                productImage.src = img.src;
+                                productImage.src = img.src-1;
                             });
                         });
 
