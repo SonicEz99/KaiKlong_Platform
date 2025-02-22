@@ -227,8 +227,17 @@
         transition: background-color 0.3s ease, color 0.3s ease;
     }
 
+    .btn_detail a {
+        color: #FF8C00;
+        text-decoration: none;
+    }
+
     .btn_detail:hover {
         background-color: #FF8C00;
+        color: white;
+    }
+
+    .btn_detail:hover a {
         color: white;
     }
 
@@ -425,7 +434,7 @@
 
             @if (session('success'))
                 <script>
-                    document.addEventListener("DOMContentLoaded", function () {
+                    document.addEventListener("DOMContentLoaded", function() {
                         Swal.fire({
                             title: "🎉 สำเร็จ!",
                             text: "{{ session('success') }}",
@@ -439,7 +448,7 @@
 
             <script>
                 // รอให้ DOM โหลดเสร็จก่อนรันโค้ด
-                document.addEventListener("DOMContentLoaded", function () {
+                document.addEventListener("DOMContentLoaded", function() {
                     fetch("/api/product")
                         .then(response => response.json())
                         .then(data => {
@@ -458,7 +467,7 @@
                             latestProducts.forEach(product => {
                                 // ตรวจสอบว่ามีข้อมูลรูปภาพหรือไม่ ถ้าไม่มีให้ใช้ placeholder
                                 const imagePath = (product.product_images && product.product_images.length >
-                                    0) ?
+                                        0) ?
                                     `/${product.product_images[0].image_path}` :
                                     '/path/to/placeholder.jpg';
 
@@ -473,7 +482,7 @@
                               <span class="product-description">${product.product_location}</span>
                             </div>
                             <div class="card-btn">
-                              <button class="btn_detail">ดูสินค้า</button>
+                              <button class="btn_detail"><a href="/product-detail/${product.product_id}">ดูสินค้า</a></button>
                             </div>
                           </div>
                         `;
@@ -483,111 +492,119 @@
                         })
                         .catch(error => console.error("Error fetching products:", error));
                 });
+
+                document.addEventListener("DOMContentLoaded", function() {
+                    const searchBox = document.querySelector(".search-box");
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const searchQuery = urlParams.get("q") || ""; // Get search query from URL
+
+                    if (searchQuery) {
+                        searchBox.value = searchQuery; // Keep previous search text in box
+                    }
+
+                    searchBox.addEventListener("keypress", function(event) {
+                        if (event.key === "Enter") {
+                            const searchValue = searchBox.value.trim();
+                            if (searchValue != "") {
+                                window.location.href = `/product-all?q=${encodeURIComponent(searchValue)}`;
+                                fetch(`/get24productsearch?q=${encodeURIComponent(searchValue)}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        // Handle the search results (display them in your page)
+                                        console.log(data);
+                                    })
+                                    .catch(error => {
+                                        console.error('Error searching products:', error);
+                                    });
+                            } else {
+                                window.location.href = `/product-all`;
+                            }
+                        }
+                    });
+
+                });
+
+                // fetch api categories
+                fetch('/api/categories', {
+                        method: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: 'include' // Ensure cookies are included
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const container = document.querySelector('.product-container');
+                        console.log(data.categories);
+                        data = data.categories;
+
+                        data.forEach(category => {
+                            const productDiv = document.createElement('div');
+                            productDiv.classList.add('product');
+
+                            const link = document.createElement('a');
+                            link.href = `/product-all?q=${category.category_name}`;
+
+                            // Programmatically navigate using window.location
+                            link.addEventListener('click', (event) => {
+                                event.preventDefault(); // Prevent default link behavior
+                                window.location.href = link.href; // Navigate with cookies included
+                            });
+
+
+                            const img = document.createElement('img');
+                            img.src = category.category_pic_path;
+                            img.alt = category.category_name;
+
+                            img.style.width = "100px";
+                            img.style.height = "100px";
+                            img.style.objectFit = "contain";
+                            img.style.borderRadius = "10px";
+
+                            const p = document.createElement('p');
+                            p.textContent = category.category_name;
+                            p.style.textAlign = "center";
+
+                            link.appendChild(img);
+                            link.appendChild(p);
+                            productDiv.appendChild(link);
+                            container.appendChild(productDiv);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
+                // new sale fetch
+
+                async function fetchFirstTenTypes() {
+                    try {
+                        const response = await fetch("/api/types/first-ten");
+                        const data = await response.json();
+
+                        const container = document.querySelector('.product-type');
+                        if (!container) return;
+
+                        // แก้โค้ดให้แสดงชื่อและเป็นลิงก์ไปยังหน้าที่ต้องการ
+                        let typeLinks = data.map(type =>
+                            `<p>
+                        <a href="/product-all?q=${type.type_name}">
+                            ${type.type_name}
+                        </a>
+                    </p>`
+                        ).join('');
+
+                        container.innerHTML = typeLinks;
+
+                    } catch (error) {
+                        console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+                        document.getElementById("product-name").innerText = "โหลดข้อมูลล้มเหลว";
+                    }
+                }
+
+                document.addEventListener("DOMContentLoaded", fetchFirstTenTypes);
             </script>
 
         </div>
     </body>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const searchBox = document.querySelector(".search-box");
-            const urlParams = new URLSearchParams(window.location.search);
-            const searchQuery = urlParams.get("q") || ""; // Get search query from URL
-
-            if (searchQuery) {
-                searchBox.value = searchQuery; // Keep previous search text in box
-            }
-
-            searchBox.addEventListener("keypress", function (event) {
-                if (event.key === "Enter") {
-                    const searchValue = searchBox.value.trim();
-                    if (searchValue != "") {
-                        window.location.href = `/product-all?q=${encodeURIComponent(searchValue)}`;
-                        fetch(`/get24productsearch?q=${encodeURIComponent(searchValue)}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                // Handle the search results (display them in your page)
-                                console.log(data);
-                            })
-                            .catch(error => {
-                                console.error('Error searching products:', error);
-                            });
-                    } else {
-                        window.location.href = `/product-all`;
-                    }
-                }
-            });
-
-        });
-
-        // fetch api categories
-        fetch('/api/categories')
-            .then(response => response.json())
-            .then(data => {
-                const container = document.querySelector('.product-container');
-                console.log(data.categories);
-                data = data.categories;
-
-                data.forEach(category => {
-                    const productDiv = document.createElement('div');
-                    productDiv.classList.add('product');
-
-                    const link = document.createElement('a');
-                    link.href = `http://127.0.0.1:8000/product-all?q=${category.category_name}`;
-                    link.target = "_blank";
-
-                    const img = document.createElement('img');
-                    img.src = category.category_pic_path;
-                    img.alt = category.category_name;
-
-                    img.style.width = "100px";
-                    img.style.height = "100px";
-                    img.style.objectFit = "contain";
-                    img.style.borderRadius = "10px";
-
-                    const p = document.createElement('p');
-                    p.textContent = category.category_name;
-                    p.style.textAlign = "center";
-
-                    link.appendChild(img);
-                    link.appendChild(p);
-                    productDiv.appendChild(link);
-                    container.appendChild(productDiv);
-                });
-            })
-            .catch(error => console.error('Error fetching data:', error));
-        // new sale fetch
-    </script>
-
-
-    <script>
-        async function fetchFirstTenTypes() {
-            try {
-                const response = await fetch("http://127.0.0.1:8000/api/types/first-ten");
-                const data = await response.json();
-
-                const container = document.querySelector('.product-type');
-                if (!container) return;
-
-                // แก้โค้ดให้แสดงชื่อและเป็นลิงก์ไปยังหน้าที่ต้องการ
-                let typeLinks = data.map(type =>
-                    `<p>
-                        <a href="http://127.0.0.1:8000/product-all?q=${type.type_name}" target="_blank">
-                            ${type.type_name}
-                        </a>
-                    </p>`
-                ).join('');
-
-                container.innerHTML = typeLinks;
-
-            } catch (error) {
-                console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
-                document.getElementById("product-name").innerText = "โหลดข้อมูลล้มเหลว";
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", fetchFirstTenTypes);
-    </script>
 @endsection
 
 </html>
