@@ -100,17 +100,17 @@ class productController extends Controller
 
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('product_name', 'LIKE', $searchTerm)
-                  ->orWhere('product_description', 'LIKE', $searchTerm)
-                  ->orWhereHas('category', function ($categoryQuery) use ($searchTerm) {
-                      $categoryQuery->where('category_name', 'LIKE', $searchTerm);
-                  })
-                  ->orWhereHas('brand', function ($brandQuery) use ($searchTerm) {
-                      $brandQuery->where('brand_name', 'LIKE', $searchTerm);
-                  })
-                  ->orWhereHas('type', function ($typeQuery) use ($searchTerm) {
-                      $typeQuery->where('type_name', 'LIKE', $searchTerm);
-                  })
-                  ;
+                    ->orWhere('product_description', 'LIKE', $searchTerm)
+                    ->orWhereHas('category', function ($categoryQuery) use ($searchTerm) {
+                        $categoryQuery->where('category_name', 'LIKE', $searchTerm);
+                    })
+                    ->orWhereHas('brand', function ($brandQuery) use ($searchTerm) {
+                        $brandQuery->where('brand_name', 'LIKE', $searchTerm);
+                    })
+                    ->orWhereHas('type', function ($typeQuery) use ($searchTerm) {
+                        $typeQuery->where('type_name', 'LIKE', $searchTerm);
+                    })
+                ;
             });
         }
 
@@ -256,6 +256,27 @@ class productController extends Controller
             $product->delete();
 
             return response()->json(['message' => 'Product deleted successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getProductsByUserId($userId)
+    {
+        try {
+            $products = Product::with([
+                'productImages',
+                'category',
+                'user',
+                'brand',
+                'type',
+            ])->where('user_id', $userId)->get();
+
+            if ($products->isEmpty()) {
+                return response()->json(['error' => 'No products found for this user'], 404);
+            }
+
+            return response()->json($products, 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
