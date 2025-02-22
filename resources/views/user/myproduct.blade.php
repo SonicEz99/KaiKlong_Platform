@@ -112,6 +112,7 @@
                     .item {
                         border-radius: 8px;
                         border: 1px solid gray;
+                        text-align: center;
 
                         img {
                             background-size: cover;
