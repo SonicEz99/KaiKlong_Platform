@@ -186,6 +186,10 @@ $user = auth()->user();
                 <div class="text-flind-setting" id="account-section">
                     <div class="account-form" id="account-form">
                         <div class="input-data">
+                            <label>รหัสผ่านเดิม</label>
+                            <input type="password" placeholder="********">
+                        </div>
+                        <div class="input-data">
                             <label>เปลี่ยนรหัสผ่าน</label>
                             <input type="password" placeholder="********">
                         </div>
