@@ -241,12 +241,12 @@
 <body>
 
 
-    <div class="bg-loadding">
+    <!-- <div class="bg-loadding">
         <div id="loading">
             <h2>Kaiklong</h2>
             <div class="spinner-border" role="status"></div>
         </div>
-    </div>
+    </div> -->
 
     <?php
 $user = Auth::user();
@@ -345,14 +345,14 @@ $user = Auth::user();
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const startTime = performance.now();
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     const startTime = performance.now();
 
-            window.onload = function () {
-                document.querySelector(".bg-loadding").style.display = "none";
-                document.getElementById("page_content").style.display = "block";
-            };
-        });
+        //     window.onload = function () {
+        //         document.querySelector(".bg-loadding").style.display = "none";
+        //         document.getElementById("page_content").style.display = "block";
+        //     };
+        // });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>

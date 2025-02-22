@@ -49,6 +49,7 @@
         .product-details {
             display: flex;
             flex-direction: column;
+            width: 60%;
         }
 
         .product-title {
@@ -108,16 +109,11 @@
         }
 
         .seller-card {
-            width: 150%;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            padding: 15px;
-            margin-top: 20px;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-            background: #ececec;
+           display: flex;
+           gap: 10px;
+           justify-content: center;
+           align-items: center;
+           width: 100%;
         }
 
         .seller-image {
@@ -127,11 +123,14 @@
             border-radius: 50%;
             display: flex;
             justify-content: center;
+            align-items: center;
         }
 
         .seller-info {
-            flex: 1;
             display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
 
         .seller-name {
@@ -197,8 +196,6 @@
                                         </div>
                                     `;
                         }
-
-
                         productDetailContainer.innerHTML = `
                                                             <div class="product-card">
                                                                  <div class="image-add">
@@ -235,7 +232,7 @@
 
                                                                     <!-- ข้อมูลผู้ขาย -->
                                                                     <div class="seller-card">
-                                                                        <img class="seller-image" src="${product.user?.profile_image || '/path/to/default-profile.jpg'}"
+                                                                        <img class="seller-image" src="${product.user?.user_pic }"
                                                                             alt="${product.user?.user_name}" loading="lazy">
                                                                         <div class="seller-info">
                                                                             <div class="seller-name">${product.user?.user_name || 'ไม่ระบุ'}</div>
