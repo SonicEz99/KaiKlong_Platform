@@ -298,13 +298,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="menu nav-link" href="home">หน้าหลัก</a>
+                            <a class="menu nav-link" href="#" onclick="go(1)">หน้าหลัก</a>
                         </li>
                         <li class="nav-item">
-                            <a class="menu nav-link" href="about">เกี่ยวกับเรา</a>
+                            <a class="menu nav-link" href="#" onclick="go(2)">เกี่ยวกับเรา</a>
                         </li>
                         <li class="nav-item">
-                            <a class="menu nav-link" href="first-start">เริ่มต้นยังไง?</a>
+                            <a class="menu nav-link" href="#" onclick="go(3)">เริ่มต้นยังไง?</a>
                         </li>
                     </div>
 
@@ -322,10 +322,10 @@
                                             class="bi bi-shop me-2"></i> หน้าร้านของฉัน</a></li>
                                 <li><a class="dropdown-item d-flex align-items-center" href="favorites"><i
                                             class="bi bi-heart me-2"></i> รายการโปรด</a></li>
-                                <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="userSetting()"><i
+                                <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="go(4)"><i
                                             class="bi bi-person me-2"></i> ข้อมูลส่วนตัว</a></li>
                                 <li><a class="dropdown-item d-flex align-items-center text-danger" href="#"
-                                        onclick="logoutUser()"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</a>
+                                        onclick="go(5)"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</a>
                                 </li>
                             </ul>
                         </div>
@@ -345,12 +345,17 @@
         function goadd() {
             window.location.href = "/addproduct"
         }
-        function userSetting() {
-            window.location.href = "/user_setting"
-        }
-
-        function logoutUser() {
-            fetch('/api/logout', {
+        function go(num) {
+            if(num === 1){
+                window.location.href = "/home"
+            }else if(num === 2){
+                window.location.href = "/about"
+            }else if(num === 3){
+                window.location.href = "/#"
+            }else if(num === 4){
+                window.location.href = "/user_setting"
+            }else if(num === 5){
+                fetch('/api/logout', {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -366,7 +371,9 @@
                     }
                 })
                 .catch(error => console.error('Logout failed:', error));
+            }
         }
+
     </script>
 
 
