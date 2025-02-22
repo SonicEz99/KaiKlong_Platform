@@ -26,6 +26,7 @@ class productController extends Controller
                 'category_id' => 'required|integer',
                 'type_id' => 'nullable|integer',
                 'brand_id' => 'nullable|integer',
+                'user_id' => 'required|integer',
             ]);
 
             if ($validator->fails()) {
@@ -34,7 +35,7 @@ class productController extends Controller
 
             $user_id = Auth::id();
             $productData = [
-                'user_id' => $user_id,
+                'user_id' => $request->input('user_id'),
                 'product_name' => $request->input('product_name'),
                 'product_description' => $request->input('product_description'),
                 'product_price' => $request->input('product_price'),

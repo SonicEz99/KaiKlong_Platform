@@ -245,9 +245,12 @@
             </div>
         </div>
     </div>
+<?php $user = Auth::user();?>
 
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
+            let userId = <?php echo json_encode($user->id); ?>;
+            console.log(userId);
             const categoryDropdown = document.getElementById('categoryDropdown');
             const brandDropdown = document.getElementById('brandDropdown');
             const typeDropdown = document.getElementById('typeDropdown');
@@ -368,11 +371,14 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.querySelector('form');
+            let userId = <?php echo json_encode($user->id); ?>;
+            console.log(userId);
 
             form.addEventListener('submit', function(event) {
                 event.preventDefault(); // ป้องกันการส่งฟอร์มแบบปกติ
 
                 const formData = new FormData(form);
+                formData.append('user_id', userId); // Add user_id to FormData
 
                 fetch('/api/addProduct', {
                         method: 'POST',

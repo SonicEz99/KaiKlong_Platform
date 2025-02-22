@@ -34,6 +34,7 @@ class GoogleController extends Controller
                 ]
             );
 
+            session()->put('user_name', $user->user_name);
             Auth::login($user, true);
 
             session()->regenerate();  // Force session regeneration
