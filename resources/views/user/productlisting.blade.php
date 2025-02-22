@@ -15,18 +15,8 @@
     <body>
         <div class="container">
             <div class="myprofile">
-                <div class="container-myprofile">
-                    <div class="image-profile">
-                        <img src="<?php echo $user->user_pic; ?>" width="60" height="60" alt="">
-                    </div>
-                    <div class="name-profile">
-                        <b><?php echo $user->user_name; ?></b>
-                        <p>ผู้ค้าดีเด่น ประจำขายคล่อง</p>
-                        <p>หมายเลขสมาชิก kaiklong-00-<?php echo $user->id; ?></p>
-                    </div>
-                    <div class="btn-profile">
-                        <button>แชร์</button>
-                    </div>
+                <div class="container-myprofile" id="container-myprofile">
+
                 </div>
             </div>
 
@@ -117,25 +107,62 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-        const urlParts = window.location.pathname.split('/');
-        const userId = urlParts[urlParts.length - 1];
-        console.log("Fetching user with ID:", userId);
+            const urlParts = window.location.pathname.split('/');
+    const userId = urlParts[urlParts.length - 1];
+    console.log("Fetching user with ID:", userId);
 
-        fetch(`/api/getProductsByUser/${userId}`)
-            .then(response => response.json())
-            .then(products => {
-                console.log("Product data received:", products);
-                const productDetailContainer = document.getElementById('product-item');
+    fetch(`/api/getUser/${userId}`)
+        .then(response => response.json())
+        .then(response => {
+            console.log("User data received:", response);
 
-                // Clear previous content if any
-                productDetailContainer.innerHTML = '';
+            // Fix: Extract the user object
+            const user = response.user;
 
-                products.forEach(product => {
-                    const imagePath = (product.product_images && product.product_images.length > 0) ?
-                        `/${product.product_images[0].image_path}` :
-                        '/path/to/placeholder.jpg';
+            if (!user) {
+                console.error("User data is missing in response");
+                return;
+            }
 
-                    productDetailContainer.innerHTML += `
+            const userContainer = document.getElementById('container-myprofile');
+
+            userContainer.innerHTML = `
+                <div class="image-profile">
+                    <img src="${user.user_pic || '/path/to/default-profile.jpg'}" width="60" height="60" alt="">
+                </div>
+                <div class="name-profile">
+                    <b>${user.user_name || "ไม่ระบุชื่อผู้ใช้"}</b>
+                    <p>${user.first_name ? user.first_name : "ยังไม่ได้ตั้งชื่อ"}</p>
+                    <p>${user.last_name ? user.last_name : "ยังไม่ได้ตั้งนามสกุล"}</p>
+                    <p>หมายเลขสมาชิก kaiklong : ${user.id}</p>
+                </div>
+                <div class="btn-profile">
+                    <button>แชร์</button>
+                </div>
+            `;
+        })
+        .catch(error => {
+            console.error("Error fetching user details:", error);
+            document.getElementById('container-myprofile').innerHTML =
+                '<p style="text-align:center;padding:20px;color:#666;">เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้</p>';
+        });
+
+            fetch(`/api/getProductsByUser/${userId}`)
+                .then(response => response.json())
+                .then(products => {
+                    console.log("Product data received:", products);
+                    const productDetailContainer = document.getElementById('product-item');
+
+                    // Clear previous content if any
+                    productDetailContainer.innerHTML = '';
+
+                    products.forEach(product => {
+                        const imagePath = (product.product_images && product.product_images.length >
+                            0) ?
+                            `/${product.product_images[0].image_path}` :
+                            '/path/to/placeholder.jpg';
+
+                        productDetailContainer.innerHTML += `
                         <div class="item">
                             <img width="200" height="200"
                                 src="${imagePath}" alt="${product.product_name}">
@@ -149,14 +176,14 @@
                             </div>
                         </div>
                     `;
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching product detail:", error);
+                    document.getElementById('product-item').innerHTML =
+                        '<p style="text-align:center;padding:20px;color:#666;">เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า</p>';
                 });
-            })
-            .catch(error => {
-                console.error("Error fetching product detail:", error);
-                document.getElementById('product-item').innerHTML =
-                    '<p style="text-align:center;padding:20px;color:#666;">เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า</p>';
-            });
-    });
+        });
     </script>
 @endsection
 
