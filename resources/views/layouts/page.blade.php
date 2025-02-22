@@ -278,7 +278,7 @@
 
     <?php
     $user = Auth::user();
-    
+
     ?>
 
 
@@ -301,7 +301,7 @@
                             <a class="menu nav-link" href="home">หน้าหลัก</a>
                         </li>
                         <li class="nav-item">
-                            <a class="menu nav-link" href="abount">เกี่ยวกับเรา</a>
+                            <a class="menu nav-link" href="about">เกี่ยวกับเรา</a>
                         </li>
                         <li class="nav-item">
                             <a class="menu nav-link" href="first-start">เริ่มต้นยังไง?</a>
