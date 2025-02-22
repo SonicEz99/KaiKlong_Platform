@@ -6,7 +6,7 @@ use App\Http\Controllers\userController;
 use App\Http\Controllers\brandController;
 use App\Http\Controllers\productController;
 use App\Http\Controllers\categoryController;
-use App\Http\Controllers\AuthController; // Correct the capitalization here
+use App\Http\Controllers\authController; // Correct the capitalization here
 use App\Http\Controllers\TypeController; // Correct the capitalization here
 
 // Public routes
@@ -39,6 +39,7 @@ Route::get('/product/{id}', [ProductController::class, 'getProductById']);
 
 
 Route::post('/updateUser/{id}', [userController::class, 'updateUser']);
+Route::get('/getUser/{id}',[userController::class, 'getUser']);
 
 // Protected routes (Require authentication)
 Route::middleware('auth:sanctum')->group(function () {

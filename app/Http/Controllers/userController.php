@@ -30,7 +30,22 @@ class userController extends Controller
             'last_name' => $request->input('last_name'),
             'tel' => $request->input('tel'),
         ]);
-        
+
         return response()->json(['success' => 'User updated successfully!', "user" =>$user]);
+    }
+
+    public function getUser($id) {
+        try{
+            $user = User::find($id);
+
+            if (!$user) {
+                return response()->json(['error' => 'User not found'], 404);
+            }
+
+            return response()->json(['user' => $user], 200);
+        }catch(\Exception $e){
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+
     }
 }
