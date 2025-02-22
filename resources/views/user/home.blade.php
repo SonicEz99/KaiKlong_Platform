@@ -425,7 +425,7 @@
 
             @if (session('success'))
                 <script>
-                    document.addEventListener("DOMContentLoaded", function() {
+                    document.addEventListener("DOMContentLoaded", function () {
                         Swal.fire({
                             title: "🎉 สำเร็จ!",
                             text: "{{ session('success') }}",
@@ -439,7 +439,7 @@
 
             <script>
                 // รอให้ DOM โหลดเสร็จก่อนรันโค้ด
-                document.addEventListener("DOMContentLoaded", function() {
+                document.addEventListener("DOMContentLoaded", function () {
                     fetch("/api/product")
                         .then(response => response.json())
                         .then(data => {
@@ -458,25 +458,25 @@
                             latestProducts.forEach(product => {
                                 // ตรวจสอบว่ามีข้อมูลรูปภาพหรือไม่ ถ้าไม่มีให้ใช้ placeholder
                                 const imagePath = (product.product_images && product.product_images.length >
-                                        0) ?
+                                    0) ?
                                     `/${product.product_images[0].image_path}` :
                                     '/path/to/placeholder.jpg';
 
                                 productCards += `
-                      <div class="product-card">
-                        <img class="product-image" src="${imagePath}" alt="${product.product_name}" />
-                        <div class="product-details">
-                          <b class="product-title">
-                            ${product.product_name} <br />
-                          </b>
-                          <span class="product-price">${new Intl.NumberFormat().format(product.product_price)}</span> <br />
-                          <span class="product-description">${product.product_location}</span>
-                        </div>
-                        <div class="card-btn">
-                          <button class="btn_detail">ดูสินค้า</button>
-                        </div>
-                      </div>
-                    `;
+                          <div class="product-card">
+                            <img class="product-image" src="${imagePath}" alt="${product.product_name}" />
+                            <div class="product-details">
+                              <b class="product-title">
+                                ${product.product_name} <br />
+                              </b>
+                              <span class="product-price">${new Intl.NumberFormat().format(product.product_price)}</span> <br />
+                              <span class="product-description">${product.product_location}</span>
+                            </div>
+                            <div class="card-btn">
+                              <button class="btn_detail">ดูสินค้า</button>
+                            </div>
+                          </div>
+                        `;
                             });
                             // แสดงข้อมูลทั้งหมดทีเดียว
                             productsContainer.innerHTML = productCards;
@@ -489,43 +489,43 @@
     </body>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-                const searchBox = document.querySelector(".search-box");
-                const urlParams = new URLSearchParams(window.location.search);
-                const searchQuery = urlParams.get("q") || ""; // Get search query from URL
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchBox = document.querySelector(".search-box");
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchQuery = urlParams.get("q") || ""; // Get search query from URL
 
-                if (searchQuery) {
-                    searchBox.value = searchQuery; // Keep previous search text in box
-                }
+            if (searchQuery) {
+                searchBox.value = searchQuery; // Keep previous search text in box
+            }
 
-                searchBox.addEventListener("keypress", function(event) {
-                    if (event.key === "Enter") {
-                        const searchValue = searchBox.value.trim();
-                        if (searchValue != "") {
-                            window.location.href = `/product-all?q=${encodeURIComponent(searchValue)}`;
-                            fetch(`/get24productsearch?q=${encodeURIComponent(searchValue)}`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    // Handle the search results (display them in your page)
-                                    console.log(data);
-                                })
-                                .catch(error => {
-                                    console.error('Error searching products:', error);
-                                });
-                        } else {
-                            window.location.href = `/product-all`;
-                        }
+            searchBox.addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                    const searchValue = searchBox.value.trim();
+                    if (searchValue != "") {
+                        window.location.href = `/product-all?q=${encodeURIComponent(searchValue)}`;
+                        fetch(`/get24productsearch?q=${encodeURIComponent(searchValue)}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                // Handle the search results (display them in your page)
+                                console.log(data);
+                            })
+                            .catch(error => {
+                                console.error('Error searching products:', error);
+                            });
+                    } else {
+                        window.location.href = `/product-all`;
                     }
-                });
-
+                }
             });
 
-        document.getElementById('logout-button')?.addEventListener('click', function() {
+        });
+
+        document.getElementById('logout-button')?.addEventListener('click', function () {
             axios.post("{{ route('logout') }}", {}, {
-                    headers: {
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    }
-                })
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                }
+            })
                 .then(response => {
                     alert(response.data.message);
                     window.location.href = response.data.redirect;
@@ -588,10 +588,10 @@
                 // แก้โค้ดให้แสดงชื่อและเป็นลิงก์ไปยังหน้าที่ต้องการ
                 let typeLinks = data.map(type =>
                     `<p>
-                    <a href="http://127.0.0.1:8000/product-all?q=${type.type_name}" target="_blank">
-                        ${type.type_name}
-                    </a>
-                </p>`
+                        <a href="http://127.0.0.1:8000/product-all?q=${type.type_name}" target="_blank">
+                            ${type.type_name}
+                        </a>
+                    </p>`
                 ).join('');
 
                 container.innerHTML = typeLinks;

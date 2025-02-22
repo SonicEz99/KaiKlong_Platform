@@ -8,7 +8,8 @@ use App\Http\Controllers\userController;
 
 Route::get('/', function () {
     return view('auth.login_auth');
-})->name('login.page');;
+})->name('login.page');
+;
 
 // // Register Page Route
 Route::get('/register', function () {
@@ -33,7 +34,9 @@ Route::middleware('auth:sanctum')->group(function () {
         return view('product.addproduct');
     });
     Route::get('/product-detail/{id}', [ProductController::class, 'show'])->name('productdetail');
-
+    Route::get('/my-product', function () {
+        return view('user.myproduct');
+    });
 });
 
 Route::middleware('web')->get('/home', function () {
