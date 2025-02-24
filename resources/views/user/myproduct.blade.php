@@ -117,25 +117,26 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-        const urlParts = window.location.pathname.split('/');
-        const userId = urlParts[urlParts.length - 1];
-        console.log("Fetching user with ID:", userId);
+            const urlParts = window.location.pathname.split('/');
+            const userId = urlParts[urlParts.length - 1];
+            console.log("Fetching user with ID:", userId);
 
-        fetch(`/api/getProductsByUser/<?php echo $user->id; ?>`)
-            .then(response => response.json())
-            .then(products => {
-                console.log("Product data received:", products);
-                const productDetailContainer = document.getElementById('product-item');
+            fetch(`/api/getProductsByUser/<?php echo $user->id; ?>`)
+                .then(response => response.json())
+                .then(products => {
+                    console.log("Product data received:", products);
+                    const productDetailContainer = document.getElementById('product-item');
 
-                // Clear previous content if any
-                productDetailContainer.innerHTML = '';
+                    // Clear previous content if any
+                    productDetailContainer.innerHTML = '';
 
-                products.forEach(product => {
-                    const imagePath = (product.product_images && product.product_images.length > 0) ?
-                        `/${product.product_images[0].image_path}` :
-                        '/path/to/placeholder.jpg';
+                    products.forEach(product => {
+                        const imagePath = (product.product_images && product.product_images.length >
+                            0) ?
+                            `/${product.product_images[0].image_path}` :
+                            '/path/to/placeholder.jpg';
 
-                    productDetailContainer.innerHTML += `
+                        productDetailContainer.innerHTML += `
                         <div class="item">
                             <img width="200" height="200"
                                 src="${imagePath}" alt="${product.product_name}">
@@ -149,15 +150,15 @@
                             </div>
                         </div>
                     `;
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching product detail:", error);
+                    document.getElementById('product-item').innerHTML =
+                        '<p style="text-align:center;padding:20px;color:#666;">เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า</p>';
                 });
-            })
-            .catch(error => {
-                console.error("Error fetching product detail:", error);
-                document.getElementById('product-item').innerHTML =
-                    '<p style="text-align:center;padding:20px;color:#666;">เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า</p>';
-            });
-    });
+        });
     </script>
-@endsection
 
-</html>
+
+    </html>

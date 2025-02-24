@@ -269,12 +269,12 @@
 <body>
 
 
-    <!-- <div class="bg-loadding">
+    <div class="bg-loadding">
         <div id="loading">
             <h2>Kaiklong</h2>
             <div class="spinner-border" role="status"></div>
         </div>
-    </div> -->
+    </div> 
 
     <?php
     $user = Auth::user();
