@@ -60,6 +60,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/favorites', function () {
         return view('user.favorites');
     });
+    Route::get('/detail_chat', function () {
+        return view('user.chat_detail');
+    });
     Route::get('/product-detail/chatsale/{id_saller}/{id_user}', [ChatController::class, 'getMessages']);
     Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
 });

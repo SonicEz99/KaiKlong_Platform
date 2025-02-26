@@ -3,14 +3,55 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Message;
 
 class ChatController extends Controller
 {
+    public function getPeople($id)
+    {
+        $authId = $id;
+
+        $messages = DB::select("
+        SELECT message, user_seller_id, user_buyer_id, send_form
+        FROM messages
+        WHERE user_seller_id = ? OR user_buyer_id = ?
+    ", [$authId, $authId]);
+
+        $otherUserIds = collect($messages)->pluck('user_seller_id')->merge(collect($messages)->pluck('user_buyer_id'))->unique()->filter(function ($id) use ($authId) {
+            return $id != $authId;
+        });
+
+        $users = DB::select("SELECT * FROM users WHERE id IN (" . implode(",", $otherUserIds->toArray()) . ")");
+
+        return response()->json([
+            'users' => $users,
+            'message' => $messages
+        ]);
+    }
+
+
+    public function getMessagesBuyer($sellerId, $user_buyer_id)
+    {
+        try {
+            $messages = DB::select("
+                                            SELECT message, user_seller_id, user_buyer_id, send_form
+                                            FROM messages
+                                            WHERE user_seller_id = ? AND user_buyer_id = ?
+                                        ", [$sellerId, $user_buyer_id]);
+            return response()->json([
+                'message_chat' => $messages,
+            ]);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error fetching messages: ' . $e->getMessage());
+        }
+    }
+
+
     public function getMessages($sellerId, $userId)
     {
         try {
-            // Fetch messages for the specific conversation, sorted by created_at
             $messages = Message::where(function ($query) use ($sellerId, $userId) {
                 $query->where('user_seller_id', $sellerId)
                     ->where('user_buyer_id', $userId);

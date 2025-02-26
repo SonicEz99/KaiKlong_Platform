@@ -274,11 +274,11 @@
             <h2>Kaiklong</h2>
             <div class="spinner-border" role="status"></div>
         </div>
-    </div> 
+    </div>
 
     <?php
     $user = Auth::user();
-
+    
     ?>
 
 
@@ -324,9 +324,13 @@
                                             class="bi bi-heart me-2"></i> รายการโปรด</a></li>
                                 <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="go(4)"><i
                                             class="bi bi-person me-2"></i> ข้อมูลส่วนตัว</a></li>
+                                <li><a class="dropdown-item d-flex align-items-center " href="#"
+                                        onclick="go(6)"><i class="bi bi-box-arrow-right me-2"></i>เเชท</a>
+                                </li>
                                 <li><a class="dropdown-item d-flex align-items-center text-danger" href="#"
                                         onclick="go(5)"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</a>
                                 </li>
+
                             </ul>
                         </div>
 
@@ -355,7 +359,9 @@
                 window.location.href = "/#"
             } else if (num === 4) {
                 window.location.href = "/user_setting"
-            } else if (num === 5) {
+            }else if (num === 6){
+                window.location.href = "/detail_chat"
+            }else if (num === 5) {
                 fetch('/logout', {
                         method: 'POST',
                         headers: {

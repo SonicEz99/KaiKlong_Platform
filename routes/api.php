@@ -42,6 +42,11 @@ Route::get('/product/{id}', [ProductController::class, 'getProductById']);
 
 Route::post('/updateUser/{id}', [userController::class, 'updateUser']);
 Route::get('/getUser/{id}', [userController::class, 'getUser']);
+
+
+Route::get('/peoplechat/{id}', [chatController::class, 'getPeople']);
+Route::get('/message/{id}/{buyer_id}', [chatController::class, 'getMessagesBuyer']);
+
 // Protected routes (Require authentication)
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
