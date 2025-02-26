@@ -49,6 +49,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user_setting', function () {
         return view('user.usersetting');
     });
+    Route::get('/detailcar', function () {
+        return view('product.car_detail');
+    });
     Route::get('/home', function () {
         return view('user.home');
     })->name('home');
