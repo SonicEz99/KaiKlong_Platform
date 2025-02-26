@@ -76,7 +76,14 @@
                                 chatList.forEach(mes => {
                                     const list_chat = document.createElement('li');
                                     list_chat.innerHTML = `${mes.message}`;
-                                    chatChatContainer.appendChild(list_chat); // Append each message
+
+                                    if (mes.send_form == mes.user_seller_id) {
+                                        list_chat.style.textAlign = "right"; // Align to left for seller
+                                    } else {
+                                        list_chat.style.textAlign = "left"; // Align to right for buyer
+                                    }
+
+                                    chatChatContainer.appendChild(list_chat);
                                 });
                             }
                         })
@@ -84,6 +91,7 @@
                             console.error("Error fetching messages:", error);
                         });
                 }
+
 
                 fetchMessage(); // Call the function to fetch messages
             }
