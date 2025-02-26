@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\chatController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\userController;
@@ -23,7 +24,7 @@ Route::get('/get24product', [productController::class, 'getProduct24']);
 Route::get('/get24productsearch', [ProductController::class, 'getFilteredProducts']); // API endpoint
 Route::get('/getProductsByUser/{id}', [ProductController::class, 'getProductsByUserId']); // API endpoint
 
-Route::get('/types',[TypeController::class, 'index']);
+Route::get('/types', [TypeController::class, 'index']);
 Route::get('/types/category/{category_id}', [TypeController::class, 'getByCategory']);
 Route::get('/types/first-ten', [TypeController::class, 'getFirstTenTypes']);
 
@@ -40,8 +41,7 @@ Route::get('/product/{id}', [ProductController::class, 'getProductById']);
 
 
 Route::post('/updateUser/{id}', [userController::class, 'updateUser']);
-Route::get('/getUser/{id}',[userController::class, 'getUser']);
-
+Route::get('/getUser/{id}', [userController::class, 'getUser']);
 // Protected routes (Require authentication)
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);

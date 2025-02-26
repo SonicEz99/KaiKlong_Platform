@@ -43,7 +43,7 @@ class categoryController extends Controller
     public function getCategory()
     {
         try {
-            $categories = Categorie::all(); // Fetch all categories
+            $categories = Categorie::all();
 
             return response()->json(['categories' => $categories], 200);
         } catch (\Exception $e) {

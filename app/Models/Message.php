@@ -10,4 +10,12 @@ class Message extends Model
     use HasFactory;
 
     protected $primaryKey = 'message_id';
+
+
+    protected $fillable = [
+        'user_seller_id',
+        'user_buyer_id',
+        'message',
+        'send_form'
+    ];
 }
