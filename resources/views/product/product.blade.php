@@ -121,6 +121,9 @@
             width: 100%;
             font-weight: bold;
             transition: background-color 0.3s ease, color 0.3s ease;
+            text-decoration: none;
+            display: block;
+            text-align: center;
         }
 
         .btn_detail:hover {

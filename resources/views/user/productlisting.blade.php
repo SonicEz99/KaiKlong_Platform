@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>สินค้าของฉัน</title>
+    <title>สินค้าผู้อื่น</title>
     @vite(['resources/js/app.js'])
     <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
         rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <style>
     .container {
@@ -28,7 +29,7 @@
         text-align: center;
         padding: 8px;
         border-radius: 2px;
-        z-index: 10; 
+        z-index: 10;
     }
 
     .btn-profile {
@@ -253,9 +254,24 @@
                     <p class="name-profileuserid">หมายเลขสมาชิก kaiklong : ${user.id}</p>
                 </div>
                 <div class="btn-profile">
-                    <button>แชร์</button>
+                    <button id="share-profile-btn">แชร์</button>
                 </div>
             `;
+
+                    // Add event listener to the share button
+                    document.getElementById('share-profile-btn').addEventListener('click', function() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText(url).then(function() {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'ทำการคัดลอกโปรไฟล์เสร็จสิ้น',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }, function(err) {
+                            console.error('Could not copy text: ', err);
+                        });
+                    });
                 })
                 .catch(error => {
                     console.error("Error fetching user details:", error);

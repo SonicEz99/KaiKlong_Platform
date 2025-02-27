@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\userController;
+use App\Http\Controllers\FavoriteController;
 
 
 Route::get('/', function () {
@@ -64,3 +65,7 @@ Route::controller(GoogleController::class)->group(function () {
     Route::middleware('web')->get('auth/google', 'redirectToGoogle')->name('auth.google');
     Route::get('auth/google/callback', 'handleGoogle');
 });
+
+Route::get('/favorites', function () {
+    return view('user.favorites');
+})->name('favorites');
