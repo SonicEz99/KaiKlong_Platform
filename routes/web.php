@@ -52,6 +52,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/home', function () {
         return view('user.home');
     })->name('home');
+    Route::get('/admin', function () {
+        return view('admin.approve');
+    })->name('admin');
 });
 
 
