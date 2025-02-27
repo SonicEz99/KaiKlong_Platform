@@ -140,7 +140,7 @@ class productController extends Controller
                 'user',
                 'brand', // Add this
                 'type',  // Add this
-            ])->where('product_approve', 'อนุมัติ')->findOrFail($id);
+            ])->findOrFail($id);
 
             return response()->json($product, 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
@@ -272,7 +272,6 @@ class productController extends Controller
                 'brand',
                 'type',
             ])
-            ->where('product_approve', 'อนุมัติ') // Explicit '=' operator for clarity
             ->where('user_id', $userId) // Ensure $userId is correctly defined
             ->get();
             

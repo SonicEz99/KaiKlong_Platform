@@ -143,6 +143,7 @@
                                 <p>${product.product_name}</p>
                                 <p>${product.product_location}</p>
                                 <p>${new Intl.NumberFormat().format(product.product_price)} บาท</p>
+                                <p>สถานะ ${product.product_approve}</p>
                             </div>
                             <div class="btn">
                                 <a class="btn_detail" href="/product-detail/${product.product_id}">ดูสินค้า</a>
