@@ -85,7 +85,7 @@ class productController extends Controller
     public function getProduct24(Request $request)
     {
         $limit = $request->input('limit', 24); // ค่า default = 24 รายการต่อหน้า
-        $products = Product::with(['productImages', 'category', 'category.brands', 'category.types', 'user'])
+        $products = Product::where('product_approve', 'อนุมัติ')->with(['productImages', 'category', 'category.brands', 'category.types', 'user'])
             ->paginate($limit); // ใช้ paginate() แทน get()
 
         return response()->json($products);
@@ -94,7 +94,7 @@ class productController extends Controller
 
     public function getFilteredProducts(Request $request)
     {
-        $query = Product::with(['productImages', 'category', 'brand', 'type']);
+        $query = Product::where('product_approve', 'อนุมัติ')->with(['productImages', 'category', 'brand', 'type']);
 
         if ($request->has('q') && !empty($request->q)) {
             $searchTerm = '%' . $request->q . '%';
@@ -123,7 +123,7 @@ class productController extends Controller
 
     public function getProduct()
     {
-        $products = Product::with(['productImages', 'category', 'category.brands', 'category.types', 'user'])->get();
+        $products = Product::where('product_approve', 'อนุมัติ')->with(['productImages', 'category', 'category.brands', 'category.types', 'user'])->get();
 
         return response()->json([
             'message' => 'Products retrieved successfully',
@@ -140,7 +140,7 @@ class productController extends Controller
                 'user',
                 'brand', // Add this
                 'type',  // Add this
-            ])->findOrFail($id);
+            ])->where('product_approve', 'อนุมัติ')->findOrFail($id);
 
             return response()->json($product, 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
@@ -153,7 +153,7 @@ class productController extends Controller
 
     public function show($id)
     {
-        $product = Product::with(['productImages', 'category'])->find($id);
+        $product = Product::where('product_approve', 'อนุมัติ')->with(['productImages', 'category'])->find($id);
 
         if (!$product) {
             return response()->json(['error' => 'Product not found'], 404);
@@ -271,8 +271,11 @@ class productController extends Controller
                 'user',
                 'brand',
                 'type',
-            ])->where('user_id', $userId)->get();
-
+            ])
+            ->where('product_approve', 'อนุมัติ') // Explicit '=' operator for clarity
+            ->where('user_id', $userId) // Ensure $userId is correctly defined
+            ->get();
+            
             if ($products->isEmpty()) {
                 return response()->json(['error' => 'No products found for this user'], 404);
             }
@@ -282,4 +285,30 @@ class productController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function unApprove(){
+        $products = Product::with(['productImages', 'category', 'category.brands', 'category.types', 'user'])
+        ->where('product_approve', 'ไม่อนุมัติ')->get();
+        return response()->json($products, 200);
+    }
+    public function approve(){
+        $products = Product::with(['productImages', 'category', 'category.brands', 'category.types', 'user'])
+        ->where('product_approve', 'อนุมัติ')->get();
+        return response()->json($products, 200);
+    }
+
+    public function updateApprove($id)
+    {
+        $product = Product::find($id);
+    
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+    
+        $product->product_approve = 'อนุมัติ';  // Approve the product
+        $product->save();
+    
+        return response()->json(['message' => 'Product approved successfully'], 200);
+    }
+    
 }

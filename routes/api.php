@@ -22,6 +22,11 @@ Route::get('/categoriesBrandAndType/{id}', [CategoryController::class, 'getCateg
 Route::get('/get24product', [productController::class, 'getProduct24']);
 Route::get('/get24productsearch', [ProductController::class, 'getFilteredProducts']); // API endpoint
 Route::get('/getProductsByUser/{id}', [ProductController::class, 'getProductsByUserId']); // API endpoint
+Route::get('/deleteProduct/{id}', [ProductController::class, 'deleteProduct']); // API endpoint
+
+Route::get('/getApprove', [ProductController::class, 'approve']); // API endpoint
+Route::get('/getUnApprove', [ProductController::class, 'unApprove']); // API endpoint
+Route::put('/approve/{id}', [ProductController::class, 'updateApprove']);
 
 Route::get('/types',[TypeController::class, 'index']);
 Route::get('/types/category/{category_id}', [TypeController::class, 'getByCategory']);
