@@ -330,7 +330,6 @@
                                 <li><a class="dropdown-item d-flex align-items-center text-danger" href="#"
                                         onclick="go(5)"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</a>
                                 </li>
-
                             </ul>
                         </div>
 
