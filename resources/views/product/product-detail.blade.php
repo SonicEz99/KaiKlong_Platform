@@ -10,6 +10,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
         rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .product-card {
             display: flex;
@@ -60,12 +61,6 @@
             display: flex;
             flex-direction: column;
             width: 60%;
-        }
-
-        .product-title {
-            font-size: 24px;
-            margin-bottom: 10px;
-            font-weight: bold;
         }
 
         .product-price {
@@ -244,6 +239,57 @@
             align-items: center;
             justify-content: center;
         }
+
+        .btn-share {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-share svg {
+            width: 35px;
+            height: 35px;
+        }
+
+        .btn-share:hover svg {
+            fill: #FF8C00;
+        }
+
+        .btn-favorite {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            padding-bottom: 7px;
+        }
+
+        .btn-favorite svg {
+            width: 35px;
+            height: 35px;
+        }
+
+        .btn-favorite.active svg {
+            fill: #FF8C00;
+        }
+
+        .product-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
     </style>
 </head>
 
@@ -309,9 +355,9 @@
                                 <div class="additional-images">
                                     <div class="image-gallery">
                                         ${product.product_images.slice(1).map(img => `
-                                                                                                                                                                                                            <img class="additional-image" src="/${img.image_path}" alt="${product.product_name}"
-                                                                                                                                                                                                                loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
-                                                                                                                                                                                                        `).join('')}
+                                                                                                                                                                                                                                                                                                            <img class="additional-image" src="/${img.image_path}" alt="${product.product_name}"
+                                                                                                                                                                                                                                                                                                                loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
+                                                                                                                                                                                                                                                                                                        `).join('')}
                                     </div>
 
 
@@ -320,7 +366,19 @@
 
 
                             <div class="product-details">
-                                <div class="product-title">${product.product_name}</div>
+                                <div class="product-title">
+                                    {{ $product->product_name }}
+
+                                    <button class="btn-favorite" onclick="toggleFavorite()">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z" stroke="#FB8C00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                    </button>
+
+                                    <button class="btn-share" onclick="shareProduct()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="#FB8C00" viewBox="0 0 30 30" width="40" height="40">
+                                            <path d="M18 16.08C17.24 16.08 16.56 16.38 16.05 16.88L8.91 12.7C8.96 12.47 9 12.24 9 12C9 11.76 8.96 11.53 8.91 11.3L15.96 7.22C16.5 7.72 17.22 8 18 8C19.66 8 21 6.66 21 5C21 3.34 19.66 2 18 2C16.34 2 15 3.34 15 5C15 5.24 15.04 5.47 15.09 5.7L8.04 9.78C7.5 9.28 6.78 9 6 9C4.34 9 3 10.34 3 12C3 13.66 4.34 15 6 15C6.78 15 7.5 14.72 8.04 14.22L15.18 18.4C15.13 18.63 15.09 18.86 15.09 19.1C15.09 20.76 16.43 22.1 18.09 22.1C19.75 22.1 21.09 20.76 21.09 19.1C21.09 17.44 19.75 16.1 18.09 16.1Z"/>
+                                        </svg>
+                                    </button>
+                                </div>
                                 <div class="product-price">${new Intl.NumberFormat().format(product.product_price)} บาท</div>
                                 <div class="product-seller">
                                     <strong>ลงขายโดย</strong> <span class="seller-name" style="color: #FF8C00;
@@ -381,7 +439,7 @@
                         // Click on additional images to switch main image
                         document.querySelectorAll('.additional-image').forEach((img, index) => {
                             img.addEventListener('click', function() {
-                                currentImageIndex = index+1;
+                                currentImageIndex = index + 1;
                                 productImage.src = images[currentImageIndex];
                             });
                         });
@@ -394,7 +452,7 @@
 
                         additionalImages.forEach(img => {
                             img.addEventListener('click', function() {
-                                productImage.src = img.src-1;
+                                productImage.src = img.src - 1;
                             });
                         });
 
@@ -436,6 +494,30 @@
                     console.log("Image or container not found again!");
                 }
             }, 2000); // รอ 2 วินาทีให้ DOM โหลดก่อน
+            function shareProduct() {
+                const url = window.location.href;
+                navigator.clipboard.writeText(url).then(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'คัดลอกลิงก์เสร็จสิ้น',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            }
+
+            function toggleFavorite() {
+                const favoriteButton = document.querySelector('.btn-favorite');
+                const isActive = favoriteButton.classList.toggle('active');
+                Swal.fire({
+                    icon: isActive ? 'success' : 'info',
+                    title: isActive ? 'เพิ่มสินค้าไปยังรายการโปรดแล้ว' : 'นำสินค้าออกจากรายการโปรดแล้ว',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
         </script>
     </body>
 @endsection
