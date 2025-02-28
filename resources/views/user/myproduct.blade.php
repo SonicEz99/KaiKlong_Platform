@@ -231,8 +231,8 @@
                     <h1>สินค้าประกาศขาย</h1>
                     <div class="sort-dropdown">
                         <select onchange="sortProducts(this.value)">
-                            <option value="newest">ลงขายล่าสุด</option>
                             <option value="oldest">ลงขายนานสุด</option>
+                            <option value="newest" selected>ลงขายล่าสุด</option>
                             <option value="lowest">ราคาถูกสุด</option>
                             <option value="highest">ราคาแพงสุด</option>
                         </select>
@@ -250,6 +250,8 @@
             const urlParts = window.location.pathname.split('/');
             const userId = urlParts[urlParts.length - 1];
             console.log("Fetching user with ID:", userId);
+            const criteria = 'newest';
+            sortProducts(criteria);
 
             fetch(`/api/getProductsByUser/<?php echo $user->id; ?>`)
                 .then(response => response.json())
@@ -343,10 +345,10 @@
 
         function sortProducts(criteria) {
             let sortedProducts = [...products];
-            if (criteria === 'newest') {
-                sortedProducts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-            } else if (criteria === 'oldest') {
+            if (criteria === 'oldest') {
                 sortedProducts.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+            } else if (criteria === 'newest') {
+                sortedProducts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
             } else if (criteria === 'lowest') {
                 sortedProducts.sort((a, b) => a.product_price - b.product_price);
             } else if (criteria === 'highest') {
