@@ -298,21 +298,20 @@
                     console.error('Could not copy text: ', err);
                 });
             });
-        });
 
-        function sortProducts(criteria) {
-            let sortedProducts = [...products];
-            if (criteria === 'newest') {
-                sortedProducts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-            } else if (criteria === 'oldest') {
-                sortedProducts.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-            } else if (criteria === 'lowest') {
-                sortedProducts.sort((a, b) => a.product_price - b.product_price);
-            } else if (criteria === 'highest') {
-                sortedProducts.sort((a, b) => b.product_price - a.product_price);
-            }
-            displayProducts(sortedProducts);
-        }
+            fetch(`/api/getProductsByUser/<?php echo $user->id; ?>`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Product data received:", data);
+                    products = data;
+                    displayProducts(products);
+                })
+                .catch(error => {
+                    console.error("Error fetching product detail:", error);
+                    document.getElementById('product-item').innerHTML =
+                        '<p style="text-align:center;padding:20px;color:#666;">เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า</p>';
+                });
+        });
 
         function displayProducts(products) {
             const productDetailContainer = document.getElementById('product-item');
@@ -335,6 +334,20 @@
                     </div>
                 `;
             });
+        }
+
+        function sortProducts(criteria) {
+            let sortedProducts = [...products];
+            if (criteria === 'newest') {
+                sortedProducts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            } else if (criteria === 'oldest') {
+                sortedProducts.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+            } else if (criteria === 'lowest') {
+                sortedProducts.sort((a, b) => a.product_price - b.product_price);
+            } else if (criteria === 'highest') {
+                sortedProducts.sort((a, b) => b.product_price - a.product_price);
+            }
+            displayProducts(sortedProducts);
         }
     </script>
 @endsection
