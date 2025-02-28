@@ -6,6 +6,7 @@ use App\Http\Controllers\userController;
 use App\Http\Controllers\brandController;
 use App\Http\Controllers\productController;
 use App\Http\Controllers\categoryController;
+use App\Http\Controllers\favoriteController;
 use App\Http\Controllers\authController; // Correct the capitalization here
 use App\Http\Controllers\TypeController; // Correct the capitalization here
 
@@ -46,6 +47,10 @@ Route::get('/product/{id}', [ProductController::class, 'getProductById']);
 
 Route::post('/updateUser/{id}', [userController::class, 'updateUser']);
 Route::get('/getUser/{id}',[userController::class, 'getUser']);
+
+Route::post('/addFavorite', [favoriteController::class, 'addFavorite']);
+Route::get('/getFavorite', [favoriteController::class, 'getFavorite']);
+Route::delete('/deleteFavorite/{id}', [favoriteController::class, 'deleteFavorite']);
 
 // Protected routes (Require authentication)
 Route::middleware('auth:sanctum')->group(function () {
