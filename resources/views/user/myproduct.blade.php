@@ -212,7 +212,12 @@
                     </div>
                     <div class="name-profile">
                         <p class="name-profliename"><?php echo $user->user_name; ?></p>
-                        <p class="name-profilefullname">ทดสอบ ฝากดึงมาด้วย</p>
+                        <p class="name-profilefullname">
+                            <?php 
+                                echo ($user->first_name ?? "ยังไม่ได้ตั้งชื่อ") . " " . ($user->last_name ?? "ยังไม่ได้ตั้งนามสกุล"); 
+                            ?>
+                        </p>
+                        
                         <p class="name-profileuserid">หมายเลขสมาชิก kaiklong-00-<?php echo $user->id; ?></p>
                     </div>
                     <div class="btn-profile">
