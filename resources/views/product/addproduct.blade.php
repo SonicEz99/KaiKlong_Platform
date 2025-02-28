@@ -11,6 +11,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         option:disabled {
             color: gray !important;
@@ -245,7 +246,7 @@
             </div>
         </div>
     </div>
-<?php $user = Auth::user();?>
+    <?php $user = Auth::user(); ?>
 
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
@@ -394,15 +395,30 @@
                     })))
                     .then(result => {
                         if (result.status === 201) {
-                            alert('🎉 ลงขายสินค้าสำเร็จ! กำลังเปลี่ยนหน้า...');
-                            window.location.href = '/home';
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'ลงขายสินค้าสำเร็จ!',
+                                text: 'กำลังเปลี่ยนหน้า...',
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                window.location.href = '/home';
+                            });
                         } else {
-                            alert('❌ เกิดข้อผิดพลาด: ' + (result.body.errors || 'กรุณาลองใหม่'));
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'เกิดข้อผิดพลาด',
+                                text: 'กรุณากรอกข้อมูลให้ครบ'
+                            });
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('❌ เกิดข้อผิดพลาดในการลงขายสินค้า');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาดในการลงขายสินค้า',
+                            text: 'กรุณาลองใหม่'
+                        });
                     });
             });
         });
