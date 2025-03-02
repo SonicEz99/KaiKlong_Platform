@@ -83,7 +83,7 @@ class ChatController extends Controller
                 'user_seller_id' => $request->user_seller_id,
                 'user_buyer_id' => $request->user_buyer_id,
                 'message' => $request->message,
-                'send_form' => auth()->id(),
+                'send_form' =>  $request->user_seller_id,
             ]);
 
             return redirect()->back()->with('success', 'Message sent successfully.');

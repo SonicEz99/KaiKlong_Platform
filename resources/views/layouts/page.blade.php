@@ -318,7 +318,7 @@
                                     width="40" height="40">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                                <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="go(6)"><i
+                                <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="go(7)"><i
                                             class="bi bi-shop me-2"></i> หน้าร้านของฉัน</a></li>
                                 <li><a class="dropdown-item d-flex align-items-center" href="favorites"><i
                                             class="bi bi-heart me-2"></i> รายการโปรด</a></li>
@@ -330,7 +330,6 @@
                                 <li><a class="dropdown-item d-flex align-items-center text-danger" href="#"
                                         onclick="go(5)"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</a>
                                 </li>
-
                             </ul>
                         </div>
 
@@ -375,7 +374,7 @@
                     })
                     .catch(error => console.error('Logout failed:', error));
 
-            } else if (num === 6) {
+            } else if (num === 7) {
                 window.location.href = "/my-product";
             }
         }

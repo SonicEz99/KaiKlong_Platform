@@ -14,15 +14,6 @@
             padding: 0;
         }
 
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 15px;
-        }
-
         h1 {
             text-align: center;
             color: #333;
@@ -32,28 +23,27 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #FF6F00;
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 12px;
             font-weight: bold;
             box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 4px;
         }
 
         .chat-box {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            padding: 10px;
+            padding: 15px;
             max-height: 400px;
             overflow-y: auto;
-            border-radius: 8px;
             background: #fff;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+
         }
 
         .chat-message {
-            padding: 10px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 12px;
             max-width: 75%;
             word-wrap: break-word;
             font-size: 14px;
@@ -65,6 +55,7 @@
             color: white;
             align-self: flex-start;
             text-align: left;
+            border-top-left-radius: 2px;
         }
 
         .buyer-message {
@@ -72,24 +63,24 @@
             color: white;
             align-self: flex-end;
             text-align: right;
+            border-top-right-radius: 2px;
         }
 
         .chat-input {
             display: flex;
             gap: 10px;
             margin-top: 10px;
-            padding: 10px;
-            border-top: 1px solid #ddd;
             background: #fff;
             border-radius: 8px;
         }
 
         .chat-input input {
             flex: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
+            padding: 20px;
             border-radius: 5px;
             font-size: 14px;
+            border: none;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .chat-input button {
@@ -100,10 +91,30 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 14px;
+            transition: background 0.3s ease;
         }
 
         .chat-input button:hover {
             background: #E65100;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+            }
+
+            .chat-box {
+                max-height: 300px;
+            }
+
+            .chat-input {
+                flex-direction: column;
+            }
+
+            .chat-input input {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -113,9 +124,7 @@
 @section('content')
 
     <body>
-        <div class="container">
-            <h1>แชทกับผู้ขาย</h1>
-
+        <div class="container mt-2">
             <div class="profile_chat">
                 <p>ผู้ขาย</p>
                 {{ Auth::user()->user_name }}
