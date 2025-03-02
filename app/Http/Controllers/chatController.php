@@ -32,14 +32,17 @@ class ChatController extends Controller
     }
 
 
-    public function getMessagesBuyer($sellerId, $user_buyer_id)
+    public function getMessagesBuyer($sellerId, $buyerId)
     {
         try {
             $messages = DB::select("
-                                            SELECT message, user_seller_id, user_buyer_id, send_form
-                                            FROM messages
-                                            WHERE user_seller_id = ? AND user_buyer_id = ?
-                                        ", [$sellerId, $user_buyer_id]);
+                SELECT message, user_seller_id, user_buyer_id, send_form
+                FROM messages
+                WHERE (user_seller_id = ? AND user_buyer_id = ?)
+                   OR (user_seller_id = ? AND user_buyer_id = ?)
+                ORDER BY created_at ASC;
+            ", [$sellerId, $buyerId, $buyerId, $sellerId]);
+
             return response()->json([
                 'message_chat' => $messages,
             ]);
@@ -47,6 +50,7 @@ class ChatController extends Controller
             return back()->with('error', 'Error fetching messages: ' . $e->getMessage());
         }
     }
+
 
 
     public function getMessages($sellerId, $userId)
@@ -83,7 +87,7 @@ class ChatController extends Controller
                 'user_seller_id' => $request->user_seller_id,
                 'user_buyer_id' => $request->user_buyer_id,
                 'message' => $request->message,
-                'send_form' =>  $request->user_seller_id,
+                'send_form' => $request->user_seller_id,
             ]);
 
             return redirect()->back()->with('success', 'Message sent successfully.');

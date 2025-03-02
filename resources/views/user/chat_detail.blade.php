@@ -209,6 +209,7 @@
             // console.log("auth : id ", authId);
             function chatTo(id_) {
                 currentChatId = id_;
+                console.log(id_);
                 fetchMessages();
             }
             async function fetchMessages() {
@@ -225,7 +226,8 @@
                             list_chat.classList.add("li-chat");
                             list_chat.textContent = mes.message;
                             // จัดตำแหน่งข้อความ ถ้าส่งจากผู้ใช้ที่ล็อกอินให้ชิดขวา
-                            list_chat.style.textAlign = mes.send_form === authId ? "right" : "left";
+                            list_chat.style.textAlign = mes.send_form  === authId ? "right" : "left";
+                            console.log(mes.send_form , authId);
                             chatMes.appendChild(list_chat);
                         });
                         // เลื่อนลงด้านล่างอัตโนมัติ

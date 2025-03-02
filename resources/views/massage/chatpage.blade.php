@@ -146,8 +146,8 @@
 
             <form action="{{ route('chat.send') }}" method="POST" class="chat-input">
                 @csrf
-                <input type="hidden" name="user_seller_id" value="{{ $sellerId }}">
-                <input type="hidden" name="user_buyer_id" value="{{ $userId }}">
+                <input type="hidden" name="user_seller_id" value="{{$userId  }}">
+                <input type="hidden" name="user_buyer_id" value="{{ $sellerId }}">
                 <input type="text" name="message" placeholder="พิมพ์ข้อความ..." required>
                 <button type="submit">ส่ง</button>
             </form>
