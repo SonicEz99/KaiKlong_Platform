@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ProductController;
@@ -50,9 +51,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user_setting', function () {
         return view('user.usersetting');
     });
+    Route::get('/detailcar', function () {
+        return view('product.car_detail');
+    });
     Route::get('/home', function () {
         return view('user.home');
     })->name('home');
+    Route::get('/favorites', function () {
+        return view('user.favorites');
+    });
+    Route::get('/detail_chat', function () {
+        return view('user.chat_detail');
+    });
+    Route::get('/product-detail/chatsale/{id_saller}/{id_user}', [ChatController::class, 'getMessages']);
     Route::get('/admin', function () {
         return view('admin.approve');
     })->name('admin');

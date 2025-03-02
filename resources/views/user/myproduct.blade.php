@@ -225,7 +225,7 @@
                     </div>
                 </div>
             </div>
-
+        </div>
             <div class="myproduct">
                 <div class="product-header">
                     <h1>สินค้าประกาศขาย</h1>
@@ -261,13 +261,16 @@
 
                     // Clear previous content if any
                     productDetailContainer.innerHTML = '';
-
+                products.forEach(product => {
+                    const imagePath = (product.product_images && product.product_images.length >
+                        0) ?
+                        `/${product.product_images[0].image_path}` :
+                        '/path/to/placeholder.jpg';
                     products.forEach(product => {
                         const imagePath = (product.product_images && product.product_images.length >
                                 0) ?
                             `/${product.product_images[0].image_path}` :
                             '/path/to/placeholder.jpg';
-
                         productDetailContainer.innerHTML += `
                         <div class="item">
                             <img width="200" height="200"

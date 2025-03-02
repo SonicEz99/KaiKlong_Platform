@@ -25,6 +25,7 @@
 @extends('layouts.page')
 @section('content')
 
+
 <body style="font-family: 'Noto Sans Thai', 'Prompt', sans-serif;">
     <div class="container text-center mt-5">
         <h1>📌 รายการโปรด</h1>
@@ -34,6 +35,7 @@
 
     <!-- Add your footer here -->
 </body>
+
 @endsection
 
 </html>

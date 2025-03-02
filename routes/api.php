@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\chatController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\userController;
@@ -29,7 +30,7 @@ Route::get('/getApprove', [ProductController::class, 'approve']); // API endpoin
 Route::get('/getUnApprove', [ProductController::class, 'unApprove']); // API endpoint
 Route::put('/approve/{id}', [ProductController::class, 'updateApprove']);
 
-Route::get('/types',[TypeController::class, 'index']);
+Route::get('/types', [TypeController::class, 'index']);
 Route::get('/types/category/{category_id}', [TypeController::class, 'getByCategory']);
 Route::get('/types/first-ten', [TypeController::class, 'getFirstTenTypes']);
 
@@ -46,7 +47,12 @@ Route::get('/product/{id}', [ProductController::class, 'getProductById']);
 
 
 Route::post('/updateUser/{id}', [userController::class, 'updateUser']);
-Route::get('/getUser/{id}',[userController::class, 'getUser']);
+Route::get('/getUser/{id}', [userController::class, 'getUser']);
+
+
+Route::get('/peoplechat/{id}', [chatController::class, 'getPeople']);
+Route::get('/message/{id}/{buyer_id}', [chatController::class, 'getMessagesBuyer']);
+Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
 
 Route::post('/addFavorite', [favoriteController::class, 'addFavorite']);
 Route::get('/getFavorite', [favoriteController::class, 'getFavorite']);
