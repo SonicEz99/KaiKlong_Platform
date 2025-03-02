@@ -4,12 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>สินค้าผู้อื่น</title>
+    <title>สินค้าของฉัน</title>
     @vite(['resources/js/app.js'])
     <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <style>
     .container {
@@ -122,7 +121,33 @@
         display: block;
     }
 
-    .btn-detail {
+
+    .btn-detail-unapprove {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #ffc7c7;
+        color: #ff0000;
+        border: 1px solid #ff4343;
+        padding: 8px 10px;
+        border-radius: 5px;
+        width: 95%;
+        height: 40px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        margin: 10px auto;
+        margin-top: auto;
+        margin-bottom: 5px;
+        text-decoration: none;
+    }
+
+    .btn-detail-unapprove:hover {
+        background-color: #fb0000;
+        color: white;
+        position: relative;
+    }
+
+    .btn-detail-approve {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -141,7 +166,7 @@
         text-decoration: none;
     }
 
-    .btn-detail:hover {
+    .btn-detail-approve:hover {
         background-color: #FB8C00;
         color: white;
         position: relative;
@@ -201,6 +226,18 @@
         <div class="container">
             <div class="myprofile">
                 <div class="container-myprofile" id="container-myprofile">
+                    <div class="image-profile">
+                        <img src="https://cdn-icons-png.flaticon.com/512/9703/9703596.png" width="60" height="60"
+                            alt="">
+                    </div>
+                    <div class="name-profile">
+                        <p class="name-profliename">สวัสดี</p>
+                        <p class="name-profilefullname">Admin สุดหล่อ</p>
+                        <p class="name-profileuserid">ได้โปรดอนุมัติโพสต่างๆ</p>
+                    </div>
+                    <div class="btn-profile">
+                        <button>แชร์</button>
+                    </div>
                 </div>
             </div>
             <div class="myproduct">
@@ -224,62 +261,8 @@
 
     <script>
         let products = [];
-
         document.addEventListener('DOMContentLoaded', function() {
-            const urlParts = window.location.pathname.split('/');
-            const userId = urlParts[urlParts.length - 1];
-            console.log("Fetching user with ID:", userId);
-
-            fetch(`/api/getUser/${userId}`)
-                .then(response => response.json())
-                .then(response => {
-                    console.log("User data received:", response);
-
-                    const user = response.user;
-
-                    if (!user) {
-                        console.error("User data is missing in response");
-                        return;
-                    }
-
-                    const userContainer = document.getElementById('container-myprofile');
-
-                    userContainer.innerHTML = `
-                <div class="image-profile">
-                    <img src="${user.user_pic || '/path/to/default-profile.jpg'}" width="60" height="60" alt="">
-                </div>
-                <div class="name-profile">
-                    <p class="name-profliename">${user.user_name || "ไม่ระบุชื่อผู้ใช้"}</p>
-                    <p class="name-profilefullname">${user.first_name ? user.first_name : "ยังไม่ได้ตั้งชื่อ"} ${user.last_name ? user.last_name : "ยังไม่ได้ตั้งนามสกุล"}</p>
-                    <p class="name-profileuserid">หมายเลขสมาชิก kaiklong : ${user.id}</p>
-                </div>
-                <div class="btn-profile">
-                    <button id="share-profile-btn">แชร์</button>
-                </div>
-            `;
-
-                    // Add event listener to the share button
-                    document.getElementById('share-profile-btn').addEventListener('click', function() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'ทำการคัดลอกโปรไฟล์เสร็จสิ้น',
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                        }, function(err) {
-                            console.error('Could not copy text: ', err);
-                        });
-                    });
-                })
-                .catch(error => {
-                    console.error("Error fetching user details:", error);
-                    document.getElementById('container-myprofile').innerHTML =
-                        '<p style="text-align:center;padding:20px;color:#666;">เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้</p>';
-                });
-
-            fetch(`/api/getProductsByUser/${userId}`)
+            fetch(`api/getUnApprove`)
                 .then(response => response.json())
                 .then(data => {
                     console.log("Product data received:", data);
@@ -310,7 +293,8 @@
                             <p class="detail-item-location">${product.product_location}</p>
                             <p class="detail-item-price">${new Intl.NumberFormat().format(product.product_price)} บาท</p>
                         </div>
-                        <a class="btn-detail" href="/product-detail/${product.product_id}">ดูสินค้า</a>
+                        <a href="javascript:void(0)" class="btn-detail-approve" onClick="approve(${product.product_id})">อนุมัติโพส</a>
+                        <a href="javascript:void(0)" class="btn-detail-unapprove" onClick="deleteProduct(${product.product_id})">ลบโพส</a>
                     </div>
                 `;
             });
@@ -328,6 +312,64 @@
                 sortedProducts.sort((a, b) => b.product_price - a.product_price);
             }
             displayProducts(sortedProducts);
+        }
+
+        function approve(product_id) {
+            fetch(`/api/approve/${product_id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message);
+                        fetchUnapprovedProducts();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Something went wrong. Please try again.');
+                });
+        }
+
+        function deleteProduct(product_id) {
+            console.log(`Deleting product with ID: ${product_id}`); // Log to check the product ID
+
+            fetch(`/api/deleteProduct/${product_id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Delete response:", data); // Log the response from the server
+                    fetchUnapprovedProducts();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Something went wrong. Please try again.');
+                });
+        }
+
+        // This function fetches the updated list of unapproved products
+        function fetchUnapprovedProducts() {
+            fetch('api/getUnApprove')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Updated product data received:", data);
+                    products = data;
+                    displayProducts(products); // Re-render the updated product list
+                })
+                .catch(error => {
+                    console.error("Error fetching product detail:", error);
+                    document.getElementById('product-item').innerHTML =
+                        '<p style="text-align:center;padding:20px;color:#666;">เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า</p>';
+                });
         }
     </script>
 @endsection

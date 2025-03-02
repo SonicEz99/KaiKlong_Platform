@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\userController;
+use App\Http\Controllers\FavoriteController;
 
 
 Route::get('/', function () {
@@ -56,7 +57,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/home', function () {
         return view('user.home');
     })->name('home');
-
     Route::get('/favorites', function () {
         return view('user.favorites');
     });
@@ -64,6 +64,9 @@ Route::middleware('auth:sanctum')->group(function () {
         return view('user.chat_detail');
     });
     Route::get('/product-detail/chatsale/{id_saller}/{id_user}', [ChatController::class, 'getMessages']);
+    Route::get('/admin', function () {
+        return view('admin.approve');
+    })->name('admin');
 });
 
 
@@ -73,3 +76,7 @@ Route::controller(GoogleController::class)->group(function () {
     Route::middleware('web')->get('auth/google', 'redirectToGoogle')->name('auth.google');
     Route::get('auth/google/callback', 'handleGoogle');
 });
+
+Route::get('/favorites', function () {
+    return view('user.favorites');
+})->name('favorites');

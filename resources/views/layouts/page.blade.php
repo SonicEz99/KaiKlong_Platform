@@ -7,6 +7,7 @@
     <title>@yield('title', 'My Laravel App')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite(['resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <style>
@@ -320,8 +321,11 @@
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                                 <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="go(7)"><i
                                             class="bi bi-shop me-2"></i> หน้าร้านของฉัน</a></li>
-                                <li><a class="dropdown-item d-flex align-items-center" href="favorites"><i
-                                            class="bi bi-heart me-2"></i> รายการโปรด</a></li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" href="{{ url('/favorites') }}">
+                                        <i class="bi bi-heart me-2"></i> รายการโปรด
+                                    </a>
+                                </li>
                                 <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="go(4)"><i
                                             class="bi bi-person me-2"></i> ข้อมูลส่วนตัว</a></li>
                                 <li><a class="dropdown-item d-flex align-items-center " href="#"
@@ -360,20 +364,33 @@
                 window.location.href = "/user_setting"
             }else if (num === 6){
                 window.location.href = "/detail_chat"
-            }else if (num === 5) {
-                fetch('/logout', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                            'Content-Type': 'application/json'
-                        },
-                        credentials: 'include' // ✅ Ensures cookies are included
-                    })
-                    .then(response => {
-                        window.location.href = response.url || '/';
-                    })
-                    .catch(error => console.error('Logout failed:', error));
-
+            } else if (num === 5) {
+                Swal.fire({
+                    title: 'คุณแน่ใจหรือไม่?',
+                    text: "คุณต้องการออกจากระบบหรือไม่?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#gray',
+                    confirmButtonText: 'ออกจากระบบ',
+                    cancelButtonText: 'ยกเลิก'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch('/logout', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                        .getAttribute('content'),
+                                    'Content-Type': 'application/json'
+                                },
+                                credentials: 'include' // ✅ Ensures cookies are included
+                            })
+                            .then(response => {
+                                window.location.href = response.url || '/';
+                            })
+                            .catch(error => console.error('Logout failed:', error));
+                    }
+                });
             } else if (num === 7) {
                 window.location.href = "/my-product";
             }

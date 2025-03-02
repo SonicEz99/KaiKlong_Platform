@@ -7,6 +7,7 @@ use App\Http\Controllers\userController;
 use App\Http\Controllers\brandController;
 use App\Http\Controllers\productController;
 use App\Http\Controllers\categoryController;
+use App\Http\Controllers\favoriteController;
 use App\Http\Controllers\authController; // Correct the capitalization here
 use App\Http\Controllers\TypeController; // Correct the capitalization here
 
@@ -23,6 +24,11 @@ Route::get('/categoriesBrandAndType/{id}', [CategoryController::class, 'getCateg
 Route::get('/get24product', [productController::class, 'getProduct24']);
 Route::get('/get24productsearch', [ProductController::class, 'getFilteredProducts']); // API endpoint
 Route::get('/getProductsByUser/{id}', [ProductController::class, 'getProductsByUserId']); // API endpoint
+Route::get('/deleteProduct/{id}', [ProductController::class, 'deleteProduct']); // API endpoint
+
+Route::get('/getApprove', [ProductController::class, 'approve']); // API endpoint
+Route::get('/getUnApprove', [ProductController::class, 'unApprove']); // API endpoint
+Route::put('/approve/{id}', [ProductController::class, 'updateApprove']);
 
 Route::get('/types', [TypeController::class, 'index']);
 Route::get('/types/category/{category_id}', [TypeController::class, 'getByCategory']);
@@ -47,6 +53,10 @@ Route::get('/getUser/{id}', [userController::class, 'getUser']);
 Route::get('/peoplechat/{id}', [chatController::class, 'getPeople']);
 Route::get('/message/{id}/{buyer_id}', [chatController::class, 'getMessagesBuyer']);
 Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
+
+Route::post('/addFavorite', [favoriteController::class, 'addFavorite']);
+Route::get('/getFavorite', [favoriteController::class, 'getFavorite']);
+Route::delete('/deleteFavorite/{id}', [favoriteController::class, 'deleteFavorite']);
 
 // Protected routes (Require authentication)
 Route::middleware('auth:sanctum')->group(function () {

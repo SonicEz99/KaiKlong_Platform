@@ -10,6 +10,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
         rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .product-card {
             display: flex;
@@ -60,12 +61,6 @@
             display: flex;
             flex-direction: column;
             width: 60%;
-        }
-
-        .product-title {
-            font-size: 24px;
-            margin-bottom: 10px;
-            font-weight: bold;
         }
 
         .product-price {
@@ -244,6 +239,57 @@
             align-items: center;
             justify-content: center;
         }
+
+        .btn-share {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-share svg {
+            width: 35px;
+            height: 35px;
+        }
+
+        .btn-share:hover svg {
+            fill: #FF8C00;
+        }
+
+        .btn-favorite {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            padding-bottom: 7px;
+        }
+
+        .btn-favorite svg {
+            width: 35px;
+            height: 35px;
+        }
+
+        .btn-favorite.active svg {
+            fill: #FF8C00;
+        }
+
+        .product-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
     </style>
 </head>
 
@@ -308,6 +354,7 @@
                                                         ?>
 
                         productDetailContainer.innerHTML = `
+
                                                                                         <div class="product-card">
                                                                                             <div class="image-add">
                                                                                                 <div class="product-image-container">
@@ -366,10 +413,6 @@
                                                                                             </div>
                                                                                         </div>
                                                                                     `;
-
-
-
-
 
                         // เพิ่มฟังก์ชันคลิกที่ภาพเพิ่มเติมเพื่อเปลี่ยนภาพหลัก
                         const productImage = document.querySelector('.product-image'); // รูปหลัก
@@ -450,9 +493,30 @@
                     console.log("Image or container not found again!");
                 }
             }, 2000); // รอ 2 วินาทีให้ DOM โหลดก่อน
+            function shareProduct() {
+                const url = window.location.href;
+                navigator.clipboard.writeText(url).then(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'คัดลอกลิงก์เสร็จสิ้น',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            }
 
-
-
+            function toggleFavorite() {
+                const favoriteButton = document.querySelector('.btn-favorite');
+                const isActive = favoriteButton.classList.toggle('active');
+                Swal.fire({
+                    icon: isActive ? 'success' : 'info',
+                    title: isActive ? 'เพิ่มสินค้าไปยังรายการโปรดแล้ว' : 'นำสินค้าออกจากรายการโปรดแล้ว',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
         </script>
     </body>
 @endsection
