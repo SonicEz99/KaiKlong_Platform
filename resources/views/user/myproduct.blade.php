@@ -293,7 +293,7 @@
 
             // Add event listener to the share button
             document.getElementById('share-profile-btn').addEventListener('click', function() {
-                const url = window.location.href;
+                const url = "http://127.0.0.1:8000/product-listing/<?php echo $user->id; ?>";
                 navigator.clipboard.writeText(url).then(function() {
                     Swal.fire({
                         icon: 'success',
@@ -316,7 +316,7 @@
                 .catch(error => {
                     console.error("Error fetching product detail:", error);
                     document.getElementById('product-item').innerHTML =
-                        '<p style="text-align:center;padding:20px;color:#666;">เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า</p>';
+                        '<p style="text-align:center;padding:20px;color:#666;">ไม่พบข้อมูลสินค้า</p>';
                 });
         });
 

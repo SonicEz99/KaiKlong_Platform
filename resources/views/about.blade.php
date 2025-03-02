@@ -2,12 +2,13 @@
 <html>
 
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Noto Sans Thai', 'Prompt', sans-serif;
         }
 
         body {
@@ -177,48 +178,48 @@
 @extends('layouts.page')
 @section('content')
 
-    <body>
-        <div class="containerProfile">
-            <h1>Our Team</h1>
-            <div class="team-grid">
-                <div class="team-member">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="John Doe" class="profile-img">
-                    <div class="member-info">
-                        <h2 class="member-name">John Doe</h2>
-                        <p class="member-id">ID: JD001</p>
-                        <p class="member-position">Chief Executive Officer</p>
-                    </div>
+<body>
+    <div class="containerProfile">
+        <h1>Our Team</h1>
+        <div class="team-grid">
+            <div class="team-member">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7ft7binCwq2KY4nXgmZk-eioIHbh83GamZg&s" alt="John Doe" class="profile-img">
+                <div class="member-info">
+                    <h2 class="member-name">ธนารัตน์ สุดใจ</h2>
+                    <p class="member-id">ID: JD001</p>
+                    <p class="member-position">CEO บริษัทขายคล่อง</p>
                 </div>
+            </div>
 
-                <div class="team-member">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Jane Smith" class="profile-img">
-                    <div class="member-info">
-                        <h2 class="member-name">Jane Smith</h2>
-                        <p class="member-id">ID: JS002</p>
-                        <p class="member-position">Creative Director</p>
-                    </div>
+            <div class="team-member">
+                <img src="https://preview.redd.it/can-someone-photoshop-my-face-onto-this-meme-but-keep-the-v0-1kg7g9ub12fa1.jpg?width=905&format=pjpg&auto=webp&s=c9ea963d1ef07e9f925e2bcc5ed4e364ae031c12" alt="Mike Johnson" class="profile-img">
+                <div class="member-info">
+                    <h2 class="member-name">ณัฐกานต์ ราฟนิค</h2>
+                    <p class="member-id">ID: MJ003</p>
+                    <p class="member-position">หัวหน้าฝ่ายการตลาด</p>
                 </div>
+            </div>
 
-                <div class="team-member">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Mike Johnson" class="profile-img">
-                    <div class="member-info">
-                        <h2 class="member-name">Mike Johnson</h2>
-                        <p class="member-id">ID: MJ003</p>
-                        <p class="member-position">Technical Lead</p>
-                    </div>
+            <div class="team-member">
+                <img src="https://preview.redd.it/can-someone-photoshop-my-face-onto-this-meme-but-keep-the-v0-1kg7g9ub12fa1.jpg?width=905&format=pjpg&auto=webp&s=c9ea963d1ef07e9f925e2bcc5ed4e364ae031c12" alt="Mike Johnson" class="profile-img">
+                <div class="member-info">
+                    <h2 class="member-name">จักรกฤษ จันทร์ทุ่ง</h2>
+                    <p class="member-id">ID: MJ003</p>
+                    <p class="member-position">หัวหน้าฝ่ายการตลาด</p>
                 </div>
+            </div>
 
-                <div class="team-member">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Sarah Williams" class="profile-img">
-                    <div class="member-info">
-                        <h2 class="member-name">Sarah Williams</h2>
-                        <p class="member-id">ID: SW004</p>
-                        <p class="member-position">Marketing Manager</p>
-                    </div>
+            <div class="team-member">
+                <img src="https://media.istockphoto.com/id/957318582/photo/passed-out-man-drooling-in-bed.jpg?s=612x612&w=0&k=20&c=4wJ2pSred_Elfl8di6UwNgSR3fMT05l-91Er6pYngKo=" alt="Sarah Williams" class="profile-img">
+                <div class="member-info">
+                    <h2 class="member-name">อรณี โสมินทร์</h2>
+                    <p class="member-id">ID: SW004</p>
+                    <p class="member-position">หัวหน้าฝ่ายสนับสนุนการพักผ่อน</p>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</body>
 @endsection
 
 </html>
