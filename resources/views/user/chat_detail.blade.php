@@ -6,11 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>รายการเเชทสนทนา</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
+        rel="stylesheet">
     @vite(['resources/js/app.js'])
 </head>
 <style>
     body {
-        font-family: 'Kanit', 'Prompt', sans-serif;
         background-color: #f5f7fa;
         margin: 0;
         padding: 0;
@@ -182,7 +184,7 @@
                                                                                     ?>
 
 
-    <body>
+    <body style="font-family: 'Prompt', sans-serif;">
         <div class="container">
             <div class="container_chat d-flex gap-2">
                 <div class="list" id="list">
