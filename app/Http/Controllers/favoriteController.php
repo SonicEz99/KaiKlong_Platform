@@ -30,7 +30,7 @@ class favoriteController extends Controller
 
             if ($isInFav) {
                 $isInFav->delete();
-                return response()->json(['success' => 'Favorite removed successfully!']);
+                return response()->json(['success' => 'Favorite removed successfully!'],200);
             } else {
                 $favoriteData = [
                     'user_id' => $userId,
@@ -38,7 +38,7 @@ class favoriteController extends Controller
                 ];
 
                 $favorite = Favorite::create($favoriteData);
-                return response()->json(['success' => 'Favorite added successfully!', 'favorite' => $favorite]);
+                return response()->json(['success' => 'Favorite added successfully!', 'favorite' => $favorite],201);
             }
 
         } catch (\InvalidArgumentException $e) {
