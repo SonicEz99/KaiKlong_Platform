@@ -70,44 +70,65 @@
         display: flex;
         flex-direction: column;
         border: none;
+        flex-grow: 1; /* Add this line */
     }
 
     #chat_mes {
         list-style: none;
-        padding: 0;
+        padding: 15px;
         margin: 0;
         overflow-y: auto;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
         gap: 10px;
+        height: calc(100% - 80px);
     }
 
     .li-chat {
         max-width: 70%;
-        padding: 10px 15px;
-        border-radius: 18px;
+        padding: 5px 10px;
         margin: 5px 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .li-chat[style*="text-align: right"] {
+        margin-left: auto;
+        align-items: flex-end;
+    }
+
+    .li-chat[style*="text-align: left"] {
+        margin-right: auto;
+        align-items: flex-start;
+    }
+
+    .message-content {
+        padding: 12px 16px;
+        border-radius: 15px;
+        max-width: 100%;
         word-break: break-word;
-        position: relative;
-        color: white;
     }
 
     /* Sender message style */
-    .li-chat[style*="text-align: right"] {
+    .li-chat[style*="text-align: right"] .message-content {
         background-color: rgb(255, 139, 61);
-        align-self: flex-end;
+        color: white;
         border-bottom-right-radius: 5px;
-        margin-left: auto;
     }
 
     /* Receiver message style */
-    .li-chat[style*="text-align: left"] {
+    .li-chat[style*="text-align: left"] .message-content {
         background-color: #e6e6e6;
         color: #333;
-        align-self: flex-start;
         border-bottom-left-radius: 5px;
-        margin-right: auto;
+    }
+
+    .message-time {
+        font-size: 0.75em;
+        color: #999;
+        margin-top: 4px;
+        padding: 0 4px;
     }
 
     /* Add message input area */
@@ -205,8 +226,7 @@
                 if (!currentChatId) return;
 
                 try {
-                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute(
-                        'content'); // Get CSRF token
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // Get CSRF token
                     const response = await fetch(`/api/message/${authId}/${currentChatId}`, {
                         method: "GET",
                         headers: {
@@ -228,7 +248,10 @@
                         data.message_chat.forEach(mes => {
                             const list_chat = document.createElement("li");
                             list_chat.classList.add("li-chat");
-                            list_chat.textContent = mes.message;
+                            list_chat.innerHTML = `
+                                <div class="message-content">${mes.message}</div>
+                                <div class="message-time">${new Date(mes.created_at).toLocaleTimeString()}</div>
+                            `;
                             list_chat.style.textAlign = mes.send_form === authId ? "right" : "left";
                             chatMes.appendChild(list_chat);
                         });
