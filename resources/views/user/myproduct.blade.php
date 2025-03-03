@@ -122,7 +122,7 @@
         display: block;
     }
 
-    .detail-item-status{
+    .detail-item-status {
         font-size: 1rem;
         color: #666;
         margin-bottom: 8px;
@@ -225,7 +225,6 @@
                     </div>
                 </div>
             </div>
-        </div>
             <div class="myproduct">
                 <div class="product-header">
                     <h1>สินค้าประกาศขาย</h1>
@@ -261,14 +260,8 @@
 
                     // Clear previous content if any
                     productDetailContainer.innerHTML = '';
-                products.forEach(product => {
-                    const imagePath = (product.product_images && product.product_images.length >
-                        0) ?
-                        `/${product.product_images[0].image_path}` :
-                        '/path/to/placeholder.jpg';
                     products.forEach(product => {
-                        const imagePath = (product.product_images && product.product_images.length >
-                                0) ?
+                        const imagePath = (product.product_images && product.product_images.length > 0) ?
                             `/${product.product_images[0].image_path}` :
                             '/path/to/placeholder.jpg';
                         productDetailContainer.innerHTML += `
@@ -339,6 +332,7 @@
                             <p class="detail-item-name">${product.product_name}</p>
                             <p class="detail-item-location">${product.product_location}</p>
                             <p class="detail-item-price">${new Intl.NumberFormat().format(product.product_price)} บาท</p>
+                            <p class="detail-item-status">สถานะ <strong style="color: ${product.product_approve === 'ไม่อนุมัติ' ? 'red' : 'green'};">${product.product_approve}</strong></p>
                         </div>
                         <a class="btn-detail" href="/product-detail/${product.product_id}">ดูสินค้า</a>
                     </div>
