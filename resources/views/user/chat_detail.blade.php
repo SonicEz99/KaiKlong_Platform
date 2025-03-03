@@ -91,19 +91,6 @@
         word-break: break-word;
         position: relative;
         color: white;
-        animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
     }
 
     /* Sender message style */
@@ -181,8 +168,7 @@
 @section('content')
     <?php
     $user = Auth::user();
-                                                                                    ?>
-
+    ?>
 
     <body style="font-family: 'Prompt', sans-serif;">
         <div class="container">
@@ -208,18 +194,20 @@
         <script>
             const authId = <?php echo Auth::id(); ?>;
             let currentChatId = null;
-            // console.log("auth : id ", authId);
+
             function chatTo(id_) {
                 currentChatId = id_;
                 console.log(id_);
                 fetchMessages();
             }
+
             async function fetchMessages() {
                 if (!currentChatId) return;
                 try {
                     const response = await fetch(`/api/message/${authId}/${currentChatId}`);
                     const data = await response.json();
                     const chatMes = document.getElementById("chat_mes");
+                    const isAtBottom = chatMes.scrollHeight - chatMes.scrollTop === chatMes.clientHeight;
                     chatMes.innerHTML = "";
 
                     if (data.message_chat && data.message_chat.length > 0) {
@@ -227,26 +215,24 @@
                             const list_chat = document.createElement("li");
                             list_chat.classList.add("li-chat");
                             list_chat.textContent = mes.message;
-                            // จัดตำแหน่งข้อความ ถ้าส่งจากผู้ใช้ที่ล็อกอินให้ชิดขวา
-                            list_chat.style.textAlign = mes.send_form  === authId ? "right" : "left";
-                            console.log(mes.send_form , authId);
+                            list_chat.style.textAlign = mes.send_form === authId ? "right" : "left";
+                            console.log(mes.send_form, authId);
                             chatMes.appendChild(list_chat);
                         });
-                        // เลื่อนลงด้านล่างอัตโนมัติ
-                        chatMes.scrollTop = chatMes.scrollHeight;
+                        if (isAtBottom) {
+                            chatMes.scrollTop = chatMes.scrollHeight;
+                        }
                     }
                 } catch (error) {
                     console.error("Error fetching messages:", error);
                 }
             }
+
             async function sendMessage() {
                 const messageInput = document.querySelector(".message-input");
                 const messageText = messageInput.value.trim();
 
-                // ตรวจสอบว่ามีข้อความหรือไม่
                 if (!messageText) return;
-
-                // ตรวจสอบว่ามีการเลือกแชท (currentChatId) หรือไม่
                 if (!currentChatId) {
                     console.error("ไม่มีการเลือกแชท");
                     return;
@@ -254,15 +240,14 @@
 
                 console.log(messageText, authId, currentChatId);
 
-
                 try {
                     const chatMes = document.getElementById("chat_mes");
                     const response = await axios.post(
                         "/api/chat/send",
                         {
                             message: messageText,
-                            user_seller_id: authId,      // ผู้ส่งคือผู้ใช้ที่ล็อกอิน
-                            user_buyer_id: currentChatId // ผู้รับคือผู้ที่เลือกแชท
+                            user_seller_id: authId,
+                            user_buyer_id: currentChatId
                         },
                         {
                             headers: {
@@ -274,39 +259,30 @@
                         }
                     );
 
-                 
                     fetchMessages();
                 } catch (error) {
                     console.error("เกิดข้อผิดพลาดในการเชื่อมต่อ API: ", error);
                 }
             }
 
-
-
             function fetchPeopleChat() {
                 fetch(`/api/peoplechat/${authId}`)
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data); // ตรวจสอบข้อมูลที่ได้รับจาก API
+                        console.log(data);
                         const peopleList = data.users;
                         const peopleChatContainer = document.getElementById('list');
-
-                        // ล้างข้อมูลเก่า
                         peopleChatContainer.innerHTML = '';
 
-                        // ตรวจสอบว่า `peopleList` มีข้อมูลหรือไม่
                         if (peopleList && peopleList.length > 0) {
-                            // แสดงปุ่มสำหรับแต่ละคน
                             peopleList.forEach(user => {
                                 const userButton = document.createElement('button');
                                 userButton.classList.add('chat', 'd-flex', 'gap-3');
                                 userButton.setAttribute('onclick', `chatTo(${user.id})`);
                                 userButton.innerHTML = `
-                                                                                                        <img src="${user.user_pic}" alt="" width="50" height="50">
-                                                                                                        ${user.user_name}
-                                                                                                    `;
-
-                                // เพิ่มปุ่มลงใน container
+                                    <img src="${user.user_pic}" alt="" width="50" height="50">
+                                    ${user.user_name}
+                                `;
                                 peopleChatContainer.appendChild(userButton);
                             });
                         } else {
@@ -316,12 +292,11 @@
                     .catch(error => console.error('Error fetching data:', error));
             }
 
-            // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูล
             fetchPeopleChat();
+
+            setInterval(fetchMessages, 1000);
         </script>
     </body>
 @endsection
-
-
 
 </html>
