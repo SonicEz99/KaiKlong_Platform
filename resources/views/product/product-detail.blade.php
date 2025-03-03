@@ -305,7 +305,7 @@
 
         <script>
             let id_customer = <?php echo auth()->id(); ?>
-
+            
             function favorites(id_product) {
                 console.log("Product : ", id_product, "Customer : ", id_customer);
 
@@ -328,6 +328,10 @@
                     });
             }
 
+            function chatSale(id_saler) {
+                console.log(id_saler, id_customer);
+                window.location.href = `chatsale/${id_saler}/${id_customer}`
+            }
 
 
             document.addEventListener('DOMContentLoaded', function() {
@@ -381,9 +385,9 @@
                                 <div class="additional-images">
                                     <div class="image-gallery">
                                         ${product.product_images.slice(1).map(img => `
-                                                                                                                                                                                                                                                                                                                                            <img class="additional-image" src="/${img.image_path}" alt="${product.product_name}"
-                                                                                                                                                                                                                                                                                                                                                loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
-                                                                                                                                                                                                                                                                                                                                        `).join('')}
+                                                                                                                                                                                                                                                                                                                                                            <img class="additional-image" src="/${img.image_path}" alt="${product.product_name}"
+                                                                                                                                                                                                                                                                                                                                                                loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
+                                                                                                                                                                                                                                                                                                                                                        `).join('')}
                                     </div>
 
 
@@ -411,7 +415,7 @@
                                                                 font-size: 22px;">${product.user?.user_name || 'ไม่ระบุ'}</span>
                                 </div>
 
-                                <button class="btn-chat">คุยกับผู้ขาย</button>
+                                <button class="btn-chat" onClick="chatSale(${product.user_id})">คุยกับผู้ขาย</button>
 
                                 ${productFeature}
 
