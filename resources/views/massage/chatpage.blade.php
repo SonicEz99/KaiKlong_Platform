@@ -133,11 +133,11 @@
             </div>
 
             <div class="chat-box">
-                @if($messages->isEmpty())
+                @if ($messages->isEmpty())
                     <p style="text-align: center; color: #777;">ไม่มีข้อความ</p>
                 @else
-                    @foreach($messages as $message)
-                        @if($message->send_form == $sellerId)
+                    @foreach ($messages as $message)
+                        @if ($message->send_form  == $sellerId)
                             <p class="chat-message seller-message">{{ $message->message }}</p>
                         @else
                             <p class="chat-message buyer-message">{{ $message->message }}</p>
@@ -145,17 +145,31 @@
                     @endforeach
                 @endif
             </div>
-
             <form action="{{ route('chat.send') }}" method="POST" class="chat-input">
                 @csrf
-                <input type="hidden" name="user_seller_id" value="{{$userId  }}">
+                <input type="hidden" name="user_seller_id" value="{{ $userId }}">
                 <input type="hidden" name="user_buyer_id" value="{{ $sellerId }}">
                 <input type="text" name="message" placeholder="พิมพ์ข้อความ..." required>
                 <button type="submit">ส่ง</button>
             </form>
         </div>
     </body>
-
 @endsection
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        async function fetchMessages() {
+            try {
+                const response = await fetch(`/message/{{ $sellerId }}/{{ $userId }}`);
+                const data = await response.text(); // รับ response เป็น HTML
+                document.querySelector(".chat-box").innerHTML = data;
+            } catch (error) {
+                console.error("Error fetching messages:", error);
+            }
+        }
+
+        // โหลดข้อความใหม่ทุกๆ 3 วินาที
+        setInterval(fetchMessages, 3000);
+    });
+</script>
 
 </html>

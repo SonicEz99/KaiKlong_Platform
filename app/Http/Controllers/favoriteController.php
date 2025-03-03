@@ -19,6 +19,8 @@ class favoriteController extends Controller
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 500);
             }
+            
+            
 
             $favoriteData = [
                 'user_id' => $request->input('user_id'),
