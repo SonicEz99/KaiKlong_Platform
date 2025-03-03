@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>รายละเอียดสินค้า</title>
     @vite(['resources/js/app.js'])
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
         rel="stylesheet">
@@ -305,14 +306,17 @@
 
         <script>
             let id_customer = <?php echo auth()->id(); ?>
-            
+
             function favorites(id_product) {
                 console.log("Product : ", id_product, "Customer : ", id_customer);
+
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
                 fetch(`/api/addFavorite`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": csrfToken
                         },
                         body: JSON.stringify({
                             user_id: id_customer,
@@ -385,9 +389,9 @@
                                 <div class="additional-images">
                                     <div class="image-gallery">
                                         ${product.product_images.slice(1).map(img => `
-                                                                                                                                                                                                                                                                                                                                                            <img class="additional-image" src="/${img.image_path}" alt="${product.product_name}"
-                                                                                                                                                                                                                                                                                                                                                                loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
-                                                                                                                                                                                                                                                                                                                                                        `).join('')}
+                                                                                                                                                                                                                                                                                                                                                                                            <img class="additional-image" src="/${img.image_path}" alt="${product.product_name}"
+                                                                                                                                                                                                                                                                                                                                                                                                loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
+                                                                                                                                                                                                                                                                                                                                                                                        `).join('')}
                                     </div>
 
 
@@ -399,7 +403,7 @@
                                 <div class="product-title">
                                     {{ $product->product_name }}
 
-                                    <button class="btn-favorite" onClick="favorites(${product.product_id})">
+                                    <button class="btn-favorite" onClick="toggleFavorite(); favorites({{ $product->product_id }})">
                                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z" stroke="#FB8C00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                                     </button>
 
@@ -548,6 +552,20 @@
                     timer: 1500
                 });
             }
+
+            // Set initial state to "Favorite removed successfully!"
+            document.addEventListener('DOMContentLoaded', function() {
+                const favoriteButton = document.querySelector('.btn-favorite');
+                if (favoriteButton) {
+                    favoriteButton.classList.add('active');
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'นำสินค้าออกจากรายการโปรดแล้ว',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            });
         </script>
     </body>
 @endsection

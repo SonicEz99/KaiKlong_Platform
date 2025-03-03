@@ -57,7 +57,7 @@ class favoriteController extends Controller
     {
         try {
             
-            $favorites = Favorite::with(['user', 'product'])->where('user_id',$id)->get();
+            $favorites = Favorite::with(['user', 'product', 'product.productImages'])->where('user_id',$id)->get();
 
             return response()->json(['favorites' => $favorites], 200);
         } catch (\Exception $e) {

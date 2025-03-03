@@ -213,11 +213,11 @@
                     <div class="name-profile">
                         <p class="name-profliename"><?php echo $user->user_name; ?></p>
                         <p class="name-profilefullname">
-                            <?php 
-                                echo ($user->first_name ?? "ยังไม่ได้ตั้งชื่อ") . " " . ($user->last_name ?? "ยังไม่ได้ตั้งนามสกุล"); 
+                            <?php
+                            echo ($user->first_name ?? 'ยังไม่ได้ตั้งชื่อ') . ' ' . ($user->last_name ?? 'ยังไม่ได้ตั้งนามสกุล');
                             ?>
                         </p>
-                        
+
                         <p class="name-profileuserid">หมายเลขสมาชิก kaiklong-00-<?php echo $user->id; ?></p>
                     </div>
                     <div class="btn-profile">
@@ -262,11 +262,11 @@
                 });
             });
 
-            fetch(`/api/getProductsByUser/<?php echo $user->id; ?>`)
+            fetch(`/api/getFavorite/<?php echo $user->id; ?>`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Product data received:", data);
-                    products = data;
+                    console.log("Product data received:", data.favorites);
+                    products = data.favorites.map(favorite => favorite.product);
                     displayProducts(products);
                 })
                 .catch(error => {
@@ -286,16 +286,16 @@
                     '/path/to/placeholder.jpg';
 
                 productDetailContainer.innerHTML += `
-                    <div class="item">
-                        <img width="200" height="200" src="${imagePath}" alt="${product.product_name}">
-                        <div class="detail-item">
-                            <p class="detail-item-name">${product.product_name}</p>
-                            <p class="detail-item-location">${product.product_location}</p>
-                            <p class="detail-item-price">${new Intl.NumberFormat().format(product.product_price)} บาท</p>
-                        </div>
-                        <a class="btn-detail" href="/product-detail/${product.product_id}">ดูสินค้า</a>
-                    </div>
-                `;
+            <div class="item">
+                <img width="200" height="200" src="${imagePath}" alt="${product.product_name}">
+                <div class="detail-item">
+                    <p class="detail-item-name">${product.product_name}</p>
+                    <p class="detail-item-location">${product.product_location}</p>
+                    <p class="detail-item-price">${new Intl.NumberFormat().format(product.product_price)} บาท</p>
+                </div>
+                <a class="btn-detail" href="/product-detail/${product.product_id}">ดูสินค้า</a>
+            </div>
+        `;
             });
         }
 
