@@ -206,7 +206,7 @@
 
                 try {
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute(
-                    'content'); // Get CSRF token
+                        'content'); // Get CSRF token
                     const response = await fetch(`/api/message/${authId}/${currentChatId}`, {
                         method: "GET",
                         headers: {
@@ -242,7 +242,6 @@
                 }
             }
 
-
             async function sendMessage() {
                 const messageInput = document.querySelector(".message-input");
                 const messageText = messageInput.value.trim();
@@ -273,6 +272,7 @@
                     );
 
                     fetchMessages();
+                    messageInput.value = ""; // Clear the message input field
                 } catch (error) {
                     console.error("เกิดข้อผิดพลาดในการเชื่อมต่อ API: ", error);
                 }
@@ -308,6 +308,14 @@
             fetchPeopleChat();
 
             setInterval(fetchMessages, 1000);
+
+            // Add event listener for Enter key
+            document.querySelector(".message-input").addEventListener("keydown", function(event) {
+                if (event.key === "Enter" && !event.shiftKey) {
+                    event.preventDefault();
+                    sendMessage();
+                }
+            });
         </script>
     </body>
 @endsection
