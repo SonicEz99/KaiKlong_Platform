@@ -3,77 +3,59 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use App\Models\Message;
+use App\Models\User;
 
 class ChatController extends Controller
 {
+    /**
+     * Get all users the authenticated user has chatted with.
+     */
     public function getPeople($id)
     {
-        $authId = $id;
+        $messages = Message::where('user_seller_id', $id)
+            ->orWhere('user_buyer_id', $id)
+            ->select('user_seller_id', 'user_buyer_id')
+            ->get();
 
-        $messages = DB::select("
-        SELECT message, user_seller_id, user_buyer_id, send_form
-        FROM messages
-        WHERE user_seller_id = ? OR user_buyer_id = ?
-    ", [$authId, $authId]);
+        // Get unique user IDs except the authenticated user
+        $otherUserIds = collect($messages)->pluck('user_seller_id')
+            ->merge($messages->pluck('user_buyer_id'))
+            ->unique()
+            ->reject(fn($userId) => $userId == $id);
 
-        $otherUserIds = collect($messages)->pluck('user_seller_id')->merge(collect($messages)->pluck('user_buyer_id'))->unique()->filter(function ($id) use ($authId) {
-            return $id != $authId;
-        });
-
-        $users = DB::select("SELECT * FROM users WHERE id IN (" . implode(",", $otherUserIds->toArray()) . ")");
+        // Fetch users in a single query
+        $users = User::whereIn('id', $otherUserIds)->get();
 
         return response()->json([
             'users' => $users,
-            'message' => $messages
         ]);
     }
 
-
+    /**
+     * Get messages between two users (either buyer or seller).
+     */
     public function getMessagesBuyer($sellerId, $buyerId)
     {
-        try {
-            $messages = DB::select("
-                SELECT message, user_seller_id, user_buyer_id, send_form
-                FROM messages
-                WHERE (user_seller_id = ? AND user_buyer_id = ?)
-                   OR (user_seller_id = ? AND user_buyer_id = ?)
-                ORDER BY created_at ASC;
-            ", [$sellerId, $buyerId, $buyerId, $sellerId]);
+        $messages = Message::where(function ($query) use ($sellerId, $buyerId) {
+            $query->where('user_seller_id', $sellerId)
+                ->where('user_buyer_id', $buyerId);
+        })
+        ->orWhere(function ($query) use ($sellerId, $buyerId) {
+            $query->where('user_seller_id', $buyerId)
+                ->where('user_buyer_id', $sellerId);
+        })
+        ->orderBy('created_at', 'asc')
+        ->get();
 
-            return response()->json([
-                'message_chat' => $messages,
-            ]);
-        } catch (\Exception $e) {
-            return back()->with('error', 'Error fetching messages: ' . $e->getMessage());
-        }
+        return response()->json([
+            'message_chat' => $messages,
+        ]);
     }
 
-
-
-    public function getMessages($sellerId, $userId)
-    {
-        try {
-            $messages = Message::where(function ($query) use ($sellerId, $userId) {
-                $query->where('user_seller_id', $sellerId)
-                    ->where('user_buyer_id', $userId);
-            })
-                ->orWhere(function ($query) use ($sellerId, $userId) {
-                    $query->where('user_seller_id', $userId)
-                        ->where('user_buyer_id', $sellerId);
-                })
-                ->orderBy('created_at', 'asc')
-                ->get();
-
-            return view('massage.chatpage', compact('messages', 'sellerId', 'userId'));
-        } catch (\Exception $e) {
-            return back()->with('error', 'Error fetching messages: ' . $e->getMessage());
-        }
-    }
-
-
+    /**
+     * Send a message from one user to another.
+     */
     public function sendMessage(Request $request)
     {
         $request->validate([
@@ -83,19 +65,19 @@ class ChatController extends Controller
         ]);
 
         try {
-            Message::create([
+            $message = Message::create([
                 'user_seller_id' => $request->user_seller_id,
                 'user_buyer_id' => $request->user_buyer_id,
                 'message' => $request->message,
                 'send_form' => $request->user_seller_id,
             ]);
 
-            return redirect()->back()->with('success', 'Message sent successfully.');
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+            ]);
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to send message: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to send message: ' . $e->getMessage()], 500);
         }
     }
-
 }
-
-

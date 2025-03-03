@@ -203,8 +203,22 @@
 
             async function fetchMessages() {
                 if (!currentChatId) return;
+
                 try {
-                    const response = await fetch(`/api/message/${authId}/${currentChatId}`);
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute(
+                    'content'); // Get CSRF token
+                    const response = await fetch(`/api/message/${authId}/${currentChatId}`, {
+                        method: "GET",
+                        headers: {
+                            "X-CSRF-TOKEN": csrfToken, // Add CSRF token
+                            "Accept": "application/json", // Ensure JSON response
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
                     const data = await response.json();
                     const chatMes = document.getElementById("chat_mes");
                     const isAtBottom = chatMes.scrollHeight - chatMes.scrollTop === chatMes.clientHeight;
@@ -216,9 +230,9 @@
                             list_chat.classList.add("li-chat");
                             list_chat.textContent = mes.message;
                             list_chat.style.textAlign = mes.send_form === authId ? "right" : "left";
-                            console.log(mes.send_form, authId);
                             chatMes.appendChild(list_chat);
                         });
+
                         if (isAtBottom) {
                             chatMes.scrollTop = chatMes.scrollHeight;
                         }
@@ -227,6 +241,7 @@
                     console.error("Error fetching messages:", error);
                 }
             }
+
 
             async function sendMessage() {
                 const messageInput = document.querySelector(".message-input");
@@ -243,13 +258,11 @@
                 try {
                     const chatMes = document.getElementById("chat_mes");
                     const response = await axios.post(
-                        "/api/chat/send",
-                        {
+                        "/api/chat/send", {
                             message: messageText,
                             user_seller_id: authId,
                             user_buyer_id: currentChatId
-                        },
-                        {
+                        }, {
                             headers: {
                                 "Content-Type": "application/json",
                                 "X-CSRF-TOKEN": document
