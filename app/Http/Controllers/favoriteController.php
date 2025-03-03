@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Favorite;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class favoriteController extends Controller
 {
@@ -52,10 +53,11 @@ class favoriteController extends Controller
         }
     }
 
-    public function getFavorite()
+    public function getFavorite($id)
     {
         try {
-            $favorites = Favorite::with(['user', 'product'])->get();
+            
+            $favorites = Favorite::with(['user', 'product'])->where('user_id',$id)->get();
 
             return response()->json(['favorites' => $favorites], 200);
         } catch (\Exception $e) {

@@ -55,7 +55,7 @@ Route::get('/message/{id}/{buyer_id}', [chatController::class, 'getMessagesBuyer
 Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
 
 Route::post('/addFavorite', [favoriteController::class, 'addFavorite']);
-Route::get('/getFavorite', [favoriteController::class, 'getFavorite']);
+Route::get('/getFavorite/{id}', [favoriteController::class, 'getFavorite']);
 Route::delete('/deleteFavorite/{id}', [favoriteController::class, 'deleteFavorite']);
 
 // Protected routes (Require authentication)
