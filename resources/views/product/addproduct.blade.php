@@ -60,8 +60,11 @@
             padding: 10px;
         }
 
-        .navbar {
-            font-family: 'Noto Sans Thai', 'Prompt', sans-serif;
+        body, 
+        .navbar,
+        footer,
+        * {
+            font-family: 'Noto Sans Thai', 'Prompt', sans-serif !important;
         }
     </style>
 </head>
