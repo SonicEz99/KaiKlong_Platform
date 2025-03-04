@@ -10,6 +10,7 @@
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <style>
     .container {
@@ -196,6 +197,28 @@
         background-color: #FB8C00;
         color: white;
     }
+
+    .btn-remove {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #ffe5e5;
+        color: #FF0000;
+        border: 1px solid #FF0000;
+        padding: 8px 10px;
+        border-radius: 5px;
+        width: 95%;
+        height: 40px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        margin: 5px auto 10px auto;
+        cursor: pointer;
+    }
+
+    .btn-remove:hover {
+        background-color: #FF0000;
+        color: white;
+    }
 </style>
 @extends('layouts.page')
 @section('content')
@@ -276,6 +299,7 @@
                 });
         });
 
+        // Update the displayProducts function
         function displayProducts(products) {
             const productDetailContainer = document.getElementById('product-item');
             productDetailContainer.innerHTML = '';
@@ -294,9 +318,49 @@
                     <p class="detail-item-price">${new Intl.NumberFormat().format(product.product_price)} บาท</p>
                 </div>
                 <a class="btn-detail" href="/product-detail/${product.product_id}">ดูสินค้า</a>
+                <button class="btn-remove" onclick="removeFavorite(${product.product_id})">นำออกจากรายการโปรด</button>
             </div>
         `;
             });
+        }
+
+        // Add the removeFavorite function
+        async function removeFavorite(productId) {
+            try {
+                const response = await fetch(`/api/removeFavorite/${productId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    // Remove the product from the local products array
+                    products = products.filter(product => product.product_id !== productId);
+
+                    // Show success message
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'นำสินค้าออกจากรายการโปรดเรียบร้อยแล้ว',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    // Refresh the display
+                    displayProducts(products);
+                } else {
+                    throw new Error('Failed to remove favorite');
+                }
+            } catch (error) {
+                console.error('Error removing favorite:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'ไม่สามารถนำสินค้าออกจากรายการโปรดได้',
+                    confirmButtonText: 'ตกลง'
+                });
+            }
         }
 
         function sortProducts(criteria) {

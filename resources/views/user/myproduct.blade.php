@@ -10,6 +10,7 @@
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <style>
     .container {
@@ -105,6 +106,10 @@
         color: #333;
         margin-bottom: 8px;
         display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
     }
 
     .detail-item-location {
@@ -196,6 +201,51 @@
         background-color: #FB8C00;
         color: white;
     }
+
+    .btn-edit {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #fffca0;
+        color: #918c00;
+        border: 1px solid #ded91a;
+        padding: 8px 10px;
+        border-radius: 5px;
+        width: 95%;
+        height: 40px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        margin: 0 auto 10px auto;
+        text-decoration: none;
+    }
+
+    .btn-edit:hover {
+        background-color: #ded91a;
+        color: black !important;
+    }
+
+    .btn-delete {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #ffebee;
+        color: #ff0000;
+        border: 1px solid #ff4343;
+        padding: 8px 10px;
+        border-radius: 5px;
+        width: 95%;
+        height: 40px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        margin: 0 auto 10px auto;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn-delete:hover {
+        background-color: #ff0000;
+        color: white;
+    }
 </style>
 @extends('layouts.page')
 @section('content')
@@ -276,6 +326,8 @@
                             </div>
                             <div class="btn">
                                 <a class="btn-detail" href="/product-detail/${product.product_id}">ดูสินค้า</a>
+                                <a class="btn-edit" href="/product/${product.product_id}/edit">แก้ไขสินค้า</a>
+                                <button class="btn-delete" onclick="deleteProduct(${product.product_id})">ลบสินค้า</button>
                             </div>
                         </div>
                     `;
@@ -334,7 +386,11 @@
                             <p class="detail-item-price">${new Intl.NumberFormat().format(product.product_price)} บาท</p>
                             <p class="detail-item-status">สถานะ <strong style="color: ${product.product_approve === 'ไม่อนุมัติ' ? 'red' : 'green'};">${product.product_approve}</strong></p>
                         </div>
-                        <a class="btn-detail" href="/product-detail/${product.product_id}">ดูสินค้า</a>
+                        <div class="btn">
+                            <a class="btn-detail" href="/product-detail/${product.product_id}">ดูสินค้า</a>
+                            <a class="btn-edit" href="/product/${product.product_id}/edit">แก้ไขสินค้า</a>
+                            <button class="btn-delete" onclick="deleteProduct(${product.product_id})">ลบสินค้า</button>
+                        </div>
                     </div>
                 `;
             });
@@ -352,6 +408,49 @@
                 sortedProducts.sort((a, b) => b.product_price - a.product_price);
             }
             displayProducts(sortedProducts);
+        }
+
+        function deleteProduct(productId) {
+            Swal.fire({
+                title: 'ยืนยันการลบสินค้า',
+                text: "คุณต้องการลบสินค้านี้ใช่หรือไม่?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'ยืนยัน',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/api/products/${productId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'ลบสินค้าเรียบร้อย',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด',
+                            text: 'ไม่สามารถลบสินค้าได้'
+                        });
+                    });
+                }
+            });
         }
     </script>
 @endsection

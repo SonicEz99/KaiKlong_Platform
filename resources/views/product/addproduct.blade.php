@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -34,69 +34,9 @@
             background-color: #FF8C00 !important;
         }
 
-        .custom-dropdown {
+        .form-dropdown {
             position: relative;
             width: 100%;
-        }
-
-        .dropdown-toggle {
-            width: 100%;
-            padding: 10px 15px;
-            background: white;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .dropdown-toggle:hover {
-            border-color: #FFA500;
-        }
-
-        .dropdown-toggle::after {
-            content: '';
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            border-top: 5px solid #666;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            margin-top: 5px;
-            padding: 0;
-            list-style: none;
-            z-index: 1000;
-            display: none;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-item {
-            padding: 10px 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .dropdown-item:hover {
-            background-color: #FFF5E6;
-            color: #FF8C00;
-        }
-
-        .dropdown-item:not(:last-child) {
-            border-bottom: 1px solid #eee;
         }
 
         select {
@@ -324,49 +264,6 @@
             if (this.files.length > 5) {
                 alert('คุณสามารถอัพโหลดรูปได้สูงสุด 5 รูปเท่านั้น');
                 this.value = '';
-            }
-        });
-
-        // Dropdown functionality
-        const dropdown = document.querySelector('.dropdown-toggle');
-        const dropdownMenu = document.querySelector('.dropdown-menu');
-        const dropdownItems = document.querySelectorAll('.dropdown-item');
-
-        // Toggle dropdown
-        dropdown.addEventListener('click', function() {
-            dropdownMenu.classList.toggle('show');
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.custom-dropdown')) {
-                dropdownMenu.classList.remove('show');
-            }
-        });
-
-        // Handle item selection
-        dropdownItems.forEach(item => {
-            item.addEventListener('click', function() {
-                const value = this.dataset.value;
-                const text = this.textContent;
-
-                // Update hidden input and dropdown text
-                document.getElementById('productType').value = value;
-                dropdown.textContent = text;
-
-                // Close dropdown
-                dropdownMenu.classList.remove('show');
-
-                // Remove invalid feedback if present
-                document.getElementById('productType').classList.remove('is-invalid');
-            });
-        });
-
-        // Add validation for category selection
-        document.querySelector('form').addEventListener('submit', function(event) {
-            if (!document.getElementById('productType').value) {
-                event.preventDefault();
-                document.getElementById('productType').classList.add('is-invalid');
             }
         });
 

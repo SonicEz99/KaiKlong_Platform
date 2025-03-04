@@ -309,5 +309,11 @@ class productController extends Controller
     
         return response()->json(['message' => 'Product approved successfully'], 200);
     }
+
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('product.editproduct', compact('product'));
+    }
     
 }
