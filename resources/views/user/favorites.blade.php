@@ -290,10 +290,28 @@
                 .then(data => {
                     console.log("Product data received:", data.favorites);
                     products = data.favorites.map(favorite => favorite.product);
-                    displayProducts(products);
+                    
+                    if (products.length === 0) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'คุณยังไม่มีรายการโปรดในขณะนี้',
+                            confirmButtonText: 'ตกลง',
+                            confirmButtonColor: '#FF8C00'
+                        });
+                        document.getElementById('product-item').innerHTML = 
+                            '<p style="text-align:center;padding:20px;color:#666;">คุณยังไม่มีรายการโปรด</p>';
+                    } else {
+                        displayProducts(products);
+                    }
                 })
                 .catch(error => {
                     console.error("Error fetching product detail:", error);
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'คุณยังไม่มีรายการโปรดในขณะนี้',
+                        confirmButtonText: 'ตกลง',
+                        confirmButtonColor: '#FF8C00'
+                    });
                     document.getElementById('product-item').innerHTML =
                         '<p style="text-align:center;padding:20px;color:#666;">คุณยังไม่มีรายการโปรด</p>';
                 });
