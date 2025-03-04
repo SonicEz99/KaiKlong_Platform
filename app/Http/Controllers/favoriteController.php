@@ -22,8 +22,6 @@ class favoriteController extends Controller
                 return response()->json(['errors' => $validator->errors()], 500);
             }
             
-            
-
             $userId = $request->input('user_id');
             $productId = $request->input('product_id');
 

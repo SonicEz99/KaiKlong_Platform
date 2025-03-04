@@ -323,16 +323,27 @@
         `;
             });
         }
+        <?php $user = Auth::user(); ?>
 
         // Add the removeFavorite function
         async function removeFavorite(productId) {
             try {
-                const response = await fetch(`/api/removeFavorite/${productId}`, {
-                    method: 'DELETE',
+                const userId = <?php echo json_encode($user->id); ?>; // Ensures proper JavaScript format
+                const product_id = productId;
+
+                console.log(userId)
+                console.log(product_id)
+
+                const response = await fetch(`/api/addFavorite`, {
+                    method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        product_id: productId
+                    })
                 });
 
                 if (response.ok) {

@@ -42,9 +42,8 @@ Route::get('/getFourBrand', [brandController::class, 'getFourBrand']);
 Route::post('/addProduct', [productController::class, 'addProduct'])->name("product.store");
 Route::get('/product', [productController::class, 'getProduct']);
 Route::delete('/deleteProduct/{id}', [productController::class, 'deleteProduct']);
-Route::post('/updateProduct/{id}', [productController::class, 'updateProduct']);
+Route::post('/updateProduct/{id}', [productController::class, 'updateProduct'])->name("product.update");
 Route::get('/product/{id}', [ProductController::class, 'getProductById']);
-
 
 Route::post('/updateUser/{id}', [userController::class, 'updateUser']);
 Route::get('/getUser/{id}', [userController::class, 'getUser']);

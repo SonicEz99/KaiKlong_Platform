@@ -388,7 +388,7 @@
                         </div>
                         <div class="btn">
                             <a class="btn-detail" href="/product-detail/${product.product_id}">ดูสินค้า</a>
-                            <a class="btn-edit" href="/product/${product.product_id}/edit">แก้ไขสินค้า</a>
+                            <a class="btn-edit" href="/editProduct/${product.product_id}">แก้ไขสินค้า</a>
                             <button class="btn-delete" onclick="deleteProduct(${product.product_id})">ลบสินค้า</button>
                         </div>
                     </div>
@@ -422,7 +422,7 @@
                 cancelButtonText: 'ยกเลิก'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch(`/api/products/${productId}`, {
+                    fetch(`/api/deleteProduct/${productId}`, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json',

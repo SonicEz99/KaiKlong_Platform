@@ -67,7 +67,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin', function () {
         return view('admin.approve');
     })->name('admin');
-    Route::get('/product/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
+    Route::get('/editProduct/{id}', [ProductController::class, 'edit'])->name('product.edit');
 });
 
 
