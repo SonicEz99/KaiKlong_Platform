@@ -41,8 +41,11 @@
             box-shadow: 0 0 0 0.25rem rgba(255, 140, 0, 0.25);
         }
 
-        .navbar {
-            font-family: 'Noto Sans Thai', 'Prompt', sans-serif;
+        body, 
+        .navbar,
+        footer,
+        * {
+            font-family: 'Noto Sans Thai', 'Prompt', sans-serif !important;
         }
     </style>
 </head>
