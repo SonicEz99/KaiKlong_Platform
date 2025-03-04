@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <title>เกี่ยวกับเรา</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -196,7 +197,7 @@
                 <div class="member-info">
                     <h2 class="member-name">ณัฐกานต์ ราฟนิค</h2>
                     <p class="member-id">ID: MJ003</p>
-                    <p class="member-position">หัวหน้าฝ่ายการตลาด</p>
+                    <p class="member-position">CTO บริษัทขายคล่อง</p>
                 </div>
             </div>
 
@@ -205,7 +206,7 @@
                 <div class="member-info">
                     <h2 class="member-name">จักรกฤษ จันทร์ทุ่ง</h2>
                     <p class="member-id">ID: MJ003</p>
-                    <p class="member-position">หัวหน้าฝ่ายการตลาด</p>
+                    <p class="member-position">CPR บริษัทขายคล่อง</p>
                 </div>
             </div>
 
