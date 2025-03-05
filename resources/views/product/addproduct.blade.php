@@ -66,6 +66,78 @@
         * {
             font-family: 'Noto Sans Thai', 'Prompt', sans-serif !important;
         }
+
+        .image-upload-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .image-preview {
+            width: 150px;
+            height: 150px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-button-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .upload-button {
+            width: 150px;
+            height: 150px;
+            border: 2px dashed #FF8C00;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #FF8C00;
+            transition: all 0.3s ease;
+        }
+
+        .upload-button:hover {
+            background-color: #FFF5E6;
+        }
+
+        .upload-button i {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
     </style>
 </head>
 
@@ -143,11 +215,21 @@
                                     กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง (10 หลัก)
                                 </div>
                             </div>
-                            <!-- รูปภาพ -->
+                            <!-- Replace the existing image upload section with this -->
                             <div class="mb-3">
-                                <label for="image_path" class="form-label">รูปภาพ</label>
-                                <input type="file" class="form-control" id="image_path" name="image_path[]"
-                                    accept="image/product_pic/*" multiple>
+                                <label class="form-label">รูปภาพสินค้า (สูงสุด 5 รูป)</label>
+                                <div class="image-upload-container">
+                                    <div class="preview-container" id="imagePreview"></div>
+                                    <div class="upload-button-container">
+                                        <label for="image_path" class="upload-button">
+                                            <i class="fas fa-plus"></i>
+                                            <span>เพิ่มรูปภาพ</span>
+                                            <input type="file" class="form-control" id="image_path" name="image_path[]" 
+                                                accept="image/*" multiple style="display: none;">
+                                        </label>
+                                    </div>
+                                </div>
+                                <small class="text-muted">คลิกที่ปุ่มเพื่อเพิ่มรูปภาพ (รองรับ .jpg, .jpeg, .png)</small>
                                 <div class="invalid-feedback">
                                     กรุณาอัพโหลดรูปภาพที่ถูกต้อง
                                 </div>
@@ -358,6 +440,53 @@
             } else {
                 console.error("❌ ไม่พบ input ที่มี ID 'product_phone'");
             }
+        });
+
+        // Add to existing scripts
+        document.getElementById('image_path').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            const previewContainer = document.getElementById('imagePreview');
+            
+            if (files.length + previewContainer.children.length > 5) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ขออภัย',
+                    text: 'คุณสามารถอัพโหลดรูปได้สูงสุด 5 รูปเท่านั้น'
+                });
+                return;
+            }
+
+            files.forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const previewDiv = document.createElement('div');
+                        previewDiv.className = 'image-preview';
+                        previewDiv.innerHTML = `
+                            <img src="${e.target.result}" alt="Preview">
+                            <button type="button" class="remove-btn">&times;</button>
+                        `;
+                        
+                        previewDiv.querySelector('.remove-btn').addEventListener('click', function() {
+                            previewDiv.remove();
+                            // Update the input files
+                            const dt = new DataTransfer();
+                            const input = document.getElementById('image_path');
+                            const { files } = input;
+                            
+                            for (let i = 0; i < files.length; i++) {
+                                const file = files[i];
+                                if (file !== files[i]) dt.items.add(file);
+                            }
+                            
+                            input.files = dt.files;
+                        });
+                        
+                        previewContainer.appendChild(previewDiv);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
         });
     </script>
 @endsection
