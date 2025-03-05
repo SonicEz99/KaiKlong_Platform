@@ -80,6 +80,7 @@
         overflow: hidden;
         display: flex;
         flex-direction: column;
+        height: 100%;
     }
 
     .item:hover {
@@ -121,6 +122,13 @@
         display: block;
     }
 
+    .btn-container {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: auto;
+    }
 
     .btn-detail-unapprove {
         display: flex;
@@ -131,14 +139,12 @@
         border: 1px solid #ff4343;
         padding: 8px 10px;
         border-radius: 5px;
-        width: 95%;
+        width: 100%;
         height: 40px;
         font-weight: bold;
-        transition: background-color 0.3s ease, color 0.3s ease;
-        margin: 10px auto;
-        margin-top: auto;
-        margin-bottom: 5px;
+        transition: all 0.3s ease;
         text-decoration: none;
+        margin: 0;
     }
 
     .btn-detail-unapprove:hover {
@@ -156,14 +162,12 @@
         border: 1px solid #FF8C00;
         padding: 8px 10px;
         border-radius: 5px;
-        width: 95%;
+        width: 100%;
         height: 40px;
         font-weight: bold;
-        transition: background-color 0.3s ease, color 0.3s ease;
-        margin: 10px auto;
-        margin-top: auto;
-        margin-bottom: 5px;
+        transition: all 0.3s ease;
         text-decoration: none;
+        margin: 0;
     }
 
     .btn-detail-approve:hover {
@@ -293,8 +297,10 @@
                             <p class="detail-item-location">${product.product_location}</p>
                             <p class="detail-item-price">${new Intl.NumberFormat().format(product.product_price)} บาท</p>
                         </div>
-                        <a href="javascript:void(0)" class="btn-detail-approve" onClick="approve(${product.product_id})">อนุมัติโพส</a>
-                        <a href="javascript:void(0)" class="btn-detail-unapprove" onClick="deleteProduct(${product.product_id})">ลบโพส</a>
+                        <div class="btn-container">
+                            <a href="javascript:void(0)" class="btn-detail-approve" onClick="approve(${product.product_id})">อนุมัติโพส</a>
+                            <a href="javascript:void(0)" class="btn-detail-unapprove" onClick="deleteProduct(${product.product_id})">ลบโพส</a>
+                        </div>
                     </div>
                 `;
             });
@@ -316,44 +322,86 @@
 
         function approve(product_id) {
             fetch(`/api/approve/${product_id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message) {
-                        alert(data.message);
-                        fetchUnapprovedProducts();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Something went wrong. Please try again.');
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'อนุมัติสินค้าสำเร็จ',
+                        text: 'สินค้าถูกอนุมัติเรียบร้อยแล้ว',
+                        confirmButtonText: 'ตกลง',
+                        confirmButtonColor: '#FF8C00'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetchUnapprovedProducts();
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'ไม่สามารถอนุมัติสินค้าได้ กรุณาลองใหม่อีกครั้ง',
+                    confirmButtonText: 'ตกลง',
+                    confirmButtonColor: '#FF8C00'
                 });
+            });
         }
 
         function deleteProduct(product_id) {
-            console.log(`Deleting product with ID: ${product_id}`); // Log to check the product ID
-
-            fetch(`/api/deleteProduct/${product_id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Delete response:", data); // Log the response from the server
-                    fetchUnapprovedProducts();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Something went wrong. Please try again.');
-                });
+            Swal.fire({
+                title: 'ยืนยันการลบ',
+                text: 'คุณต้องการลบคำขออนุมัตินี้ใช่หรือไม่?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'ใช่, ลบเลย',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#ff0000',
+                cancelButtonColor: '#FF8C00'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/api/deleteProduct/${product_id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Delete response:", data);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'ลบสำเร็จ',
+                            text: 'ลบคำขออนุมัติแล้ว',
+                            confirmButtonText: 'ตกลง',
+                            confirmButtonColor: '#FF8C00'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                fetchUnapprovedProducts();
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด',
+                            text: 'ไม่สามารถลบคำขออนุมัติได้ กรุณาลองใหม่อีกครั้ง',
+                            confirmButtonText: 'ตกลง',
+                            confirmButtonColor: '#FF8C00'
+                        });
+                    });
+                }
+            });
         }
 
         // This function fetches the updated list of unapproved products
