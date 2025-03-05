@@ -152,55 +152,170 @@ $user = auth()->user();
                 <div class="menu-setting">
                     <ul id="menu-list">
                         <li class="active" onclick="selectMenu(this)" data-target="profile">ข้อมูลส่วนตัว</li>
+                        <?php $user = Auth::user(); ?>
+
+                        <?php if ($user->google_id == null) { ?>
                         <li onclick="selectMenu(this)" data-target="account">จัดการบัญชี</li>
+                        <?php } ?>
                     </ul>
                     <hr>
                 </div>
 
                 <!-- ข้อมูลส่วนตัว -->
+                <?php $user = Auth::user(); ?>
+
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const form = document.getElementById('updateUserForm');
+
+                        if (form) {
+                            form.action = "/api/updateUser/{{ $user->id }}"; // Set action URL
+
+                            form.addEventListener('submit', function(event) {
+                                event.preventDefault(); // Prevent default form submission
+
+                                const formData = new FormData(form);
+
+                                fetch(form.action, {
+                                        method: 'POST',
+                                        body: formData,
+                                        headers: {
+                                            'X-CSRF-TOKEN': document.querySelector('input[name=_token]').value
+                                        }
+                                    })
+                                    .then(response => {
+                                        if (response.ok) {
+                                            return response.json(); // Convert response to JSON
+                                        }
+                                        throw new Error('Failed to update');
+                                    })
+                                    .then(data => {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'บันทึกสำเร็จ!',
+                                            text: 'ข้อมูลของคุณถูกอัปเดตเรียบร้อยแล้ว',
+                                            confirmButtonText: 'ตกลง'
+                                        }).then(() => {
+                                            location.reload(); // Refresh the page
+                                        });
+                                    })
+                                    .catch(error => {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'เกิดข้อผิดพลาด',
+                                            text: 'ไม่สามารถอัปเดตข้อมูลได้ กรุณาลองอีกครั้ง',
+                                            confirmButtonText: 'ตกลง'
+                                        });
+                                        console.error(error);
+                                    });
+                            });
+                        }
+                    });
+                </script>
+
                 <div class="text-flind-setting" id="profile-section">
-                    <div class="input-data">
-                        <label for="">ชื่อผู้ใช้</label>
-                        <input type="text" value="{{ $user->user_name }}">
-                    </div>
-                    <div class="input-data">
-                        <label for="">ชื่อ <span class="required">*</span></label>
-                        <input type="text" value="{{ $user->first_name }}" placeholder="ยังไม่ได้ตั้งค่าชื่อ">
-                    </div>
-                    <div class="input-data">
-                        <label for="">นามสกุล <span class="required">*</span></label>
-                        <input type="text" value="{{ $user->last_name }}" placeholder="ยังไม่ได้ตั้งค่านามสกุล">
-                    </div>
-                    <hr>
-                    <div class="input-data">
-                        <label for="">เบอร์โทร <span class="required">*</span></label>
-                        <input type="text" value="{{ $user->tel }}" placeholder="+ เบอร์โทรศัพท์">
-                    </div>
-                    <hr>
-                    <div class="btn">
-                        <button>บันทึก</button>
-                    </div>
+                    <form id="updateUserForm" method="POST" class="needs-validation" novalidate
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method('POST')
+                        <div class="input-data">
+                            <label for="">ชื่อผู้ใช้</label>
+                            <input type="text" name="user_name" value="{{ $user->user_name }}">
+                        </div>
+                        <div class="input-data">
+                            <label for="">ชื่อ <span class="required">*</span></label>
+                            <input type="text" name="first_name" value="{{ $user->first_name }}"
+                                placeholder="ยังไม่ได้ตั้งค่าชื่อ">
+                        </div>
+                        <div class="input-data">
+                            <label for="">นามสกุล <span class="required">*</span></label>
+                            <input type="text" name="last_name" value="{{ $user->last_name }}"
+                                placeholder="ยังไม่ได้ตั้งค่านามสกุล">
+                        </div>
+                        <hr>
+                        <div class="input-data">
+                            <label for="">เบอร์โทร <span class="required">*</span></label>
+                            <input type="text" name="tel" value="{{ $user->tel }}" placeholder="+ เบอร์โทรศัพท์">
+                        </div>
+                        <hr>
+                        <div class="btn">
+                            <button type="submit">บันทึก</button>
+                        </div>
+                    </form>
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const form = document.getElementById('updatePasswordForm');
+
+                        if (form) {
+                            form.addEventListener('submit', function(event) {
+                                event.preventDefault(); // Prevent default form submission
+
+                                const formData = new FormData(form);
+
+                                fetch("/api/resetPassword", {
+                                        method: 'POST',
+                                        body: formData,
+                                        headers: {
+                                            'X-CSRF-TOKEN': document.querySelector('input[name=_token]').value
+                                        }
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'เปลี่ยนรหัสผ่านสำเร็จ!',
+                                                text: 'รหัสผ่านของคุณถูกอัปเดตเรียบร้อยแล้ว',
+                                                confirmButtonText: 'ตกลง'
+                                            }).then(() => {
+                                                location.reload(); // Reload the page
+                                            });
+                                        } else {
+                                            throw new Error(data.error || 'ไม่สามารถเปลี่ยนรหัสผ่านได้');
+                                        }
+                                    })
+                                    .catch(error => {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'เกิดข้อผิดพลาด',
+                                            text: error.message || 'โปรดลองอีกครั้ง',
+                                            confirmButtonText: 'ตกลง'
+                                        });
+                                    });
+                            });
+                        }
+                    });
+                </script>
 
                 <!-- ฟอร์มจัดการบัญชี (เริ่มต้นซ่อน) -->
                 <div class="text-flind-setting" id="account-section">
                     <div class="account-form" id="account-form">
-                        <div class="input-data">
-                            <label>รหัสผ่านเดิม</label>
-                            <input type="password" placeholder="********">
-                        </div>
-                        <div class="input-data">
-                            <label>เปลี่ยนรหัสผ่าน</label>
-                            <input type="password" placeholder="********">
-                        </div>
-                        <div class="input-data">
-                            <label>ยืนยันรหัสผ่าน</label>
-                            <input type="password" placeholder="********">
-                        </div>
-                        <hr>
-                        <div class="btn">
-                            <button>เปลียนรหัสผ่าน</button>
-                        </div>
+                        <form id="updatePasswordForm" method="POST" class="needs-validation" novalidate>
+                            @csrf
+                            <input type="hidden" name="user_id" value="{{ $user->id }}">
+
+                            <div class="input-data">
+                                <label>รหัสผ่านเดิม</label>
+                                <input type="password" name="oldPassword" placeholder="********" required>
+                            </div>
+                            <div class="input-data">
+                                <label>เปลี่ยนรหัสผ่าน</label>
+                                <input type="password" name="password" placeholder="********" required>
+                            </div>
+                            <div class="input-data">
+                                <label>ยืนยันรหัสผ่าน</label>
+                                <input type="password" name="password_confirmation" placeholder="********" required>
+                            </div>
+                            <hr>
+                            <div class="btn">
+                                <button type="submit">เปลี่ยนรหัสผ่าน</button>
+                            </div>
+                        </form>
+
                     </div>
                 </div>
             </div>
@@ -265,4 +380,5 @@ $user = auth()->user();
         });
     </script>
 @endsection
+
 </html>

@@ -45,7 +45,8 @@ Route::delete('/deleteProduct/{id}', [productController::class, 'deleteProduct']
 Route::post('/updateProduct/{id}', [productController::class, 'updateProduct'])->name("product.update");
 Route::get('/product/{id}', [ProductController::class, 'getProductById']);
 
-Route::post('/updateUser/{id}', [userController::class, 'updateUser']);
+Route::post('/updateUser/{id}', [userController::class, 'updateUser'])->name("update.user");
+Route::post('/resetPassword', [userController::class, 'resetPassword'])->name("reset.password");
 Route::get('/getUser/{id}', [userController::class, 'getUser']);
 
 
