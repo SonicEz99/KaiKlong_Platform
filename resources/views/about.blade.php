@@ -184,28 +184,28 @@
         <h1>Our Team</h1>
         <div class="team-grid">
             <div class="team-member">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7ft7binCwq2KY4nXgmZk-eioIHbh83GamZg&s" alt="John Doe" class="profile-img">
+                <img src="/images/thod.jpg" alt="John Doe" class="profile-img">
                 <div class="member-info">
                     <h2 class="member-name">ธนารัตน์ สุดใจ</h2>
-                    <p class="member-id">ID: JD001</p>
+                    <p class="member-id">ID: 650112418012</p>
                     <p class="member-position">CEO บริษัทขายคล่อง</p>
                 </div>
             </div>
 
             <div class="team-member">
-                <img src="https://preview.redd.it/can-someone-photoshop-my-face-onto-this-meme-but-keep-the-v0-1kg7g9ub12fa1.jpg?width=905&format=pjpg&auto=webp&s=c9ea963d1ef07e9f925e2bcc5ed4e364ae031c12" alt="Mike Johnson" class="profile-img">
+                <img src="/images/nem.jpg" alt="John Doe" class="profile-img">
                 <div class="member-info">
                     <h2 class="member-name">ณัฐกานต์ ราฟนิค</h2>
-                    <p class="member-id">ID: MJ003</p>
+                    <p class="member-id">ID: 650112418008</p>
                     <p class="member-position">CTO บริษัทขายคล่อง</p>
                 </div>
             </div>
 
             <div class="team-member">
-                <img src="https://preview.redd.it/can-someone-photoshop-my-face-onto-this-meme-but-keep-the-v0-1kg7g9ub12fa1.jpg?width=905&format=pjpg&auto=webp&s=c9ea963d1ef07e9f925e2bcc5ed4e364ae031c12" alt="Mike Johnson" class="profile-img">
+                <img src="/images/mon.JPG" alt="John Doe" class="profile-img">
                 <div class="member-info">
                     <h2 class="member-name">จักรกฤษ จันทร์ทุ่ง</h2>
-                    <p class="member-id">ID: MJ003</p>
+                    <p class="member-id">ID: 650112418044</p>
                     <p class="member-position">CPR บริษัทขายคล่อง</p>
                 </div>
             </div>
