@@ -8,7 +8,7 @@ use App\Http\Controllers\userController;
 use App\Http\Controllers\FavoriteController;
 
 
-Route::get('/', function () {
+Route::middleware('redirect.auth')->get('/', function () {
     return view('auth.login_auth');
 })->name('login.page');
 ;
@@ -31,7 +31,7 @@ Route::middleware('web')->group(function () {
 // Route::post('/login', [authController::class, 'login'])->name('login.backend');
 
 // Protected Routes (Require Authentication)
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum','checksession'])->group(function () {
     Route::get('/about', function () {
         return view('about');
     });
