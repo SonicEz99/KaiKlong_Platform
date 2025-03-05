@@ -377,6 +377,11 @@
                     `/${product.product_images[0].image_path}` :
                     '/path/to/placeholder.jpg';
 
+                const isApproved = product.product_approve !== 'ไม่อนุมัติ';
+                const detailButtonClass = isApproved ? 'btn-detail' : 'btn-detail disabled';
+                const detailButtonHref = isApproved ? `/product-detail/${product.product_id}` : 'javascript:void(0);';
+                const detailButtonOnClick = isApproved ? '' : 'onclick="showNotApprovedAlert();"';
+
                 productDetailContainer.innerHTML += `
                     <div class="item">
                         <img width="200" height="200" src="${imagePath}" alt="${product.product_name}">
@@ -387,7 +392,7 @@
                             <p class="detail-item-status">สถานะ <strong style="color: ${product.product_approve === 'ไม่อนุมัติ' ? 'red' : 'green'};">${product.product_approve}</strong></p>
                         </div>
                         <div class="btn">
-                            <a class="btn-detail" href="/product-detail/${product.product_id}">ดูสินค้า</a>
+                            <a class="${detailButtonClass}" href="${detailButtonHref}" ${detailButtonOnClick}>ดูสินค้า</a>
                             <a class="btn-edit" href="/editProduct/${product.product_id}">แก้ไขสินค้า</a>
                             <button class="btn-delete" onclick="deleteProduct(${product.product_id})">ลบสินค้า</button>
                         </div>
@@ -450,6 +455,16 @@
                         });
                     });
                 }
+            });
+        }
+
+        function showNotApprovedAlert() {
+            Swal.fire({
+                icon: 'info',
+                title: 'สินค้ายังไม่ผ่านการอนุมัติ',
+                text: 'ไม่สามารถดูข้อมูลได้',
+                confirmButtonText: 'ตกลง',
+                confirmButtonColor: '#FF8C00'
             });
         }
     </script>
