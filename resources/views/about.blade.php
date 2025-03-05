@@ -3,7 +3,9 @@
 
 <head>
     <title>เกี่ยวกับเรา</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
+        rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -179,48 +181,48 @@
 @extends('layouts.page')
 @section('content')
 
-<body>
-    <div class="containerProfile">
-        <h1>Our Team</h1>
-        <div class="team-grid">
-            <div class="team-member">
-                <img src="/images/thod.jpg" alt="John Doe" class="profile-img">
-                <div class="member-info">
-                    <h2 class="member-name">ธนารัตน์ สุดใจ</h2>
-                    <p class="member-id">ID: 650112418012</p>
-                    <p class="member-position">CEO บริษัทขายคล่อง</p>
+    <body>
+        <div class="containerProfile">
+            <h1>Our Team</h1>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="/images/thod.jpg" alt="John Doe" class="profile-img">
+                    <div class="member-info">
+                        <h2 class="member-name">ธนารัตน์ สุดใจ</h2>
+                        <p class="member-id">ID: 650112418012</p>
+                        <p class="member-position">CEO บริษัทขายคล่อง</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="team-member">
-                <img src="/images/nem.jpg" alt="John Doe" class="profile-img">
-                <div class="member-info">
-                    <h2 class="member-name">ณัฐกานต์ ราฟนิค</h2>
-                    <p class="member-id">ID: 650112418008</p>
-                    <p class="member-position">CTO บริษัทขายคล่อง</p>
+                <div class="team-member">
+                    <img src="/images/nem.jpg" alt="John Doe" class="profile-img">
+                    <div class="member-info">
+                        <h2 class="member-name">ณัฐกานต์ ราฟนิค</h2>
+                        <p class="member-id">ID: 650112418008</p>
+                        <p class="member-position">CTO บริษัทขายคล่อง</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="team-member">
-                <img src="/images/mon.JPG" alt="John Doe" class="profile-img">
-                <div class="member-info">
-                    <h2 class="member-name">จักรกฤษ จันทร์ทุ่ง</h2>
-                    <p class="member-id">ID: 650112418044</p>
-                    <p class="member-position">CPR บริษัทขายคล่อง</p>
+                <div class="team-member">
+                    <img src="/images/mon.JPG" alt="John Doe" class="profile-img">
+                    <div class="member-info">
+                        <h2 class="member-name">จักรกฤษ จันทร์ทุ่ง</h2>
+                        <p class="member-id">ID: 650112418044</p>
+                        <p class="member-position">CPR บริษัทขายคล่อง</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="team-member">
-                <img src="https://media.istockphoto.com/id/957318582/photo/passed-out-man-drooling-in-bed.jpg?s=612x612&w=0&k=20&c=4wJ2pSred_Elfl8di6UwNgSR3fMT05l-91Er6pYngKo=" alt="Sarah Williams" class="profile-img">
-                <div class="member-info">
-                    <h2 class="member-name">อรณี โสมินทร์</h2>
-                    <p class="member-id">ID: SW004</p>
-                    <p class="member-position">หัวหน้าฝ่ายสนับสนุนการพักผ่อน</p>
+                <div class="team-member">
+                    <img src="/images/dear.JPG" alt="John Doe" class="profile-img">
+                    <div class="member-info">
+                        <h2 class="member-name">อรณี โสมินทร์</h2>
+                        <p class="member-id">ID: 650112418041</p>
+                        <p class="member-position">ABC บริษัทขายคล่อง</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</body>
+    </body>
 @endsection
 
 </html>
