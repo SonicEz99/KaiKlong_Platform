@@ -121,10 +121,11 @@
     </style>
 </head>
 
+
+
 @extends('layouts.page')
 
 @section('content')
-
     <body style="font-family: 'Noto Sans Thai', 'Prompt', sans-serif;">
         <div class="container mt-2">
             <div class="profile_chat">
@@ -133,18 +134,9 @@
             </div>
 
             <div class="chat-box">
-                @if ($messages->isEmpty())
-                    <p style="text-align: center; color: #777;">ไม่มีข้อความ</p>
-                @else
-                    @foreach ($messages as $message)
-                        @if ($message->send_form  == $sellerId)
-                            <p class="chat-message seller-message">{{ $message->message }}</p>
-                        @else
-                            <p class="chat-message buyer-message">{{ $message->message }}</p>
-                        @endif
-                    @endforeach
-                @endif
+                @include('massage.partials.chat-messages')  {{-- Include only the chat messages --}}
             </div>
+
             <form action="{{ route('chat.send') }}" method="POST" class="chat-input">
                 @csrf
                 <input type="hidden" name="user_seller_id" value="{{ $userId }}">
@@ -154,22 +146,53 @@
             </form>
         </div>
     </body>
-@endsection
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        async function fetchMessages() {
-            try {
-                const response = await fetch(`/message/{{ $sellerId }}/{{ $userId }}`);
-                const data = await response.text(); // รับ response เป็น HTML
-                document.querySelector(".chat-box").innerHTML = data;
-            } catch (error) {
-                console.error("Error fetching messages:", error);
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const chatForm = document.querySelector(".chat-input");
+            const messageInput = document.querySelector("input[name='message']");
+            const chatBox = document.querySelector(".chat-box");
+
+            chatForm.addEventListener("submit", async function (event) {
+                event.preventDefault(); // Prevent page reload
+
+                let formData = new FormData(chatForm);
+
+                try {
+                    const response = await fetch("{{ route('chat.send') }}", {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "X-CSRF-TOKEN": document.querySelector("input[name='_token']").value
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        messageInput.value = ""; // Clear input after sending
+                        fetchMessages(); // Refresh messages dynamically
+                    } else {
+                        console.error("Message send error:", data.error);
+                    }
+                } catch (error) {
+                    console.error("Error sending message:", error);
+                }
+            });
+
+            async function fetchMessages() {
+                try {
+                    const response = await fetch(`/product-detail/chatsale/messages/{{ $sellerId }}/{{ $userId }}`);
+                    const data = await response.text();
+                    chatBox.innerHTML = data;
+                } catch (error) {
+                    console.error("Error fetching messages:", error);
+                }
             }
-        }
 
-        // โหลดข้อความใหม่ทุกๆ 3 วินาที
-        setInterval(fetchMessages, 3000);
-    });
-</script>
+            setInterval(fetchMessages, 3000); // Auto-refresh messages every 3 seconds
+        });
+    </script>
 
+@endsection
 </html>

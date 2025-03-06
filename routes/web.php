@@ -10,8 +10,7 @@ use App\Http\Controllers\FavoriteController;
 
 Route::middleware('redirect.auth')->get('/', function () {
     return view('auth.login_auth');
-})->name('login.page');
-;
+})->name('login.page');;
 
 // // Register Page Route
 Route::get('/register', function () {
@@ -31,7 +30,7 @@ Route::middleware('web')->group(function () {
 // Route::post('/login', [authController::class, 'login'])->name('login.backend');
 
 // Protected Routes (Require Authentication)
-Route::middleware(['auth:sanctum','checksession'])->group(function () {
+Route::middleware(['auth:sanctum', 'checksession'])->group(function () {
     Route::get('/about', function () {
         return view('about');
     });
@@ -63,7 +62,14 @@ Route::middleware(['auth:sanctum','checksession'])->group(function () {
     Route::get('/detail_chat', function () {
         return view('user.chat_detail');
     });
-    Route::get('/product-detail/chatsale/{id_saller}/{id_user}', [ChatController::class, 'getMessages']);
+    // Route to show the chat page
+    Route::get('/product-detail/chatsale/{sellerId}/{userId}', [ChatController::class, 'showChatPage']);
+
+    // Route to fetch messages via AJAX
+    Route::get('/product-detail/chatsale/messages/{sellerId}/{userId}', [ChatController::class, 'getMessages']);
+
+
+
     Route::get('/admin', function () {
         return view('admin.approve');
     })->name('admin');
