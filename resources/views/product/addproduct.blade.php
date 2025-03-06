@@ -60,7 +60,7 @@
             padding: 10px;
         }
 
-        body, 
+        body,
         .navbar,
         footer,
         * {
@@ -224,7 +224,7 @@
                                         <label for="image_path" class="upload-button">
                                             <i class="fas fa-plus"></i>
                                             <span>เพิ่มรูปภาพ</span>
-                                            <input type="file" class="form-control" id="image_path" name="image_path[]" 
+                                            <input type="file" class="form-control" id="image_path" name="image_path[]"
                                                 accept="image/*" multiple style="display: none;">
                                         </label>
                                     </div>
@@ -238,7 +238,8 @@
                             <div class="mb-3">
                                 <label for="category_id" class="form-label">หมวดหมู่ <span
                                         class="text-danger">*</span></label>
-                                <select id="categoryDropdown" name="category_id" onchange="handleCategoryChange()" required>
+                                <select id="categoryDropdown" name="category_id" onchange="handleCategoryChange()"
+                                    required>
                                     <option value="">เลือกหมวดหมู่</option>
                                     <!-- Categories will be populated here -->
                                 </select>
@@ -443,49 +444,55 @@
         });
 
         // Add to existing scripts
-        document.getElementById('image_path').addEventListener('change', function(e) {
-            const files = Array.from(e.target.files);
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('image_path');
             const previewContainer = document.getElementById('imagePreview');
-            
-            if (files.length + previewContainer.children.length > 5) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'ขออภัย',
-                    text: 'คุณสามารถอัพโหลดรูปได้สูงสุด 5 รูปเท่านั้น'
-                });
-                return;
-            }
 
-            files.forEach(file => {
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const previewDiv = document.createElement('div');
-                        previewDiv.className = 'image-preview';
-                        previewDiv.innerHTML = `
-                            <img src="${e.target.result}" alt="Preview">
-                            <button type="button" class="remove-btn">&times;</button>
-                        `;
-                        
-                        previewDiv.querySelector('.remove-btn').addEventListener('click', function() {
-                            previewDiv.remove();
-                            // Update the input files
-                            const dt = new DataTransfer();
-                            const input = document.getElementById('image_path');
-                            const { files } = input;
-                            
-                            for (let i = 0; i < files.length; i++) {
-                                const file = files[i];
-                                if (file !== files[i]) dt.items.add(file);
-                            }
-                            
-                            input.files = dt.files;
-                        });
-                        
-                        previewContainer.appendChild(previewDiv);
-                    };
-                    reader.readAsDataURL(file);
+            fileInput.addEventListener('change', function(e) {
+                const files = Array.from(e.target.files);
+                const existingImages = previewContainer.children.length;
+
+                if (existingImages + files.length > 5) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ขออภัย',
+                        text: 'คุณสามารถอัปโหลดได้สูงสุด 5 รูปเท่านั้น'
+                    });
+                    return;
                 }
+
+                files.forEach(file => {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            const previewDiv = document.createElement('div');
+                            previewDiv.className = 'image-preview';
+                            previewDiv.innerHTML = `
+                        <img src="${event.target.result}" alt="Preview">
+                        <button type="button" class="remove-btn">&times;</button>
+                    `;
+
+                            // ลบรูปภาพออกจาก preview และอัปเดต input.files
+                            previewDiv.querySelector('.remove-btn').addEventListener('click',
+                                function() {
+                                    previewDiv.remove();
+
+                                    // อัปเดต input.files เพื่อให้เหลือแค่ไฟล์ที่ยังไม่ได้ถูกลบ
+                                    const dt = new DataTransfer();
+                                    Array.from(fileInput.files).forEach((item, index) => {
+                                        if (event.target.result !== URL
+                                            .createObjectURL(item)) {
+                                            dt.items.add(item);
+                                        }
+                                    });
+                                    fileInput.files = dt.files;
+                                });
+
+                            previewContainer.appendChild(previewDiv);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
             });
         });
     </script>
