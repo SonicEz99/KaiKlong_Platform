@@ -76,51 +76,50 @@ class ChatController extends Controller
     }
 
     public function showChatPage($sellerId, $userId)
-{
-    try {
-        $messages = Message::where(function ($query) use ($sellerId, $userId) {
-            $query->where('user_seller_id', $sellerId)
-                ->where('user_buyer_id', $userId);
-        })
-        ->orWhere(function ($query) use ($sellerId, $userId) {
-            $query->where('user_seller_id', $userId)
-                ->where('user_buyer_id', $sellerId);
-        })
-        ->orderBy('created_at', 'asc')
-        ->get();
+    {
+        try {
+            $messages = Message::where(function ($query) use ($sellerId, $userId) {
+                $query->where('user_seller_id', $sellerId)
+                    ->where('user_buyer_id', $userId);
+            })
+                ->orWhere(function ($query) use ($sellerId, $userId) {
+                    $query->where('user_seller_id', $userId)
+                        ->where('user_buyer_id', $sellerId);
+                })
+                ->orderBy('created_at', 'asc')
+                ->get();
 
-        return view('massage.chatpage', compact('messages', 'sellerId', 'userId'));
-    } catch (\Exception $e) {
-        return back()->with('error', 'Error loading chat page: ' . $e->getMessage());
+            return view('massage.chatpage', compact('messages', 'sellerId', 'userId'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error loading chat page: ' . $e->getMessage());
+        }
     }
-}
 
     /**
      * Send a message from one user to another.
      */
     public function sendMessage(Request $request)
-{
-    $request->validate([
-        'message' => 'required|string',
-        'user_seller_id' => 'required|integer',
-        'user_buyer_id' => 'required|integer',
-    ]);
-
-    try {
-        $message = Message::create([
-            'user_seller_id' => $request->user_seller_id,
-            'user_buyer_id' => $request->user_buyer_id,
-            'message' => $request->message,
-            'send_form' => $request->user_seller_id,
+    {
+        $request->validate([
+            'message' => 'required|string',
+            'user_seller_id' => 'required|integer',
+            'user_buyer_id' => 'required|integer',
         ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => $message,
-        ], 200); // Explicitly return status 200
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Failed to send message: ' . $e->getMessage()], 500);
-    }
-}
+        try {
+            $message = Message::create([
+                'user_seller_id' => $request->user_seller_id,
+                'user_buyer_id' => $request->user_buyer_id,
+                'message' => $request->message,
+                'send_form' => $request->user_seller_id,
+            ]);
 
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+            ], 200); // Explicitly return status 200
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to send message: ' . $e->getMessage()], 500);
+        }
+    }
 }
