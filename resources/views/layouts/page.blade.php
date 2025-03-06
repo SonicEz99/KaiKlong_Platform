@@ -294,7 +294,7 @@
                 <ul class="menu-nav navbar-nav">
                     <div class="menu-nav-small">
                         <li class="nav-item">
-                            <a class="logo nav-link active" aria-current="page" href="home">
+                            <a class="logo nav-link active" aria-current="page" href="#" onclick="go(1)">
                                 <h1>Kaiklong</h1>
                             </a>
                         </li>
