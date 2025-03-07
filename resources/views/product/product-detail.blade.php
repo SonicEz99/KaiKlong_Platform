@@ -337,7 +337,6 @@
                 window.location.href = `chatsale/${id_saler}/${id_customer}`
             }
 
-
             document.addEventListener('DOMContentLoaded', function() {
                 const urlParts = window.location.pathname.split('/');
                 const productId = urlParts[urlParts.length - 1];
@@ -376,6 +375,9 @@
                         ];
                         let currentImageIndex = 0;
 
+                        const baseURL = window.location.origin; 
+                        const profilePic = product.user?.user_pic ? `${baseURL}/${product.user.user_pic}` : "https://cdn-icons-png.flaticon.com/512/9203/9203764.png";
+
                         productDetailContainer.innerHTML = `
                         <div class="product-card">
                             <div class="image-add">
@@ -389,9 +391,9 @@
                                 <div class="additional-images">
                                     <div class="image-gallery">
                                         ${product.product_images.slice(1).map(img => `
-                                                                                                                                                                                                                                                                                                                                                                                            <img class="additional-image" src="/${img.image_path}" alt="${product.product_name}"
-                                                                                                                                                                                                                                                                                                                                                                                                loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
-                                                                                                                                                                                                                                                                                                                                                                                        `).join('')}
+                                                                                                                                                                                                                                                                                                                                                                                                    <img class="additional-image" src="/${img.image_path}" alt="${product.product_name}"
+                                                                                                                                                                                                                                                                                                                                                                                                        loading="lazy" onerror="this.src='/path/to/placeholder.jpg'">
+                                                                                                                                                                                                                                                                                                                                                                                                `).join('')}
                                     </div>
 
 
@@ -429,10 +431,11 @@
                                     <p id="product-details">${product.product_description || "ไม่มีรายละเอียดสินค้า"}</p>
                                 </div>
 
+                                
+
                                 <!-- ข้อมูลผู้ขาย -->
                                 <div class="seller-card">
-                                    <img class="seller-image" src="${product.user?.user_pic ?? "https://cdn-icons-png.flaticon.com/512/9203/9203764.png"}"
-                                        alt="${product.user?.user_name}" loading="lazy">
+                                    <img class="seller-image" src="${profilePic}" alt="${product.user?.user_name}" loading="lazy">
 
                                     <div class="seller-info">
                                         <div class="seller-name">${product.user?.user_name || 'ไม่ระบุ'}</div>

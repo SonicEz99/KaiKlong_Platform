@@ -309,14 +309,41 @@
                         </li>
                     </div>
 
+                    <?php $user = Auth::user(); ?>
+
+                    <script>
+                        function fetchUser() {
+                            return fetch('/api/getUser/<?php echo $user->id; ?>', {
+                                    method: 'GET',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json',
+                                    },
+                                    credentials: 'include' // ✅ Include credentials
+                                })
+                                .then(response => response.json())
+                                .then(user => {
+                                    const baseURL = window.location.origin; 
+                                    const profilePic = user.user.user_pic ? `${baseURL}/${user.user.user_pic}` : "https://cdn-icons-png.flaticon.com/512/9203/9203764.png";
+                                    const username = user.user.user_name;
+                                    document.getElementById("profileImage").src = profilePic;
+                                    document.getElementById("profileImage").alt = username;
+                                })
+                                .catch(error => console.error('Error:', error));
+                        }
+                    
+                        document.addEventListener("DOMContentLoaded", function() {
+                            fetchUser();
+                        });
+                    </script>
+
                     <!-- Profile Dropdown -->
                     <div class="dropdown d-flex align-items-center ms-auto">
                         <!-- Profile Dropdown -->
                         <div class="profile dropdown me-2">
                             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
                                 id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img class="profile-pic rounded-circle" src="<?php echo $user->user_pic ? $user->user_pic : 'https://www.shutterstock.com/image-vector/avatar-gender-neutral-silhouette-vector-600nw-2470054311.jpg'; ?>" alt="Profile Picture"
-                                    width="40" height="40">
+                                <img id="profileImage" class="profile-pic rounded-circle" src="" alt="" width="40" height="40">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                                 <?php $user = Auth::user(); ?>

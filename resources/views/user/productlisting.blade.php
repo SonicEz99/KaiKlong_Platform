@@ -244,9 +244,13 @@
 
                     const userContainer = document.getElementById('container-myprofile');
 
+                    const baseURL = window.location.origin; 
+                    const profilePic = user.user_pic ? `${baseURL}/${user.user_pic}` : "https://cdn-icons-png.flaticon.com/512/9203/9203764.png";
+
+
                     userContainer.innerHTML = `
                 <div class="image-profile">
-                    <img src="${user.user_pic || '/path/to/default-profile.jpg'}" width="60" height="60" alt="">
+                    <img width="60" height="60" src="${profilePic}" alt="${user.user_name}" loading="lazy">
                 </div>
                 <div class="name-profile">
                     <p class="name-profliename">${user.user_name || "ไม่ระบุชื่อผู้ใช้"}</p>
