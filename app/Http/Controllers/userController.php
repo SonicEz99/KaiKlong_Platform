@@ -57,7 +57,7 @@ class userController extends Controller
         $validator = Validator::make($request->all(), [
             'user_id' => 'required|integer|exists:users,id',
             'oldPassword' => 'required|string',
-            'password' => 'required|string|min:8|confirmed', 
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
         if ($validator->fails()) {
@@ -71,9 +71,51 @@ class userController extends Controller
         }
 
         $user->update([
-            'user_password' => Hash::make($request->password), 
+            'user_password' => Hash::make($request->password),
         ]);
 
         return response()->json(['success' => 'เปลี่ยนรหัสผ่านสำเร็จ!'], 200);
+    }
+
+
+    public function updateProfile(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_pic' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $user = User::findOrFail($id);
+
+        if ($request->hasFile('user_pic')) {
+            // Delete old image
+            if ($user->user_pic) {
+                $oldImagePath = public_path($user->user_pic);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
+
+            // Upload new image
+            $image = $request->file('user_pic');
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('user_pics');
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0777, true);
+            }
+
+            $image->move($destinationPath, $imageName);
+            $imagePath = 'user_pics/' . $imageName;
+
+            // Update user record
+            $user->user_pic = $imagePath;
+            $user->save();
+        }
+
+        return response()->json(['user' => $user], 200);
     }
 }

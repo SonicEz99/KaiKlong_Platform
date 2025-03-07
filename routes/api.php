@@ -47,6 +47,7 @@ Route::get('/product/{id}', [ProductController::class, 'getProductById']);
 
 Route::post('/updateUser/{id}', [userController::class, 'updateUser'])->name("update.user");
 Route::post('/resetPassword', [userController::class, 'resetPassword'])->name("reset.password");
+Route::post('/updateProfile/{id}', [userController::class, 'updateProfile'])->name("update.profile");
 Route::get('/getUser/{id}', [userController::class, 'getUser']);
 
 
