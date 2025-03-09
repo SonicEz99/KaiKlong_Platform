@@ -246,6 +246,81 @@
         background-color: #ff0000;
         color: white;
     }
+
+    /* เพิ่ม CSS สำหรับรูปโปรไฟล์วงกลม */
+    .image-profile {
+        margin: 0 auto;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid #FF8C00;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .image-profile:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .image-profile img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Modal รูปภาพ */
+    .profile-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profile-modal-content {
+        position: relative;
+        max-width: 80%;
+        max-height: 80%;
+    }
+
+    .profile-modal-content img {
+        display: block;
+        max-width: 100%;
+        max-height: 80vh;
+        margin: 0 auto;
+        border: 3px solid #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .close-modal {
+        position: absolute;
+        top: -40px;
+        right: 0;
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        background: rgba(0, 0, 0, 0.5);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .close-modal:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
 </style>
 @extends('layouts.page')
 @section('content')
@@ -257,8 +332,8 @@
         <div class="container">
             <div class="myprofile">
                 <div class="container-myprofile">
-                    <div class="image-profile">
-                        <img src="<?php echo $user->user_pic; ?>" width="60" height="60" alt="">
+                    <div class="image-profile" id="profile-image">
+                        <img src="<?php echo $user->user_pic; ?>" alt="โปรไฟล์">
                     </div>
                     <div class="name-profile">
                         <p class="name-profliename"><?php echo $user->user_name; ?></p>
@@ -288,6 +363,14 @@
                     </div>
                 </div>
                 <div class="product-item" id="product-item"></div>
+            </div>
+        </div>
+
+        <!-- Modal สำหรับแสดงรูปโปรไฟล์ -->
+        <div id="profileModal" class="profile-modal">
+            <div class="profile-modal-content">
+                <span class="close-modal">&times;</span>
+                <img id="modal-profile-image" src="" alt="รูปโปรไฟล์">
             </div>
         </div>
     </body>
@@ -366,6 +449,36 @@
                     document.getElementById('product-item').innerHTML =
                         '<p style="text-align:center;padding:20px;color:#666;">ไม่พบข้อมูลสินค้า</p>';
                 });
+
+            // เพิ่ม Event Listener สำหรับคลิกที่รูปโปรไฟล์
+            const profileImage = document.getElementById('profile-image');
+            const modal = document.getElementById('profileModal');
+            const modalImg = document.getElementById('modal-profile-image');
+            const closeButton = document.querySelector('.close-modal');
+
+            profileImage.addEventListener('click', function() {
+                modalImg.src = document.querySelector('.image-profile img').src;
+                modal.style.display = 'flex';
+            });
+
+            // ปิด Modal เมื่อคลิกที่ปุ่มปิด
+            closeButton.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+
+            // ปิด Modal เมื่อคลิกที่พื้นหลัง
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // ปิด Modal เมื่อกด ESC
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    modal.style.display = 'none';
+                }
+            });
         });
 
         function displayProducts(products) {

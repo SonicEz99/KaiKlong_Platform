@@ -189,12 +189,114 @@
         background-color: #FB8C00;
         color: white;
     }
+
+    /* CSS สำหรับรูปโปรไฟล์ */
+    .image-profile {
+        display: inline-block;
+        margin: 10px auto;
+    }
+
+    .image-profile img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 3px solid #FF8C00;
+        object-fit: cover;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+
+    .image-profile img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(255, 140, 0, 0.4);
+    }
+
+    /* CSS สำหรับ Modal - แก้ไขใหม่ */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .modal.show {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 1;
+    }
+
+    .modal-content {
+        position: relative;
+        max-width: 90%;
+        max-height: 90%;
+        margin: auto;
+        animation: modalFadeIn 0.3s ease;
+    }
+
+    @keyframes modalFadeIn {
+        from {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .modal-content img {
+        display: block;
+        max-width: 100%;
+        max-height: 80vh;
+        object-fit: contain;
+        border: 3px solid #FF8C00;
+        border-radius: 5px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .close-button {
+        position: absolute;
+        top: -40px;
+        right: 0;
+        color: white;
+        font-size: 30px;
+        font-weight: bold;
+        cursor: pointer;
+        background-color: rgba(255, 140, 0, 0.8);
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .close-button:hover {
+        background-color: #FB8C00;
+        transform: scale(1.1);
+    }
 </style>
 
 @extends('layouts.page')
 @section('content')
     <?php
     $user = Auth::user(); ?>
+
+    <!-- เพิ่ม Modal HTML -->
+    <div id="profileImageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <img id="modalImage" src="" alt="รูปโปรไฟล์">
+        </div>
+    </div>
 
     <body style="font-family: 'Noto Sans Thai', 'Prompt', sans-serif;">
         <div class="orange-banner"></div>
@@ -250,7 +352,7 @@
 
                     userContainer.innerHTML = `
                 <div class="image-profile">
-                    <img width="60" height="60" src="${profilePic}" alt="${user.user_name}" loading="lazy">
+                    <img width="100" height="100" src="${profilePic}" alt="${user.user_name}" loading="lazy">
                 </div>
                 <div class="name-profile">
                     <p class="name-profliename">${user.user_name || "ไม่ระบุชื่อผู้ใช้"}</p>
@@ -276,6 +378,9 @@
                             console.error('Could not copy text: ', err);
                         });
                     });
+
+                    // เพิ่ม Event Listeners สำหรับรูปโปรไฟล์และ Modal
+                    setupProfileImageModal(profilePic, user.user_name);
                 })
                 .catch(error => {
                     console.error("Error fetching user details:", error);
@@ -296,6 +401,55 @@
                         '<p style="text-align:center;padding:20px;color:#666;">เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า</p>';
                 });
         });
+
+        // แก้ไขฟังก์ชัน Setup Modal สำหรับรูปโปรไฟล์
+        function setupProfileImageModal(imageSrc, altText) {
+            const modal = document.getElementById('profileImageModal');
+            const modalImage = document.getElementById('modalImage');
+            const closeButton = document.querySelector('.close-button');
+
+            // รีเซ็ต display property เมื่อเริ่มต้น
+            modal.style.display = 'none';
+            modal.classList.remove('show');
+
+            // เมื่อคลิกที่รูปโปรไฟล์ - ใช้ Event Delegation
+            document.addEventListener('click', function(event) {
+                if (event.target.closest('.image-profile img')) {
+                    modalImage.src = imageSrc;
+                    modalImage.alt = altText || 'รูปโปรไฟล์';
+                    modal.style.display = 'flex';
+                    setTimeout(() => {
+                        modal.classList.add('show');
+                    }, 10);
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+
+            // ปิด Modal เมื่อคลิกที่ปุ่มปิด
+            closeButton.addEventListener('click', closeModal);
+
+            // ปิด Modal เมื่อคลิกที่พื้นที่นอกรูป
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // ปิด Modal เมื่อกดปุ่ม ESC
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && modal.classList.contains('show')) {
+                    closeModal();
+                }
+            });
+
+            function closeModal() {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+        }
 
         function displayProducts(products) {
             const productDetailContainer = document.getElementById('product-item');
