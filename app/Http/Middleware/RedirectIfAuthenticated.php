@@ -25,6 +25,10 @@ class RedirectIfAuthenticated
             }
         }
 
+        if (Auth::check() && $request->is('/')) {
+            return redirect('/home'); // Redirect authenticated users from '/' to '/home'
+        }
+
         return $next($request);
     }
 }
