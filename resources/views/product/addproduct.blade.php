@@ -263,6 +263,7 @@
                                     <!-- Brands will be populated here -->
                                 </select>
                             </div>
+                           
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn-orange btn-lg">ลงขายสินค้า</button>
                             </div>
